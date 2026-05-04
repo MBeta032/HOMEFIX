@@ -1,9 +1,11 @@
+import { Routes, Route } from "react-router-dom";
+import HomePublica from "./pages/HomePublica";
+
 function App() {
   return (
-    <main>
-      <h1>HomeFix</h1>
-      <p>Soluciones confiables para cada rincón de tu hogar.</p>
-    </main>
+    <Routes>
+      <Route path="/" element={<HomePublica />} />
+    </Routes>
   );
 }
 

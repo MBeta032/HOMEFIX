@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useContext, useState } from "react"
 import type { RegisterData } from "../interfaces/InterfaceAuth"
 import { AuthContext } from "../context/AuthContext"
