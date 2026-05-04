@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/HomePublica.css";
 
@@ -14,6 +15,16 @@ const servicios = [
 
 function HomePublica() {
   const navigate = useNavigate();
+  const [zona, setZona] = useState("");
+  const [resultado, setResultado] = useState("");
+
+  function handleBuscar() {
+    if (zona.trim() === "") {
+      setResultado("Por favor ingresa una zona o barrio.");
+      return;
+    }
+    setResultado(`Buscando servicios en: ${zona}`);
+  }
 
   return (
     <div className="home-container">
@@ -33,6 +44,23 @@ function HomePublica() {
         <button onClick={() => navigate("/registro")} className="btn-primary">
           Comenzar ahora
         </button>
+      </section>
+
+      <section className="home-busqueda">
+        <h3>¿Dónde necesitas el servicio?</h3>
+        <div className="busqueda-contenedor">
+          <input
+            type="text"
+            placeholder="Ingresa tu barrio o zona"
+            value={zona}
+            onChange={(e) => setZona(e.target.value)}
+            className="busqueda-input"
+          />
+          <button onClick={handleBuscar} className="btn-primary">
+            Buscar servicios
+          </button>
+        </div>
+        {resultado && <p className="busqueda-resultado">{resultado}</p>}
       </section>
 
       <section className="home-servicios">
