@@ -1,14 +1,12 @@
-/* eslint-disable react-refresh/only-export-components */
-import { createContext, useEffect, useState } from "react"
-import type { AuthContextType, RegisterData, UserData } from "../interfaces/InterfaceAuth.ts"
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile, type User } from "firebase/auth"
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { auth, db } from "../firebase/config.ts"
+import { useEffect, useState } from "react"
+import type { RegisterData, UserData } from "../interfaces/InterfaceAuth.ts"
 
 
-export const AuthContext = createContext<AuthContextType | null>(null)
 
-export function AuthProvider({children}: {children : React.ReactNode}){
+export function useAuth(){
     const [user, setUser] = useState<User | null>(null)
     const [userData, setUserData] = useState<UserData| null>(null)
     const [loading, setLoading] = useState<boolean>(true)
@@ -33,11 +31,11 @@ export function AuthProvider({children}: {children : React.ReactNode}){
     },[])
 
     const register = async ({
-        nombre,
+        name,
         email,
         password,
-        telefono, 
-        direccion,
+        phone, 
+        address,
     }: RegisterData) : Promise <void> =>{
         const {user: firebaseUser } = await createUserWithEmailAndPassword(
             auth,
@@ -45,17 +43,16 @@ export function AuthProvider({children}: {children : React.ReactNode}){
             password
         )
 
-        await updateProfile(firebaseUser, {displayName: nombre })
+        await updateProfile(firebaseUser, {displayName: name })
 
         const newUser: UserData ={
             uid : firebaseUser.uid,
-            nombre,
+            name,
             email,
-            password,
-            telefono,
-            direccion,
+            phone,
+            address,
             rol: "Cliente",
-            creadoEn: new Date().toISOString(),
+            createdIn: new Date().toISOString(),
         }
 
             await setDoc(doc(db, "usuarios", firebaseUser.uid), newUser)
@@ -68,17 +65,10 @@ export function AuthProvider({children}: {children : React.ReactNode}){
 
     const logout = async(): Promise<void> =>{
         await signOut(auth)
-        setUser(null)
-        setUserData(null)
     }
 
-    if (loading) return <p>Cargando...</p>
-
-    return(
-        <AuthContext.Provider value={{user, userData, register, login, logout}}>
-            {children}
-        </AuthContext.Provider>
-    )
+    return {user, userData, register, login, logout, loading}
     
-
 }
+
+export default useAuth
