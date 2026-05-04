@@ -64,6 +64,45 @@
   font-size: 15px !important;
 }
 
+/* BÚSQUEDA POR ZONA */
+.home-busqueda {
+  text-align: center;
+  padding: 48px 32px;
+  background-color: #ffffff;
+}
+
+.home-busqueda h3 {
+  font-size: 20px;
+  color: #1e3a5f;
+  margin-bottom: 20px;
+}
+
+.busqueda-contenedor {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.busqueda-input {
+  padding: 10px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 15px;
+  width: 300px;
+  outline: none;
+}
+
+.busqueda-input:focus {
+  border-color: #2563eb;
+}
+
+.busqueda-resultado {
+  margin-top: 16px;
+  color: #2563eb;
+  font-size: 15px;
+}
+
 /* SERVICIOS */
 .home-servicios {
   padding: 48px 32px;
