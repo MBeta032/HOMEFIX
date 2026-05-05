@@ -11,17 +11,17 @@ function validateRegister(data: RegisterData) {
     const address = data.address?.trim() || ""
 
     if (!name) {
-        errors.name = "El nombre es obligatorio"
+        errors.name = "El nombre es obligatorio*"
     }
 
     if (!email) {
-        errors.email = "El correo es obligatorio"
+        errors.email = "El correo es obligatorio*"
     } else if (!/^\S+@\S+\.\S+$/.test(email)) {
         errors.email = "Formato inválido"
     }
 
     if (!password) {
-        errors.password = "La contraseña es obligatoria"
+        errors.password = "La contraseña es obligatorio*"
     } else if (password.length < 6) {
         errors.password = "Mínimo 6 caracteres"
     } else if (!/\d/.test(password)) {
@@ -29,13 +29,13 @@ function validateRegister(data: RegisterData) {
     }
 
     if (!confirmPassword) {
-        errors.confirmPassword = "Confirma la contraseña"
+        errors.confirmPassword = "Confirma la contraseña*"
     } else if (confirmPassword !== password) {
         errors.confirmPassword = "No coincide"
     }
 
     if (!phone) {
-        errors.phone = "El teléfono es obligatorio"
+        errors.phone = "El teléfono es obligatorio*"
     } else if (!/^\d+$/.test(phone)) {
         errors.phone = "Solo números"
     } else if (phone.length !== 10) {
@@ -43,7 +43,7 @@ function validateRegister(data: RegisterData) {
     }
 
     if (!address) {
-        errors.address = "La dirección es obligatoria"
+        errors.address = "La dirección es obligatoria*"
     }
 
     return errors

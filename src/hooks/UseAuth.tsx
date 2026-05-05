@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile, type User } from "firebase/auth"
+import { GoogleAuthProvider,createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile, type User } from "firebase/auth"
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { auth, db } from "../firebase/config.ts"
 import { useEffect, useState } from "react"
@@ -11,24 +11,35 @@ export function useAuth(){
     const [userData, setUserData] = useState<UserData| null>(null)
     const [loading, setLoading] = useState<boolean>(true)
 
-    useEffect(()=>{
-        const unsub = onAuthStateChanged(auth, async(firebaseUser) =>{
-            if(firebaseUser){
+    const googleProvider = new GoogleAuthProvider()
+    useEffect(() => {
+        const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
+            if (firebaseUser) {
                 setUser(firebaseUser)
 
-                const snap = await getDoc(doc(db, "usuarios", firebaseUser.uid))
-                if(snap.exists()){
+                const userRef = doc(db, "usuarios", firebaseUser.uid)
+                const snap = await getDoc(userRef)
+
+                if (!snap.exists()) {
+                    await setDoc(userRef, {
+                        uid: firebaseUser.uid,
+                        name: firebaseUser.displayName,
+                        email: firebaseUser.email,
+                        rol: "Cliente",
+                        createdIn: new Date().toISOString()
+                    })
+                } else {
                     setUserData(snap.data() as UserData)
                 }
-            }else{
+
+            } else {
                 setUser(null)
                 setUserData(null)
             }
             setLoading(false)
         })
-
         return () => unsub()
-    },[])
+    }, [])
 
     const register = async ({
         name,
@@ -59,15 +70,32 @@ export function useAuth(){
             setUserData(newUser)
     }
 
-    const login = async (email: string, password: string): Promise<void> =>{
+
+    const login = async (email: string, password: string): Promise<void> => {
         await signInWithEmailAndPassword(auth, email, password)
     }
+
+    const loginGoogle = async () => {
+        const result = await signInWithPopup(auth, googleProvider)
+        const user = result.user
+
+        await setDoc(doc(db, "usuarios", user.uid), {
+            uid: user.uid,
+            name: user.displayName,
+            email: user.email,
+            rol: "Cliente",
+            createdIn: new Date().toISOString()
+        })
+
+        return user
+    }
+    
 
     const logout = async(): Promise<void> =>{
         await signOut(auth)
     }
 
-    return {user, userData, register, login, logout, loading}
+    return {user, userData, register, login, logout, loading, loginGoogle}
     
 }
 
