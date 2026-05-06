@@ -1,27 +1,29 @@
 import type { User } from "firebase/auth"
  
 export interface RegisterData {
-    nombre : string
+    name : string
     email : string
     password : string
-    telefono : string
-    direccion : string
+    confirmPassword : string
+    phone : string
+    address : string
 }
 
 export interface UserData{
     uid : string
-    nombre : string
+    name : string
     email : string
-    password : string
-    telefono : string
-    direccion : string
+    phone : string
+    address : string
     rol : string
-    creadoEn : string
+    createdIn : string
 }
 
 export interface AuthContextType{
     user: User | null
     userData: UserData |  null
+    loading : boolean
+    loginGoogle : () => Promise <User>
     register: (data: RegisterData) => Promise<void>
     login: (email: string, password: string) =>Promise<void>
     logout : () => Promise <void>

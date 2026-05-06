@@ -1,0 +1,148 @@
+.home-container {
+  min-height: 100vh;
+  background-color: #f4f7fb;
+}
+
+/* NAV */
+.home-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.home-logo {
+  font-size: 24px;
+  color: #2563eb;
+  margin: 0;
+}
+
+.home-nav-botones {
+  display: flex;
+  gap: 12px;
+}
+
+.home-nav-botones button {
+  padding: 8px 20px;
+  border: 1px solid #2563eb;
+  border-radius: 6px;
+  background-color: transparent;
+  color: #2563eb;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* HERO */
+.home-hero {
+  text-align: center;
+  padding: 80px 32px;
+  background-color: #eff6ff;
+}
+
+.home-hero h2 {
+  font-size: 32px;
+  color: #1e3a5f;
+  margin-bottom: 12px;
+}
+
+.home-hero p {
+  font-size: 16px;
+  color: #4b5563;
+  margin-bottom: 28px;
+}
+
+/* BOTÓN PRIMARIO */
+.btn-primary {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 10px 24px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 15px !important;
+}
+
+/* BÚSQUEDA POR ZONA */
+.home-busqueda {
+  text-align: center;
+  padding: 48px 32px;
+  background-color: #ffffff;
+}
+
+.home-busqueda h3 {
+  font-size: 20px;
+  color: #1e3a5f;
+  margin-bottom: 20px;
+}
+
+.busqueda-contenedor {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.busqueda-input {
+  padding: 10px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 15px;
+  width: 300px;
+  outline: none;
+}
+
+.busqueda-input:focus {
+  border-color: #2563eb;
+}
+
+.busqueda-resultado {
+  margin-top: 16px;
+  color: #2563eb;
+  font-size: 15px;
+}
+
+/* SERVICIOS */
+.home-servicios {
+  padding: 48px 32px;
+  text-align: center;
+}
+
+.home-servicios h3 {
+  font-size: 22px;
+  color: #1e3a5f;
+  margin-bottom: 28px;
+}
+
+.servicios-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.servicio-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 24px 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+}
+
+.servicio-card:hover {
+  background-color: #eff6ff;
+}
+
+.servicio-icono {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.servicio-card p {
+  margin: 0;
+  font-size: 14px;
+  color: #1f2937;
+}

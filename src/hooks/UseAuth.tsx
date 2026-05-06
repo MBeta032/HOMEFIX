@@ -1,43 +1,52 @@
-/* eslint-disable react-refresh/only-export-components */
-import { createContext, useEffect, useState } from "react"
-import type { AuthContextType, RegisterData, UserData } from "../interfaces/InterfaceAuth.ts"
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile, type User } from "firebase/auth"
+import { GoogleAuthProvider,createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile, type User } from "firebase/auth"
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { auth, db } from "../firebase/config.ts"
+import { useEffect, useState } from "react"
+import type { RegisterData, UserData } from "../interfaces/InterfaceAuth.ts"
 
 
-export const AuthContext = createContext<AuthContextType | null>(null)
 
-export function AuthProvider({children}: {children : React.ReactNode}){
+export function useAuth(){
     const [user, setUser] = useState<User | null>(null)
     const [userData, setUserData] = useState<UserData| null>(null)
     const [loading, setLoading] = useState<boolean>(true)
 
-    useEffect(()=>{
-        const unsub = onAuthStateChanged(auth, async(firebaseUser) =>{
-            if(firebaseUser){
+    const googleProvider = new GoogleAuthProvider()
+    useEffect(() => {
+        const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
+            if (firebaseUser) {
                 setUser(firebaseUser)
 
-                const snap = await getDoc(doc(db, "usuarios", firebaseUser.uid))
-                if(snap.exists()){
+                const userRef = doc(db, "usuarios", firebaseUser.uid)
+                const snap = await getDoc(userRef)
+
+                if (!snap.exists()) {
+                    await setDoc(userRef, {
+                        uid: firebaseUser.uid,
+                        name: firebaseUser.displayName,
+                        email: firebaseUser.email,
+                        rol: "Cliente",
+                        createdIn: new Date().toISOString()
+                    })
+                } else {
                     setUserData(snap.data() as UserData)
                 }
-            }else{
+
+            } else {
                 setUser(null)
                 setUserData(null)
             }
             setLoading(false)
         })
-
         return () => unsub()
-    },[])
+    }, [])
 
     const register = async ({
-        nombre,
+        name,
         email,
         password,
-        telefono, 
-        direccion,
+        phone, 
+        address,
     }: RegisterData) : Promise <void> =>{
         const {user: firebaseUser } = await createUserWithEmailAndPassword(
             auth,
@@ -45,40 +54,49 @@ export function AuthProvider({children}: {children : React.ReactNode}){
             password
         )
 
-        await updateProfile(firebaseUser, {displayName: nombre })
+        await updateProfile(firebaseUser, {displayName: name })
 
         const newUser: UserData ={
             uid : firebaseUser.uid,
-            nombre,
+            name,
             email,
-            password,
-            telefono,
-            direccion,
+            phone,
+            address,
             rol: "Cliente",
-            creadoEn: new Date().toISOString(),
+            createdIn: new Date().toISOString(),
         }
 
             await setDoc(doc(db, "usuarios", firebaseUser.uid), newUser)
             setUserData(newUser)
     }
 
-    const login = async (email: string, password: string): Promise<void> =>{
+
+    const login = async (email: string, password: string): Promise<void> => {
         await signInWithEmailAndPassword(auth, email, password)
     }
 
-    const logout = async(): Promise<void> =>{
-        await signOut(auth)
-        setUser(null)
-        setUserData(null)
+    const loginGoogle = async () => {
+        const result = await signInWithPopup(auth, googleProvider)
+        const user = result.user
+
+        await setDoc(doc(db, "usuarios", user.uid), {
+            uid: user.uid,
+            name: user.displayName,
+            email: user.email,
+            rol: "Cliente",
+            createdIn: new Date().toISOString()
+        })
+
+        return user
     }
-
-    if (loading) return <p>Cargando...</p>
-
-    return(
-        <AuthContext.Provider value={{user, userData, register, login, logout}}>
-            {children}
-        </AuthContext.Provider>
-    )
     
 
+    const logout = async(): Promise<void> =>{
+        await signOut(auth)
+    }
+
+    return {user, userData, register, login, logout, loading, loginGoogle}
+    
 }
+
+export default useAuth
