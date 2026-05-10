@@ -1,20 +1,10 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/HomePublica.css";
+import { services } from "../data/services.data";
 import { AuthContext } from "../context/AuthContext";
 
 
-
-const servicios = [
-  { icono: "🔧", nombre: "Plomería" },
-  { icono: "⚡", nombre: "Electricidad" },
-  { icono: "🪚", nombre: "Carpintería" },
-  { icono: "🎨", nombre: "Pintura" },
-  { icono: "🧹", nombre: "Limpieza" },
-  { icono: "🌿", nombre: "Jardinería" },
-  { icono: "🔌", nombre: "Electrodomésticos" },
-  { icono: "🏠", nombre: "Mantenimiento" },
-];
 
 
 
@@ -104,10 +94,14 @@ function Dashboard() {
       <section className="home-servicios">
         <h3>Nuestros servicios</h3>
         <div className="servicios-grid">
-          {servicios.map((s) => (
-            <div key={s.nombre} className="servicio-card">
-              <span className="servicio-icono">{s.icono}</span>
-              <p>{s.nombre}</p>
+          {services.map((service) => (
+            <div
+              key={service.id}
+              className="servicio-card"
+              onClick={() => navigate(`/servicios/${service.id}`)}
+            >
+              <span className="servicio-icono">{service.image}</span>
+              <p>{service.name}</p>
             </div>
           ))}
         </div>
