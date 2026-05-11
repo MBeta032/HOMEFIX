@@ -33,6 +33,11 @@ export default function ServiceCard({ service }: ServiceCardProps) {
 
         <p>{service.description}</p>
 
+        <div className="service-card-meta">
+          <span>{service.company}</span>
+          <span>{service.zone}</span>
+        </div>
+
         <RatingStars rating={service.rating} />
 
         <div className="service-card-footer">
