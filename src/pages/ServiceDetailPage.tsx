@@ -3,7 +3,7 @@ import ServiceDetailHero from "../components/ServiceDetail/ServiceDetailHero";
 import ServiceDetailInfo from "../components/ServiceDetail/ServiceDetailInfo";
 import ServiceDetailList from "../components/ServiceDetail/ServiceDetailList";
 import ServiceNotFound from "../components/ServiceDetail/ServiceNotFound";
-import { useServiceDetail } from "../hooks/userServiceDetail";
+import { useServiceDetail } from "../hooks/ServiceDetail/userServiceDetail";
 
 export default function ServiceDetailPage() {
   const {

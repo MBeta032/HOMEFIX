@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Stack } from "../algorithms/detailStack";
-import type { IService } from "../interfaces/service.interface";
-import { getServiceById } from "../utils/service.utils";
+import { Stack } from "../../algorithms/detailStack";
+import type { IService } from "../../interfaces/ServiceDetail/service.interface";
+import { getServiceById } from "../../utils/ServiceDetail/service.utils";
 
 interface UseServiceDetailResult {
   service: IService | undefined;

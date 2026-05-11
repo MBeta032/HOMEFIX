@@ -1,4 +1,4 @@
-import type { IService } from "../../interfaces/service.interface";
+import type { IService } from "../../interfaces/ServiceDetail/service.interface";
 import RatingStars from "../shared/RatingStars";
 import ServiceDetailActions from "./ServiceDetailActions";
 

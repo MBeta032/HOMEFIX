@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import type { IService } from "../../interfaces/service.interface";
+import type { IService } from "../../interfaces/ServiceDetail/service.interface";
 import Button from "./Button";
 import RatingStars from "./RatingStars";
 
