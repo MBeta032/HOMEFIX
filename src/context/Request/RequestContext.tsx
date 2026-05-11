@@ -5,6 +5,7 @@ import type { IService } from "../../interfaces/ServiceDetail/service.interface"
 import type {
   IRequest,
   IRequestFormData,
+  PaymentMethod,
   RequestStatus,
 } from "../../interfaces/Requests/request.interface";
 
@@ -36,8 +37,14 @@ const VALID_REQUEST_STATUS: RequestStatus[] = [
   "Cancelada",
 ];
 
+const VALID_PAYMENT_METHODS: PaymentMethod[] = ["Efectivo", "Datáfono"];
+
 function isRequestStatus(status: unknown): status is RequestStatus {
   return VALID_REQUEST_STATUS.includes(status as RequestStatus);
+}
+
+function isPaymentMethod(method: unknown): method is PaymentMethod {
+  return VALID_PAYMENT_METHODS.includes(method as PaymentMethod);
 }
 
 function isValidRequest(request: unknown): request is IRequest {
@@ -59,6 +66,7 @@ function isValidRequest(request: unknown): request is IRequest {
     typeof possibleRequest.city === "string" &&
     typeof possibleRequest.desiredDate === "string" &&
     typeof possibleRequest.desiredTime === "string" &&
+    isPaymentMethod(possibleRequest.paymentMethod) &&
     typeof possibleRequest.problemDescription === "string" &&
     isRequestStatus(possibleRequest.status) &&
     typeof possibleRequest.createdAt === "string"
@@ -87,6 +95,14 @@ function getRequestsFromStorage(): IRequest[] {
 
 function createRequestId(serviceId: string): string {
   return `REQ-${Date.now()}-${serviceId}`;
+}
+
+function getPaymentMethod(method: PaymentMethod | ""): PaymentMethod {
+  if (method === "Datáfono") {
+    return "Datáfono";
+  }
+
+  return "Efectivo";
 }
 
 export function RequestProvider({ children }: RequestProviderProps) {
@@ -125,6 +141,7 @@ export function RequestProvider({ children }: RequestProviderProps) {
       city: formData.city,
       desiredDate: formData.desiredDate,
       desiredTime: formData.desiredTime,
+      paymentMethod: getPaymentMethod(formData.paymentMethod),
       problemDescription: formData.problemDescription,
       status: "Pendiente",
       createdAt: new Date().toISOString(),

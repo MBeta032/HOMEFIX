@@ -18,6 +18,7 @@ const initialFormData: IRequestFormData = {
   city: "",
   desiredDate: "",
   desiredTime: "",
+  paymentMethod: "",
   problemDescription: "",
 };
 
@@ -33,7 +34,7 @@ export default function RequestForm({
   const [generalError, setGeneralError] = useState<string>("");
 
   function handleChange(
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ): void {
     const fieldName = event.target.name as keyof IRequestFormData;
     const fieldValue = event.target.value;
@@ -72,6 +73,10 @@ export default function RequestForm({
 
     if (!formData.desiredTime.trim()) {
       newErrors.desiredTime = "La hora deseada es obligatoria.";
+    }
+
+    if (!formData.paymentMethod) {
+      newErrors.paymentMethod = "Selecciona un método de pago.";
     }
 
     if (!formData.problemDescription.trim()) {
@@ -181,6 +186,21 @@ export default function RequestForm({
             onChange={handleChange}
           />
           {errors.desiredTime && <span>{errors.desiredTime}</span>}
+        </div>
+
+        <div className="request-form-group">
+          <label htmlFor="paymentMethod">Método de pago</label>
+          <select
+            id="paymentMethod"
+            name="paymentMethod"
+            value={formData.paymentMethod}
+            onChange={handleChange}
+          >
+            <option value="">Selecciona un método</option>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Datáfono">Datáfono</option>
+          </select>
+          {errors.paymentMethod && <span>{errors.paymentMethod}</span>}
         </div>
       </div>
 

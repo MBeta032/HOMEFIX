@@ -1,5 +1,5 @@
 /* =========================
-   CHECKOUT PAGE
+   CHECKOUT / REQUEST PAGE
 ========================= */
 
 .checkout-page {
@@ -302,6 +302,7 @@
 }
 
 .request-form-group input,
+.request-form-group select,
 .request-form-group textarea {
   width: 100%;
   border: 1px solid #d8e2f0;
@@ -312,6 +313,7 @@
   font-size: 15px;
   outline: none;
   box-sizing: border-box;
+  background-color: #ffffff;
 }
 
 .request-form-group textarea {
@@ -319,6 +321,7 @@
 }
 
 .request-form-group input:focus,
+.request-form-group select:focus,
 .request-form-group textarea:focus {
   border-color: #1f6ed4;
   box-shadow: 0 0 0 3px rgba(31, 110, 212, 0.12);
@@ -370,6 +373,30 @@
 }
 
 /* =========================
+   EMPTY STATE INSIDE PAGE
+========================= */
+
+.checkout-page .empty-state {
+  padding: 34px;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 8px 22px rgba(29, 57, 94, 0.1);
+}
+
+.checkout-page .empty-state h2 {
+  margin: 0 0 10px;
+  color: #10213f;
+}
+
+.checkout-page .empty-state p {
+  max-width: 520px;
+  margin: 0 auto 22px;
+  color: #4d5f7a;
+  line-height: 1.5;
+}
+
+/* =========================
    RESPONSIVE
 ========================= */
 
@@ -406,5 +433,9 @@
 
   .request-form-actions {
     flex-direction: column;
+  }
+
+  .checkout-page .button {
+    width: 100%;
   }
 }

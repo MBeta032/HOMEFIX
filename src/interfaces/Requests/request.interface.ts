@@ -5,12 +5,15 @@ export type RequestStatus =
   | "Finalizada"
   | "Cancelada";
 
+export type PaymentMethod = "Efectivo" | "Datáfono";
+
 export interface IRequestFormData {
   address: string;
   neighborhood: string;
   city: string;
   desiredDate: string;
   desiredTime: string;
+  paymentMethod: PaymentMethod | "";
   problemDescription: string;
 }
 
@@ -26,6 +29,7 @@ export interface IRequest {
   city: string;
   desiredDate: string;
   desiredTime: string;
+  paymentMethod: PaymentMethod;
   problemDescription: string;
   status: RequestStatus;
   createdAt: string;
