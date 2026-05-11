@@ -85,42 +85,49 @@ export default function RequestPage() {
         ) : (
           <section className="checkout-layout">
             <section className="checkout-summary-card">
-              <h2>Servicios pendientes por enviar solicitud</h2>
+              <h2>Servicios pendientes</h2>
 
               <p className="checkout-summary-description">
-                Selecciona un servicio por su ID. Solo se enviará la solicitud
-                del servicio seleccionado.
+                Selecciona el servicio que quieres solicitar. Los demás seguirán
+                guardados en el carrito.
               </p>
 
-              <div className="checkout-services-list">
+              <div className="request-services-list">
                 {cartItems.map((service: IService) => (
-                  <article key={service.id} className="checkout-service-item">
-                    <div className="checkout-service-main">
-                      <div className="checkout-service-image">
+                  <article
+                    key={service.id}
+                    className={`request-service-card ${
+                      selectedService?.id === service.id
+                        ? "request-service-card-selected"
+                        : ""
+                    }`}
+                  >
+                    <div className="request-service-top">
+                      <div className="request-service-image">
                         {service.image}
                       </div>
 
-                      <div>
-                        <p className="checkout-service-id">
-                          ID del servicio: {service.id}
-                        </p>
+                      <div className="request-service-info">
+                        <span className="request-service-id">
+                          ID {service.id}
+                        </span>
 
                         <h3>{service.name}</h3>
 
-                        <span>{service.company}</span>
+                        <p>{service.company}</p>
 
                         <small>{service.zone}</small>
                       </div>
                     </div>
 
-                    <div className="checkout-service-bottom">
+                    <div className="request-service-footer">
                       <strong>{formatPrice(service.price)}</strong>
 
                       <Button
                         variant="primary"
                         onClick={() => handleSelectService(service)}
                       >
-                        Seleccionar ID {service.id}
+                        Solicitar
                       </Button>
                     </div>
                   </article>
@@ -133,15 +140,10 @@ export default function RequestPage() {
               </div>
 
               <div className="checkout-total-box">
-                <span>Total aproximado pendiente:</span>
+                <span>Total aproximado:</span>
                 <strong>{formatPrice(cartTotal)}</strong>
               </div>
 
-              <p className="checkout-note">
-                La zona no se pregunta aquí porque viene desde el servicio
-                disponible. Más adelante se podrá manejar la disponibilidad por
-                zonas usando grafos.
-              </p>
             </section>
 
             <section className="checkout-form-card">
@@ -153,14 +155,14 @@ export default function RequestPage() {
                 />
               ) : (
                 <section className="checkout-no-selection">
+                  <div className="checkout-no-selection-icon">🧰</div>
+
                   <h2>Selecciona un servicio</h2>
 
                   <p>
                     Elige uno de los servicios pendientes para crear su solicitud.
-                    Los demás servicios seguirán guardados en el carrito.
+                    Solo se enviará el servicio seleccionado.
                   </p>
-
-                  <div className="checkout-no-selection-icon">🧰</div>
                 </section>
               )}
             </section>
