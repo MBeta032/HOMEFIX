@@ -5,7 +5,8 @@ import { CartProvider } from "../context/Cart/CartContext";
 import { RequestProvider } from "../context/Request/RequestContext";
 import { services } from "../data/service.data";
 import CartPage from "../pages/CartPage";
-import RequestPage from "../pages/RequestPage";
+import CheckPage from "../pages/CheckPage";
+import RequestsPage from "../pages/RequestsPage";
 
 function ServicesMockPage() {
   return (
@@ -41,7 +42,9 @@ export default function AppRouter() {
 
           <Route path="/cart" element={<CartPage />} />
 
-          <Route path="/checkout" element={<RequestPage />} />
+          <Route path="/checkout" element={<CheckPage />} />
+
+          <Route path="/requests" element={<RequestsPage />} />
 
           <Route path="*" element={<Navigate to="/services" />} />
         </Routes>

@@ -8,7 +8,7 @@ import { useCart } from "../hooks/cart/useCart";
 import { useRequests } from "../hooks/request/useRequests";
 import type { IService } from "../interfaces/ServiceDetail/service.interface";
 import type { IRequestFormData } from "../interfaces/Requests/request.interface";
-import "../styles/Requests/index.css";
+import "../styles/Check/index.css";
 
 function formatPrice(price: number): string {
   return price.toLocaleString("es-CO", {
@@ -18,7 +18,7 @@ function formatPrice(price: number): string {
   });
 }
 
-export default function RequestPage() {
+export default function CheckPage() {
   const navigate = useNavigate();
 
   const { cartItems, cartCount, cartTotal, removeFromCart } = useCart();
