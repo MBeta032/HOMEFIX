@@ -7,7 +7,9 @@ export type AddToCartResult = "added" | "exists";
 export interface CartContextType {
   cartItems: IService[];
   cartCount: number;
+  cartTotal: number;
   addToCart: (service: IService) => AddToCartResult;
+  removeFromCart: (id: string) => void;
   clearCart: () => void;
 }
 
@@ -32,7 +34,17 @@ function isValidService(service: unknown): service is IService {
     typeof possibleService.id === "string" &&
     typeof possibleService.name === "string" &&
     typeof possibleService.category === "string" &&
-    typeof possibleService.price === "number"
+    typeof possibleService.image === "string" &&
+    typeof possibleService.description === "string" &&
+    typeof possibleService.price === "number" &&
+    typeof possibleService.duration === "string" &&
+    typeof possibleService.rating === "number" &&
+    typeof possibleService.company === "string" &&
+    typeof possibleService.zone === "string" &&
+    typeof possibleService.availability === "string" &&
+    Array.isArray(possibleService.includes) &&
+    Array.isArray(possibleService.excludes) &&
+    Array.isArray(possibleService.recommendations)
   );
 }
 
@@ -57,9 +69,16 @@ function getCartFromStorage(): IService[] {
 }
 
 export function CartProvider({ children }: CartProviderProps) {
-  const [cartItems, setCartItems] = useState<IService[]>(getCartFromStorage);
+  const [cartItems, setCartItems] = useState<IService[]>(() =>
+    getCartFromStorage()
+  );
 
-  const cartCount = cartItems.length;
+  const cartCount: number = cartItems.length;
+
+  const cartTotal: number = cartItems.reduce(
+    (total: number, service: IService) => total + service.price,
+    0
+  );
 
   useEffect(() => {
     if (cartItems.length === 0) {
@@ -72,15 +91,25 @@ export function CartProvider({ children }: CartProviderProps) {
 
   function addToCart(service: IService): AddToCartResult {
     const serviceAlreadyExists = cartItems.some(
-      (cartItem) => cartItem.id === service.id
+      (cartItem: IService) => cartItem.id === service.id
     );
 
     if (serviceAlreadyExists) {
       return "exists";
     }
 
-    setCartItems([...cartItems, service]);
+    setCartItems((currentCartItems: IService[]) => [
+      ...currentCartItems,
+      service,
+    ]);
+
     return "added";
+  }
+
+  function removeFromCart(id: string): void {
+    setCartItems((currentCartItems: IService[]) =>
+      currentCartItems.filter((cartItem: IService) => cartItem.id !== id)
+    );
   }
 
   function clearCart(): void {
@@ -92,7 +121,9 @@ export function CartProvider({ children }: CartProviderProps) {
       value={{
         cartItems,
         cartCount,
+        cartTotal,
         addToCart,
+        removeFromCart,
         clearCart,
       }}
     >
