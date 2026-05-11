@@ -19,7 +19,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
   const navigate = useNavigate();
 
   function handleViewDetail(): void {
-    navigate(`/services/${service.id}`);
+    navigate(`/service-detail/${service.id}`);
   }
 
   return (
