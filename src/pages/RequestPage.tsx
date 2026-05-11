@@ -18,53 +18,41 @@ function formatPrice(price: number): string {
   });
 }
 
-export default function CheckoutPage() {
+export default function RequestPage() {
   const navigate = useNavigate();
 
-  const { cartItems, cartCount, cartTotal, clearCart } = useCart();
-  const { createRequestsFromCart } = useRequests();
+  const { cartItems, cartCount, cartTotal, removeFromCart } = useCart();
+  const { createRequestFromService } = useRequests();
 
+  const [selectedService, setSelectedService] = useState<IService | null>(null);
   const [successMessage, setSuccessMessage] = useState<string>("");
 
   function handleGoToCart(): void {
     navigate("/cart");
   }
 
+  function handleSelectService(service: IService): void {
+    setSelectedService(service);
+    setSuccessMessage("");
+  }
+
+  function handleCancelSelection(): void {
+    setSelectedService(null);
+  }
+
   function handleConfirmRequest(formData: IRequestFormData): void {
-    const createdRequests = createRequestsFromCart(cartItems, formData);
-
-    clearCart();
-
-    if (createdRequests.length === 1) {
-      setSuccessMessage("Solicitud creada correctamente.");
+    if (!selectedService) {
       return;
     }
 
-    setSuccessMessage("Solicitudes creadas correctamente.");
-  }
+    createRequestFromService(selectedService, formData);
+    removeFromCart(selectedService.id);
 
-  if (successMessage) {
-    return (
-      <main className="checkout-page">
-        <section className="checkout-container">
-          <section className="checkout-success-card">
-            <div className="checkout-success-icon">✅</div>
-
-            <h1>{successMessage}</h1>
-
-            <p>
-              Tus servicios fueron convertidos en solicitudes pendientes. En la
-              siguiente historia de usuario se podrá construir la pantalla para
-              verlas.
-            </p>
-
-            <Button variant="primary" onClick={handleGoToCart}>
-              Volver al carrito
-            </Button>
-          </section>
-        </section>
-      </main>
+    setSuccessMessage(
+      `Solicitud creada correctamente para el servicio "${selectedService.name}".`
     );
+
+    setSelectedService(null);
   }
 
   return (
@@ -72,10 +60,20 @@ export default function CheckoutPage() {
       <section className="checkout-container">
         <PageHeader
           title="Confirmar solicitud"
-          subtitle="Completa los datos necesarios para crear tus solicitudes pendientes."
+          subtitle="Selecciona un servicio del carrito y crea una solicitud pendiente."
           showBackButton
           onBack={handleGoToCart}
         />
+
+        {successMessage && (
+          <section className="checkout-success-message">
+            <strong>{successMessage}</strong>
+            <p>
+              La solicitud quedó guardada como pendiente y fue agregada a la
+              cola de solicitudes.
+            </p>
+          </section>
+        )}
 
         {cartItems.length === 0 ? (
           <EmptyState
@@ -87,43 +85,85 @@ export default function CheckoutPage() {
         ) : (
           <section className="checkout-layout">
             <section className="checkout-summary-card">
-              <h2>Servicios a solicitar</h2>
+              <h2>Servicios pendientes por enviar solicitud</h2>
+
+              <p className="checkout-summary-description">
+                Selecciona un servicio por su ID. Solo se enviará la solicitud
+                del servicio seleccionado.
+              </p>
 
               <div className="checkout-services-list">
                 {cartItems.map((service: IService) => (
                   <article key={service.id} className="checkout-service-item">
-                    <div className="checkout-service-image">{service.image}</div>
+                    <div className="checkout-service-main">
+                      <div className="checkout-service-image">
+                        {service.image}
+                      </div>
 
-                    <div>
-                      <p>{service.category}</p>
-                      <h3>{service.name}</h3>
-                      <span>{service.company}</span>
+                      <div>
+                        <p className="checkout-service-id">
+                          ID del servicio: {service.id}
+                        </p>
+
+                        <h3>{service.name}</h3>
+
+                        <span>{service.company}</span>
+
+                        <small>{service.zone}</small>
+                      </div>
                     </div>
 
-                    <strong>{formatPrice(service.price)}</strong>
+                    <div className="checkout-service-bottom">
+                      <strong>{formatPrice(service.price)}</strong>
+
+                      <Button
+                        variant="primary"
+                        onClick={() => handleSelectService(service)}
+                      >
+                        Seleccionar ID {service.id}
+                      </Button>
+                    </div>
                   </article>
                 ))}
               </div>
 
               <div className="checkout-total-box">
-                <span>Total de servicios:</span>
+                <span>Servicios pendientes:</span>
                 <strong>{cartCount}</strong>
               </div>
 
               <div className="checkout-total-box">
-                <span>Total aproximado:</span>
+                <span>Total aproximado pendiente:</span>
                 <strong>{formatPrice(cartTotal)}</strong>
               </div>
 
               <p className="checkout-note">
-                Se creará una solicitud pendiente por cada servicio del carrito.
+                La zona no se pregunta aquí porque viene desde el servicio
+                disponible. Más adelante se podrá manejar la disponibilidad por
+                zonas usando grafos.
               </p>
             </section>
 
-            <RequestForm
-              serviceCount={cartCount}
-              onSubmit={handleConfirmRequest}
-            />
+            <section className="checkout-form-card">
+              {selectedService ? (
+                <RequestForm
+                  selectedService={selectedService}
+                  onSubmit={handleConfirmRequest}
+                  onCancel={handleCancelSelection}
+                />
+              ) : (
+                <section className="checkout-no-selection">
+                  <h2>Selecciona un servicio</h2>
+
+                  <p>
+                    Elige uno de los servicios pendientes para crear su solicitud.
+                    Los demás servicios seguirán guardados en el carrito.
+                  </p>
+
+                  <div className="checkout-no-selection-icon">🧰</div>
+                </section>
+              )}
+            </section>
           </section>
         )}
       </section>

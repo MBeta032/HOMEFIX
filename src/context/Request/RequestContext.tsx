@@ -2,7 +2,11 @@ import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import RequestQueue from "../../algorithms/RequestQueue";
 import type { IService } from "../../interfaces/ServiceDetail/service.interface";
-import type { IRequest, IRequestFormData, RequestStatus } from "../../interfaces/Requests/request.interface";
+import type {
+  IRequest,
+  IRequestFormData,
+  RequestStatus,
+} from "../../interfaces/Requests/request.interface";
 
 interface RequestProviderProps {
   children: ReactNode;
@@ -11,10 +15,10 @@ interface RequestProviderProps {
 export interface RequestContextType {
   requests: IRequest[];
   requestCount: number;
-  createRequestsFromCart: (
-    cartItems: IService[],
+  createRequestFromService: (
+    service: IService,
     formData: IRequestFormData
-  ) => IRequest[];
+  ) => IRequest;
   clearRequests: () => void;
 }
 
@@ -49,10 +53,10 @@ function isValidRequest(request: unknown): request is IRequest {
     typeof possibleRequest.serviceName === "string" &&
     typeof possibleRequest.company === "string" &&
     typeof possibleRequest.price === "number" &&
+    typeof possibleRequest.serviceZone === "string" &&
     typeof possibleRequest.address === "string" &&
     typeof possibleRequest.neighborhood === "string" &&
     typeof possibleRequest.city === "string" &&
-    typeof possibleRequest.zone === "string" &&
     typeof possibleRequest.desiredDate === "string" &&
     typeof possibleRequest.desiredTime === "string" &&
     typeof possibleRequest.problemDescription === "string" &&
@@ -81,8 +85,8 @@ function getRequestsFromStorage(): IRequest[] {
   }
 }
 
-function createRequestId(serviceId: string, index: number): string {
-  return `REQ-${Date.now()}-${serviceId}-${index + 1}`;
+function createRequestId(serviceId: string): string {
+  return `REQ-${Date.now()}-${serviceId}`;
 }
 
 export function RequestProvider({ children }: RequestProviderProps) {
@@ -103,39 +107,34 @@ export function RequestProvider({ children }: RequestProviderProps) {
     localStorage.setItem(REQUEST_STORAGE_KEY, JSON.stringify(requests));
   }, [requests]);
 
-  function createRequestsFromCart(
-    cartItems: IService[],
+  function createRequestFromService(
+    service: IService,
     formData: IRequestFormData
-  ): IRequest[] {
+  ): IRequest {
     const queue = new RequestQueue(requests);
-    const createdAt = new Date().toISOString();
 
-    const newRequests: IRequest[] = cartItems.map(
-      (service: IService, index: number) => ({
-        id: createRequestId(service.id, index),
-        serviceId: service.id,
-        serviceName: service.name,
-        company: service.company,
-        price: service.price,
-        address: formData.address,
-        neighborhood: formData.neighborhood,
-        city: formData.city,
-        zone: formData.zone,
-        desiredDate: formData.desiredDate,
-        desiredTime: formData.desiredTime,
-        problemDescription: formData.problemDescription,
-        status: "Pendiente",
-        createdAt,
-      })
-    );
+    const newRequest: IRequest = {
+      id: createRequestId(service.id),
+      serviceId: service.id,
+      serviceName: service.name,
+      company: service.company,
+      price: service.price,
+      serviceZone: service.zone,
+      address: formData.address,
+      neighborhood: formData.neighborhood,
+      city: formData.city,
+      desiredDate: formData.desiredDate,
+      desiredTime: formData.desiredTime,
+      problemDescription: formData.problemDescription,
+      status: "Pendiente",
+      createdAt: new Date().toISOString(),
+    };
 
-    newRequests.forEach((request: IRequest) => {
-      queue.enqueue(request);
-    });
+    queue.enqueue(newRequest);
 
     setRequests(queue.getItems());
 
-    return newRequests;
+    return newRequest;
   }
 
   function clearRequests(): void {
@@ -151,7 +150,7 @@ export function RequestProvider({ children }: RequestProviderProps) {
       value={{
         requests,
         requestCount,
-        createRequestsFromCart,
+        createRequestFromService,
         clearRequests,
       }}
     >

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import type { IRequestFormData } from "../../interfaces/Requests/request.interface";
 import Button from "../shared/Button";
+import type { IService } from "../../interfaces/ServiceDetail/service.interface";
+import type { IRequestFormData } from "../../interfaces/Requests/request.interface";
 
 interface RequestFormProps {
-  serviceCount: number;
+  selectedService: IService;
   onSubmit: (formData: IRequestFormData) => void;
+  onCancel: () => void;
 }
 
 type RequestFormErrors = Partial<Record<keyof IRequestFormData, string>>;
@@ -14,15 +16,15 @@ const initialFormData: IRequestFormData = {
   address: "",
   neighborhood: "",
   city: "",
-  zone: "",
   desiredDate: "",
   desiredTime: "",
   problemDescription: "",
 };
 
 export default function RequestForm({
-  serviceCount,
+  selectedService,
   onSubmit,
+  onCancel,
 }: RequestFormProps) {
   const [formData, setFormData] =
     useState<IRequestFormData>(initialFormData);
@@ -31,7 +33,7 @@ export default function RequestForm({
   const [generalError, setGeneralError] = useState<string>("");
 
   function handleChange(
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void {
     const fieldName = event.target.name as keyof IRequestFormData;
     const fieldValue = event.target.value;
@@ -64,10 +66,6 @@ export default function RequestForm({
       newErrors.city = "La ciudad es obligatoria.";
     }
 
-    if (!formData.zone.trim()) {
-      newErrors.zone = "La zona es obligatoria.";
-    }
-
     if (!formData.desiredDate.trim()) {
       newErrors.desiredDate = "La fecha deseada es obligatoria.";
     }
@@ -97,19 +95,29 @@ export default function RequestForm({
     }
 
     onSubmit(formData);
+    setFormData(initialFormData);
   }
 
   return (
     <form className="request-form" onSubmit={handleSubmit}>
       <div className="request-form-header">
-        <h2>Datos para confirmar la solicitud</h2>
+        <p className="request-selected-label">Servicio seleccionado</p>
+
+        <h2>{selectedService.name}</h2>
+
         <p>
-          Estos datos se aplicarán a {serviceCount}{" "}
-          {serviceCount === 1 ? "servicio" : "servicios"} del carrito.
+          Empresa: <strong>{selectedService.company}</strong>
+        </p>
+
+        <p>
+          Zona de cobertura del servicio:{" "}
+          <strong>{selectedService.zone}</strong>
         </p>
       </div>
 
-      {generalError && <p className="request-form-general-error">{generalError}</p>}
+      {generalError && (
+        <p className="request-form-general-error">{generalError}</p>
+      )}
 
       <div className="request-form-grid">
         <div className="request-form-group">
@@ -152,24 +160,6 @@ export default function RequestForm({
         </div>
 
         <div className="request-form-group">
-          <label htmlFor="zone">Zona</label>
-          <select
-            id="zone"
-            name="zone"
-            value={formData.zone}
-            onChange={handleChange}
-          >
-            <option value="">Selecciona una zona</option>
-            <option value="Norte">Norte</option>
-            <option value="Sur">Sur</option>
-            <option value="Centro">Centro</option>
-            <option value="Oeste">Oeste</option>
-            <option value="Oriente">Oriente</option>
-          </select>
-          {errors.zone && <span>{errors.zone}</span>}
-        </div>
-
-        <div className="request-form-group">
           <label htmlFor="desiredDate">Fecha deseada</label>
           <input
             id="desiredDate"
@@ -201,15 +191,23 @@ export default function RequestForm({
           name="problemDescription"
           value={formData.problemDescription}
           onChange={handleChange}
-          placeholder="Describe brevemente qué necesitas que revise la empresa."
+          placeholder="Describe qué necesitas que revise la empresa."
           rows={5}
         />
-        {errors.problemDescription && <span>{errors.problemDescription}</span>}
+        {errors.problemDescription && (
+          <span>{errors.problemDescription}</span>
+        )}
       </div>
 
-      <Button type="submit" variant="success" className="request-submit-button">
-        Enviar solicitud
-      </Button>
+      <div className="request-form-actions">
+        <Button type="submit" variant="success">
+          Enviar solicitud
+        </Button>
+
+        <Button type="button" variant="secondary" onClick={onCancel}>
+          Cancelar selección
+        </Button>
+      </div>
     </form>
   );
 }

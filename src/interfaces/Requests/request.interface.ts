@@ -9,7 +9,6 @@ export interface IRequestFormData {
   address: string;
   neighborhood: string;
   city: string;
-  zone: string;
   desiredDate: string;
   desiredTime: string;
   problemDescription: string;
@@ -21,10 +20,10 @@ export interface IRequest {
   serviceName: string;
   company: string;
   price: number;
+  serviceZone: string;
   address: string;
   neighborhood: string;
   city: string;
-  zone: string;
   desiredDate: string;
   desiredTime: string;
   problemDescription: string;
