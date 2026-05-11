@@ -3,6 +3,7 @@ import CartCounter from "../components/cart/CartCounter";
 import ServiceCard from "../components/shared/ServiceCard";
 import { CartProvider } from "../context/Cart/CartContext";
 import { services } from "../data/service.data";
+import CartPage from "../pages/CartPage";
 
 function ServicesMockPage() {
   return (
@@ -34,6 +35,8 @@ export default function AppRouter() {
           <Route path="/" element={<Navigate to="/services" />} />
 
           <Route path="/services" element={<ServicesMockPage />} />
+
+          <Route path="/cart" element={<CartPage />} />
 
           <Route path="*" element={<Navigate to="/services" />} />
         </Routes>

@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
+import CartQueue from "../../algorithms/CartQueue";
 import type { IService } from "../../interfaces/ServiceDetail/service.interface";
 
 export type AddToCartResult = "added" | "exists";
@@ -73,12 +74,11 @@ export function CartProvider({ children }: CartProviderProps) {
     getCartFromStorage()
   );
 
-  const cartCount: number = cartItems.length;
+  const cartQueue = new CartQueue(cartItems);
 
-  const cartTotal: number = cartItems.reduce(
-    (total: number, service: IService) => total + service.price,
-    0
-  );
+  const cartCount: number = cartQueue.size();
+
+  const cartTotal: number = cartQueue.getTotal();
 
   useEffect(() => {
     if (cartItems.length === 0) {
@@ -90,30 +90,32 @@ export function CartProvider({ children }: CartProviderProps) {
   }, [cartItems]);
 
   function addToCart(service: IService): AddToCartResult {
-    const serviceAlreadyExists = cartItems.some(
-      (cartItem: IService) => cartItem.id === service.id
-    );
+    const queue = new CartQueue(cartItems);
 
-    if (serviceAlreadyExists) {
+    if (queue.contains(service.id)) {
       return "exists";
     }
 
-    setCartItems((currentCartItems: IService[]) => [
-      ...currentCartItems,
-      service,
-    ]);
+    queue.enqueue(service);
+    setCartItems(queue.getItems());
 
     return "added";
   }
 
   function removeFromCart(id: string): void {
-    setCartItems((currentCartItems: IService[]) =>
-      currentCartItems.filter((cartItem: IService) => cartItem.id !== id)
-    );
+    const queue = new CartQueue(cartItems);
+
+    queue.removeById(id);
+
+    setCartItems(queue.getItems());
   }
 
   function clearCart(): void {
-    setCartItems([]);
+    const queue = new CartQueue(cartItems);
+
+    queue.clear();
+
+    setCartItems(queue.getItems());
   }
 
   return (
