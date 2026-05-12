@@ -22,11 +22,11 @@ export interface UserData{
 export interface AuthContextType{
     user: User | null
     userData: UserData |  null
-    loading : boolean
-    loginGoogle : () => Promise <User>
+    loading: boolean
+    loginGoogle: () => Promise <User>
     register: (data: RegisterData) => Promise<void>
     login: (email: string, password: string) =>Promise<void>
-    logout : () => Promise <void>
+    logout: () => Promise <void>
 }
 
 

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/HomePublica.css";
+import "../styles/HomePublica.css"
+import SearchBar from "../components/shared/Searchbar";
 
 const servicios = [
   { icono: "🔧", nombre: "Plomería" },
@@ -74,6 +75,14 @@ function HomePublica() {
           ))}
         </div>
       </section>
+
+      <SearchBar
+        value={zona}
+        onChange={setZona}
+        onSearch={handleBuscar}
+        placeholder="Ingresa tu barrio o zona"
+        buttonText="Buscar servicios"
+      />
     </div>
   );
 }

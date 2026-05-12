@@ -7,3 +7,20 @@ export interface ButtonProps {
   className?: string;
   onClick?: () => void;
 }
+
+export interface DashboardTopbarProps {
+  name: string
+}
+
+export interface SearchBarProps {
+  value: string
+  onChange: (value: string) => void
+  onSearch: () => void;
+  placeholder?: string
+  buttonText?:string
+}
+
+export interface PageHeaderProps {
+  title: string;
+  subtitle?: string;
+}

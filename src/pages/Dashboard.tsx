@@ -1,119 +1,108 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "../styles/HomePublica.css";
-import { AuthContext } from "../context/AuthContext";
+import PageHeader from "../components/shared/PageHeader";
+import "../styles/Dashboard.css"
 
+const info = [
+  {
+    tittle: "Solicitudes Activas",
+    value: 2,
+    icon: "📦"
+  },
+  {
+    tittle: "Servicios Completados",
+    value: 5,
+    icon: "✅"
+  },
 
+  {
+    tittle: "Servicios disponibles",
+    value: 8,
+    icon: "🔧",
+  },
 
-const servicios = [
-  { icono: "🔧", nombre: "Plomería" },
-  { icono: "⚡", nombre: "Electricidad" },
-  { icono: "🪚", nombre: "Carpintería" },
-  { icono: "🎨", nombre: "Pintura" },
-  { icono: "🧹", nombre: "Limpieza" },
-  { icono: "🌿", nombre: "Jardinería" },
-  { icono: "🔌", nombre: "Electrodomésticos" },
-  { icono: "🏠", nombre: "Mantenimiento" },
-];
+  {
+    tittle: "Carrito",
+    value: 1,
+    icon: "🛒",
+  },
+]
 
+const requests = [
+  {
+    service: "Plomeria",
+    state: "Completado"
+  },
 
+  {
+    service: "Limpieza",
+    state: "Completado"
+  },
 
-function Dashboard() {
-  const [zona, setZona] = useState("");
-  const [resultado, setResultado] = useState("");
+  {
+    service: "Electricidad",
+    state: "Pendiente"
+  },
+]
 
-    const context = useContext(AuthContext)
+const popular = [
+  "🔧 Plomería",
+  "⚡ Electricidad",
+  "🧹 Limpieza",
+  "🌿 Jardinería",
+]
 
-
-    if (!context) {
-        throw new Error("AuthContext no disponible")
-    }
-
-    const { user, logout } = context
-
-
-    const navigate = useNavigate()
-
-  function handleBuscar() {
-    if (zona.trim() === "") {
-      setResultado("Por favor ingresa una zona o barrio.");
-      return;
-    }
-    setResultado(`Buscando servicios en: ${zona}`);
-  }
-
-    const handleLogout = async () => {
-        await logout()
-        navigate("/login")
-    }
-
+ function Dashboard() {
   return (
-    <div className="home-container">
-        <nav className="home-nav">
-        <h1 className="home-logo">HomeFix</h1>
+    <div className="dashboard-home">
+      <PageHeader
+        title="Dashboard"
+        subtitle="Ten conocimiento sobre tus servicios y solicitudes"
+      />
 
-        <div className="home-nav-botones">
-
-            {user ? (
-            <button onClick={handleLogout}>
-                Cerrar sesión
-            </button>
-            ) : (
-            <>
-                <button onClick={() => navigate("/login")}>
-                Iniciar sesión
-                </button>
-
-                <button
-                onClick={() => navigate("/registro")}
-                className="btn-primary"
-                >
-                Registrarse
-                </button>
-            </>
-            )}
-
-        </div>
-        </nav>
-
-      <section className="home-hero">
-        <h2>Soluciones confiables para cada rincón de tu hogar.</h2>
-        <p>Encuentra el servicio que necesitas, cuando lo necesitas.</p>
-        <button onClick={() => navigate("/registro")} className="btn-primary">
-          Comenzar ahora
-        </button>
+      <section className="dashboard-info">
+           {info.map(item => (
+              <div 
+              key={item.tittle}
+              className="info-card">
+                <div className="info-icon">
+                  {item.icon}
+                </div>
+                <h3>{item.value}</h3>
+                <p>{item.tittle}</p>
+              </div>
+           ))}
       </section>
 
-      <section className="home-busqueda">
-        <h3>¿Dónde necesitas el servicio?</h3>
-        <div className="busqueda-contenedor">
-          <input
-            type="text"
-            placeholder="Ingresa tu barrio o zona"
-            value={zona}
-            onChange={(e) => setZona(e.target.value)}
-            className="busqueda-input"
-          />
-          <button onClick={handleBuscar} className="btn-primary">
-            Buscar servicios
-          </button>
-        </div>
-        {resultado && <p className="busqueda-resultado">{resultado}</p>}
+      <section className="dashboard-content">
+           <div className="dashboard-box">
+              <h2>Ultimas solicitudes</h2>
+              <div className="requests-list">
+                {requests.map(item =>(
+                  <div key={item.service}
+                  className="requests-item">
+                    <span>{item.service}</span>
+                    <span className="state">{item.state}</span>
+                  </div>
+                ))}
+              </div>
+           </div>
+
+           <div className="dashboard-box">
+                <h2>Servicios Populares</h2>
+                <div className="popular-list">
+                  {popular.map(item =>(
+                    <div
+                    key={item}
+                    className="popular-item">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+           </div>
       </section>
 
-      <section className="home-servicios">
-        <h3>Nuestros servicios</h3>
-        <div className="servicios-grid">
-          {servicios.map((s) => (
-            <div key={s.nombre} className="servicio-card">
-              <span className="servicio-icono">{s.icono}</span>
-              <p>{s.nombre}</p>
-            </div>
-          ))}
-        </div>
-      </section>
     </div>
-  );
-}
 
-export default Dashboard;
+  );
+} 
+
+export default Dashboard
