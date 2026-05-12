@@ -27,25 +27,6 @@ body {
   flex-direction: column;
 }
 
-.sidebar-logout {
-  margin-top: auto;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid #1f2937;
-  color: #ffffff;
-  font-size: 15px;
-  cursor: pointer;
-  transition: 0.2s;
-  background: none;
-  width: 100%;
-  text-align: left;
-}
-
-.sidebar-logout:hover {
-  background-color: #1f2937;
-  color: #f87171;
-}
-
 .sidebar-logo {
   font-size: 28px;
   font-weight: bold;
@@ -95,6 +76,24 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 30px;
+}
+
+.topbar-logout {
+  margin-left: auto;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background-color: white;
+  color: #6b7280;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.topbar-logout:hover {
+  background-color: #fef2f2;
+  color: #ef4444;
+  border-color: #fecaca;
 }
 
 .topbar-search {

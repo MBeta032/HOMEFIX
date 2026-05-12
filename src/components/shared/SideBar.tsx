@@ -1,6 +1,4 @@
-import { useContext } from "react"
 import { NavLink } from "react-router-dom"
-import { AuthContext } from "../../context/AuthContext"
 
 const link = [
     {name: "Inicio", path:"/dashboard", end: true},
@@ -13,13 +11,6 @@ const link = [
 
 function Sidebar(){
 
-    const context = useContext(AuthContext)
-
-  if (!context) {
-    throw new Error("AuthContext no disponible")
-  }
-
-  const {logout} = context
     return(
         <aside className="sidebar">
             <h2 className="sidebar-logo">HomeFix</h2>
@@ -36,10 +27,6 @@ function Sidebar(){
                 </NavLink>
             ))}
             </nav>
-
-            <button className="sidebar-logout" onClick={logout}>Cerrar Sesión</button>
-
-
 
         </aside>
     )

@@ -71,7 +71,7 @@ function Login(){
                 <input className="login-input" type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)}/>
 
                 <button onClick={loginGoogle} className="google-button">
-                <img src="/public/Google.png" alt="Google" />
+                <img src="/src/assets/images/Google.png" alt="Google" />
                 Iniciar sesión con Google
                 </button>
 

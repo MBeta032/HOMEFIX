@@ -1,5 +1,6 @@
 import type { SearchBarProps } from "../../interfaces/components";
 
+
 function SearchBar({
     value,
     onChange,
@@ -15,6 +16,7 @@ function SearchBar({
             placeholder={placeholder}
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            
             className="busqueda-input"
         />
 

@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 
 export interface ButtonProps {
-  children: ReactNode;
+  children: ReactNode
   type?: "button" | "submit" | "reset";
   variant?: "primary" | "secondary" | "success";
-  className?: string;
-  onClick?: () => void;
+  className?: string
+  onClick?: () => void
 }
 
 export interface DashboardTopbarProps {
@@ -21,6 +21,7 @@ export interface SearchBarProps {
 }
 
 export interface PageHeaderProps {
-  title: string;
-  subtitle?: string;
+  title: string
+  subtitle?: string
 }
+

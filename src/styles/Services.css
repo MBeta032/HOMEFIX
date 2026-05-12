@@ -1,0 +1,135 @@
+
+
+.service-card {
+  background-color: white;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: 0.2s;
+}
+
+.service-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.service-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.service-card-category {
+  background-color: #eff6ff;
+  color: #2563eb;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.service-card-availability {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.service-card-availability.available {
+  background-color: #f0fdf4;
+  color: #16a34a;
+}
+
+.service-card-availability.unavailable {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.service-card-name {
+  font-size: 17px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.service-card-company {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.service-card-description {
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.service-card-info {
+  display: flex;
+  gap: 14px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.service-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.service-card-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e3a5f;
+}
+
+.btn-primary {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 10px 24px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 15px !important;
+}
+
+/* SERVICES PAGE */
+.services-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 24px 0 16px;
+}
+
+.services-section-header h2 {
+  font-size: 20px;
+  color: #1e3a5f;
+  font-weight: 600;
+}
+
+.services-section-header span {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
