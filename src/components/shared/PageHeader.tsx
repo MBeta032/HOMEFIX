@@ -1,4 +1,4 @@
-import type { PageHeaderProps } from "../../interfaces/components";
+import type { PageHeaderProps } from "../../interfaces/Interfacecomponents";
 
 
 export default function PageHeader({

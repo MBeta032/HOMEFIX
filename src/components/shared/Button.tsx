@@ -1,4 +1,4 @@
-import type { ButtonProps } from "../../interfaces/components"
+import type { ButtonProps } from "../../interfaces/Interfacecomponents"
 
 export default function Button({
   children,

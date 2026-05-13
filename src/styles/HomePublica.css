@@ -82,6 +82,7 @@
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
+  margin-bottom: 24px;
 }
 
 .busqueda-input {

@@ -1,14 +1,17 @@
 import { useMemo, useState } from "react"
-import SearchServices from "../utils/services"
 import SearchBar from "../components/shared/Searchbar"
 import EmptyState from "../components/shared/EmptyState"
 import ServicesCard from "../components/shared/ServicesCard"
 import "../styles/Services.css"
+import FunServices from "../utils/services"
+import type { FilterServices } from "../interfaces/InterfaceServices"
+import FilterBar from "../components/shared/FilterBar"
 
 function Services(){
     const [search, setSearch] = useState("")
+    const [filters, setFilters] = useState<FilterServices>({})
 
-    const result = useMemo(() => SearchServices(search), [search])
+    const result = useMemo(() => FunServices(search, filters), [search, filters])
 
 
     return(
@@ -23,6 +26,8 @@ function Services(){
                 onSearch={() =>{}}
                 placeholder="Buscar por servicio, empresa o zona..."
                 buttonText="Buscar"/>
+
+            <FilterBar filters={filters} onChange={setFilters}/>
 
             <div className="services-section-header">
                 {search.trim() 

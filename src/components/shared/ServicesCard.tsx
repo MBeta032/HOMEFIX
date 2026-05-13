@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import type { ServiceMock } from "../../interfaces/data";
+import type { ServiceMock } from "../../interfaces/InterfaceServices";
 
 
 function ServicesCard({service}: {service: ServiceMock}){

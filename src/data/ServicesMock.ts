@@ -1,4 +1,4 @@
-import type { ServiceMock } from "../interfaces/data";
+import type { ServiceMock } from "../interfaces/InterfaceServices";
 
 export const servicesMock: ServiceMock[] = [
   {
