@@ -2,10 +2,10 @@ import { NavLink } from "react-router-dom"
 
 const link = [
     {name: "Inicio", path:"/dashboard", end: true},
+    {name: "Catalogo", path:"/dashboard/catalogo"},
     {name: "Servicios", path:"/dashboard/servicios"},
     {name: "Seguimiento", path:"/dashboard/seguimiento"},
     {name: "Carrito", path:"/dashboard/carrito"},
-    {name: "Solicitudes", path:"/dashboard/solicitudes"},        
     {name: "Perfil", path:"/dashboard/perfil"}
 ]
 

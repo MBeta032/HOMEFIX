@@ -21,7 +21,7 @@ const info = [
 
   {
     tittle: "Carrito",
-    value: 1,
+    value: 0,
     icon: "🛒",
   },
 ]

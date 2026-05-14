@@ -12,6 +12,7 @@ import ShoppingCar from "../pages/ShoppingCar"
 import Profile from "../pages/Profile"
 import Traking from "../pages/Traking"
 import Requests from "../pages/Requests"
+import Catalog from "../pages/Catalog"
 
 function AppRouter() {
 
@@ -32,6 +33,7 @@ function AppRouter() {
             <Route element={<PrivateRoute />}>
                     <Route element={<DashboardLayout/>}>
                         <Route path="/dashboard" element={<Dashboard/>}/>
+                        <Route path="/dashboard/catalogo" element={<Catalog/>}/>
                         <Route path="/dashboard/servicios" element={<Services/>}/>
                         <Route path="/dashboard/seguimiento" element={<Traking/>}/>
                         <Route path="/dashboard/carrito" element={<ShoppingCar/>}/>
