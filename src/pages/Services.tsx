@@ -3,9 +3,9 @@ import SearchBar from "../components/shared/Searchbar"
 import EmptyState from "../components/shared/EmptyState"
 import ServicesCard from "../components/shared/ServicesCard"
 import "../styles/Services.css"
-import FunServices from "../utils/services"
 import type { FilterServices } from "../interfaces/InterfaceServices"
 import FilterBar from "../components/shared/FilterBar"
+import FunServices from "../utils/Utilservices"
 
 function Services(){
     const [search, setSearch] = useState("")

@@ -2,8 +2,8 @@ import { useContext, useState } from "react"
 import type { RegisterData } from "../interfaces/InterfaceAuth"
 import { AuthContext } from "../context/AuthContext"
 import { Link, useNavigate } from "react-router-dom"
-import validateRegister from "../utils/validateRegister"
 import  "../styles/Register.css"
+import validateRegister from "../utils/UtilvalidateRegister"
 
 function Register(){
     const [form , setForm] = useState<RegisterData>({

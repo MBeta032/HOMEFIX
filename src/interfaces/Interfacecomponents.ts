@@ -25,6 +25,10 @@ export interface PageHeaderProps {
   subtitle?: string
 }
 
+export interface RatingStarsProps {
+  value: number
+  onChange: (value: number) => void
+}
 
 
 

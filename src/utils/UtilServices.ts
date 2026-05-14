@@ -33,7 +33,7 @@ function FunServices(search: string, filters: FilterServices = {}): ServiceMock[
     }
 
     if (filters.rating){
-        result = result.filter((services => services.rating === filters.rating))
+        result = result.filter((services => services.rating >= filters.rating!))
     }
 
     return result

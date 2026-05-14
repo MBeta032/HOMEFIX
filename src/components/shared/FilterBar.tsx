@@ -1,5 +1,6 @@
 import { servicesMock } from "../../data/ServicesMock";
 import type { FilterBarProps, FilterServices } from "../../interfaces/InterfaceServices";
+import RatingStars from "../RatingStars";
 import SelectField from "./SelectField";
 
 const categorys = [...new Set(servicesMock.map(s => s.category))].map((c => ({label: c, value: c})))
@@ -46,6 +47,10 @@ function FilterBar({filters, onChange}: FilterBarProps){
             onChange={(v) => onChange({...filters, maxPrice: v ? Number(v) : undefined})}
             options={price}
             />
+
+            <RatingStars
+            value={filters.rating || 0}
+            onChange={(val) => onChange({...filters, rating: val || undefined})}/>
 
             <button className="filter-clear" onClick={() => onChange({})}>Limpiar filtros</button>  
             
