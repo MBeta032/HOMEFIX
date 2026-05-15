@@ -28,6 +28,9 @@ export interface AuthContextType{
     login: (email: string, password: string) =>Promise<void>
     updateUserData: (data: Partial<UserData>) => Promise<void>
     changePassword: (newPassword: string) => Promise<void>
+    changeEmail: (newEmail: string) => Promise<void>
+    rechargeAuth: (currentPassword: string) => Promise<void>
+    resetPassword: () => Promise<void>
     logout: () => Promise <void>
 }
 

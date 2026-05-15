@@ -4,13 +4,15 @@ import { validatePassword, validateProfile } from "../utils/UtilValidateUpdate"
 import "../styles/Profile.css"
 
 function Profile(){
+    
     const context = useContext(AuthContext)
 
     if (!context) {
         throw new Error("AuthContext no disponible")
     }
-
-    const {userData, updateUserData, changePassword} = context
+    
+    const {user, userData, updateUserData, changePassword, changeEmail, rechargeAuth, resetPassword} = context
+    const isGoogle = user?.providerData[0]?.providerId === "google.com"
 
     const [edit, setEdit] = useState(false)
     const [form, setForm] = useState({
@@ -24,6 +26,7 @@ function Profile(){
         newPassword: "",
         confirmPassword: ""
     })
+    const [currentPassword, setCurrentPassword] = useState("")
 
     const [message, setMessage] = useState("")
     const [errors, setErrors] = useState<Record<string, string>>({})
@@ -36,6 +39,9 @@ function Profile(){
 
         try {
             await updateUserData(form)
+            if (form.email !== userData?.email){
+                await changeEmail(form.email)
+            }
             setEdit(false)
             setMessage("Perfil actualizado correctamente")
             setNotUpdate("")
@@ -45,20 +51,33 @@ function Profile(){
         }
     }
 
+    const handleResetPassword = async () => {
+        try {
+            await resetPassword()
+            setMessage("Correo de restablecimiento enviado. Revisa tu bandeja.")
+            setNotUpdate("")
+        } catch {
+            setNotUpdate("Error al enviar el correo.")
+        }
+    }
+
     const handleChangePassword = async () =>{
         const validationErrors = validatePassword(password.newPassword, password.confirmPassword)
             setErrors(validationErrors)
             if (Object.keys(validationErrors).length > 0) return
 
             try {
+                await rechargeAuth(currentPassword)
                 await changePassword(password.newPassword)
                 setPassword({ newPassword: "", confirmPassword: ""})
                 setMessage("Contraseña actualizada correctamente")
                 setNotUpdate("")
             } catch{
-                setNotUpdate("Error al cambiar la contraseña")
+                setNotUpdate("Contraseña actual incorrecta o sesión expirada")
             }
     }
+
+
 
     return(
         <div className="dashboard-page">
@@ -67,7 +86,7 @@ function Profile(){
                 <p>Gestiona tu informacion personal</p>
             </div>
 
-            {message && <p className="profile-message succes">{message}</p>}
+            {message && <p className="profile-message success">{message}</p>}
             {notUpdate && <p className="profile-message error">{notUpdate}</p>}
 
             <div className="profile-card">
@@ -84,15 +103,7 @@ function Profile(){
                         {edit ? "Cancelar" : "Editar"}
                     </button>
                 </div>
-                <div className="profile-field">
-                    <label className="profile-label">Email</label>
-                    <p className="profile-value">{userData?.email}</p>
-                </div>
 
-                <div className="profile-field">
-                    <label className="profile-label">Miembro desde</label>
-                    <p className="profile-value">{userData?.createdIn ? new Date(userData.createdIn).toLocaleDateString("es-CO") : "-"}</p>
-                </div>
                 {edit ? (
                     <>
                         <div className="profile-field">
@@ -102,6 +113,18 @@ function Profile(){
                                 value={form.name} 
                                 onChange={(e) => setForm({...form, name: e.target.value})} />
                                 {errors.name && <p className="profile-error">{errors.name}</p>}
+                        </div>
+
+                        <div className="profile-field">
+                            <div className="profile-field">
+                                <label className="profile-label">Correo</label>
+                                <input
+                                    className="profile-input"
+                                    type="email"
+                                    value={form.email}
+                                    onChange={(e) => setForm({...form, email: e.target.value })}/>
+                                {errors.newEmail && <p className="profile-error">{errors.newEmail}</p>}
+                            </div>
                         </div>
 
                         <div className="profile-field">
@@ -129,6 +152,10 @@ function Profile(){
                             <p className="profile-value">{userData?.name || "-"}</p>
                         </div>
                         <div className="profile-field">
+                            <label className="profile-label">Email</label>
+                            <p className="profile-value">{userData?.email}</p>
+                        </div>
+                        <div className="profile-field">
                             <label className="profile-label">Telefono</label>
                             <p className="profile-value">{userData?.phone || "No registrado"}</p>
                         </div>
@@ -136,34 +163,61 @@ function Profile(){
                             <label className="profile-label">Direccion</label>
                             <p className="profile-value">{userData?.address || "No registrado"}</p>
                         </div>
+                        <div className="profile-field">
+                            <label className="profile-label">Miembro desde</label>
+                            <p className="profile-value">{userData?.createdIn ? new Date(userData.createdIn).toLocaleDateString("es-CO") : "-"}</p>
+                        </div>
                     </>
                 )}
             </div>
 
             <div className="profile-card">
                 <h2>Cambiar contraseña</h2>
-                <p className="profile-subtitle">Minimo 6 caracteres y debe contener un numero</p>
 
-                <div className="profile-field">
-                    <label className="profile-label">Nueva Contraseña</label>
-                    <input className="profile-input" 
-                            type="password" 
-                            value={password.newPassword} 
-                            onChange={(e) => setPassword({...password, newPassword: e.target.value})}/>
+                {isGoogle ? (
+                    <>
+                        <p className="profile-subtitle">
+                            Te enviaremos un correo a <strong>{userData?.email}</strong> para restablecer tu contraseña
+                        </p>
+                        <button className="btn-primary" onClick={handleResetPassword}>
+                            Enviar correo de restablecimiento
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <p className="profile-subtitle">Mínimo 6 caracteres y debe contener un número</p>
+
+                        <div className="profile-field">
+                            <label className="profile-label">Contraseña actual</label>
+                            <input className="profile-input"
+                                type="password"
+                                value={currentPassword}
+                                onChange={(e) => setCurrentPassword(e.target.value)} />
+                        </div>
+
+                        <div className="profile-field">
+                            <label className="profile-label">Nueva contraseña</label>
+                            <input className="profile-input"
+                                type="password"
+                                value={password.newPassword}
+                                onChange={(e) => setPassword({...password, newPassword: e.target.value})} />
                             {errors.newPassword && <p className="profile-error">{errors.newPassword}</p>}
-                </div> 
+                        </div>
 
-                <div className="profile-field">
-                    <label className="profile-label">Confirmar Contraseña</label>
-                    <input className="profile-input" 
-                            type="password" 
-                            value={password.confirmPassword} 
-                            onChange={(e) => setPassword({...password, confirmPassword: e.target.value})}/>
+                        <div className="profile-field">
+                            <label className="profile-label">Confirmar contraseña</label>
+                            <input className="profile-input"
+                                type="password"
+                                value={password.confirmPassword}
+                                onChange={(e) => setPassword({...password, confirmPassword: e.target.value})} />
                             {errors.confirmPassword && <p className="profile-error">{errors.confirmPassword}</p>}
-                </div> 
-                
-                <button className="btn-primary" onClick={handleChangePassword}>Cambiar Contraseña</button>
+                        </div>
 
+                        <button className="btn-primary" onClick={handleChangePassword}>
+                            Cambiar contraseña
+                        </button>
+                    </>
+                )}
             </div>
         </div>
             

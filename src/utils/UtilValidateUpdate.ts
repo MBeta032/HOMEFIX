@@ -39,3 +39,15 @@ export function validatePassword(newPassword: string, confirmPassword: string) {
 
     return errors
 }
+
+export function validateEmail(email: string) {
+    const errors: Record<string, string> = {}
+
+    if (!email.trim()) {
+        errors.newEmail = "El correo es obligatorio*"
+    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+        errors.newEmail = "Formato inválido"
+    }
+
+    return errors
+}

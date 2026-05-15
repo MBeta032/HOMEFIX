@@ -1,8 +1,9 @@
-import { GoogleAuthProvider,createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword, updateProfile, type User } from "firebase/auth"
+import { GoogleAuthProvider,createUserWithEmailAndPassword, onAuthStateChanged, reauthenticateWithCredential, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updatePassword, updateProfile, type User } from "firebase/auth"
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { auth, db } from "../firebase/config.ts"
 import { useEffect, useState } from "react"
 import type { RegisterData, UserData } from "../interfaces/InterfaceAuth.ts"
+import { EmailAuthProvider } from "firebase/auth"
 
 
 
@@ -97,6 +98,11 @@ export function useAuth(){
         await setDoc(OldUser, {...userData, ...data}, {merge : true})
         setUserData({...userData, ...data} as UserData)
     }
+
+    const resetPassword = async (): Promise<void> => {
+        if (!user?.email) return
+        await sendPasswordResetEmail(auth, user.email)
+    }
     
     const changePassword = async (newPassword: string): Promise<void> =>{
         if(!user) return
@@ -104,11 +110,27 @@ export function useAuth(){
         await updatePassword(user, newPassword)
     }
 
+    const changeEmail = async (newEmail: string) : Promise<void> =>{
+        if(!user) return
+        await updateEmail(user, newEmail)
+        const OldEmail = doc(db, "usuarios", user.uid)
+        await setDoc(OldEmail, {...userData, email: newEmail}, {merge : true})
+        setUserData({...userData, email: newEmail} as UserData)
+        
+    }
+
+    const rechargeAuth = async (currentPassword: string) : Promise<void> =>{
+        if(!user || !user.email) return
+        const credential = EmailAuthProvider.credential(user.email, currentPassword)
+        await reauthenticateWithCredential(user, credential)
+
+    }
+
     const logout = async(): Promise<void> =>{
         await signOut(auth)
     }
 
-    return {user, userData, register, login, updateUserData, changePassword, logout, loading, loginGoogle}
+    return {user, userData, register, login, updateUserData, changePassword, changeEmail, rechargeAuth, resetPassword, logout, loading, loginGoogle}
     
 }
 
