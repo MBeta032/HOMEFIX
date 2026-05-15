@@ -1,4 +1,4 @@
-import { GoogleAuthProvider,createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile, type User } from "firebase/auth"
+import { GoogleAuthProvider,createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword, updateProfile, type User } from "firebase/auth"
 import { doc, getDoc, setDoc } from "firebase/firestore"
 import { auth, db } from "../firebase/config.ts"
 import { useEffect, useState } from "react"
@@ -89,13 +89,26 @@ export function useAuth(){
 
         return user
     }
+
+    const updateUserData = async (data: Partial<UserData>): Promise<void> =>{
+        if (!user) return
+
+        const OldUser = doc(db, "usuarios", user.uid)
+        await setDoc(OldUser, {...userData, ...data}, {merge : true})
+        setUserData({...userData, ...data} as UserData)
+    }
     
+    const changePassword = async (newPassword: string): Promise<void> =>{
+        if(!user) return
+
+        await updatePassword(user, newPassword)
+    }
 
     const logout = async(): Promise<void> =>{
         await signOut(auth)
     }
 
-    return {user, userData, register, login, logout, loading, loginGoogle}
+    return {user, userData, register, login, updateUserData, changePassword, logout, loading, loginGoogle}
     
 }
 

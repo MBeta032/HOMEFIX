@@ -7,10 +7,10 @@ export const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({children} : {children : React.ReactNode}){
 
-    const {user, userData, register, login, logout, loading, loginGoogle} = useAuth()
+    const {user, userData, register, login, updateUserData, changePassword, logout, loading, loginGoogle} = useAuth()
 
     return(
-        <AuthContext.Provider value={{user, userData, register, login, logout, loading, loginGoogle}}>
+        <AuthContext.Provider value={{user, userData, register, login, updateUserData, changePassword, logout, loading, loginGoogle}}>
             {children}
         </AuthContext.Provider>
     )

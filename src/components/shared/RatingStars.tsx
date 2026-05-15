@@ -1,5 +1,5 @@
-import type { RatingStarsProps } from "../interfaces/Interfacecomponents"
-import "../styles/Services.css"
+import type { RatingStarsProps } from "../../interfaces/Interfacecomponents"
+import "../../styles/Services.css"
 
 function RatingStars({value, onChange}: RatingStarsProps){
     return(
