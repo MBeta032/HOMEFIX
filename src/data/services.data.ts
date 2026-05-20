@@ -1,45 +1,90 @@
-import type { IHomeBenefit, IHomeStep, IService } from "../interfaces/Home/service.interface";
+import type {
+  IHomeBenefit,
+  IHomeStep,
+  IService,
+} from "../interfaces/Home/service.interface";
 
 export const serviciosPrincipales: IService[] = [
-  { icono: "🔧", nombre: "Plomería" },
-  { icono: "⚡", nombre: "Electricidad" },
-  { icono: "🪚", nombre: "Carpintería" },
-  { icono: "🎨", nombre: "Pintura" },
-  { icono: "🧹", nombre: "Limpieza" },
-  { icono: "🌿", nombre: "Jardinería" },
-  { icono: "🔌", nombre: "Electrodomésticos" },
-  { icono: "🏠", nombre: "Mantenimiento" },
+  {
+    icono: "🔧",
+    nombre: "Plomería",
+    descripcion: "Reparación de fugas, tuberías, grifos y mantenimiento básico.",
+  },
+  {
+    icono: "⚡",
+    nombre: "Electricidad",
+    descripcion: "Soporte para instalaciones, tomas, iluminación y revisiones.",
+  },
+  {
+    icono: "🪚",
+    nombre: "Carpintería",
+    descripcion: "Arreglos, instalación y mantenimiento de muebles del hogar.",
+  },
+  {
+    icono: "🎨",
+    nombre: "Pintura",
+    descripcion: "Servicios de pintura interior, exterior y retoques generales.",
+  },
+  {
+    icono: "🧹",
+    nombre: "Limpieza",
+    descripcion: "Apoyo para limpieza general, profunda o por zonas del hogar.",
+  },
+  {
+    icono: "🌿",
+    nombre: "Jardinería",
+    descripcion: "Cuidado de jardines, poda, organización y mantenimiento verde.",
+  },
+  {
+    icono: "🔌",
+    nombre: "Electrodomésticos",
+    descripcion: "Revisión básica de equipos y reparación de fallas comunes.",
+  },
+  {
+    icono: "🏠",
+    nombre: "Mantenimiento",
+    descripcion: "Soluciones generales para conservar tu hogar en buen estado.",
+  },
 ];
 
 export const pasosHome: IHomeStep[] = [
   {
-    numero: "1",
-    titulo: "Elige un servicio",
-    descripcion: "Busca el tipo de ayuda que necesitas para tu hogar.",
+    icono: "📍",
+    titulo: "Indica qué necesitas",
+    descripcion:
+      "Selecciona el servicio del hogar que quieres solicitar y revisa sus detalles.",
   },
   {
-    numero: "2",
-    titulo: "Envía tu solicitud",
-    descripcion: "Registra la información básica del servicio que quieres pedir.",
+    icono: "🛠️",
+    titulo: "Agrega servicios",
+    descripcion:
+      "Guarda los servicios que te interesan para organizarlos antes de confirmar.",
   },
   {
-    numero: "3",
-    titulo: "Recibe atención",
-    descripcion: "HomeFix te ayuda a organizar la solicitud para recibir soporte.",
+    icono: "✅",
+    titulo: "Confirma tu solicitud",
+    descripcion:
+      "Envía la solicitud y consulta su estado desde la plataforma cuando esté disponible.",
   },
 ];
 
 export const beneficiosHome: IHomeBenefit[] = [
   {
-    titulo: "Servicios variados",
-    descripcion: "Encuentra varias soluciones para el mantenimiento de tu casa en un solo lugar.",
+    icono: "⭐",
+    titulo: "Servicios centralizados",
+    descripcion:
+      "Encuentra diferentes servicios del hogar en una sola plataforma.",
   },
   {
-    titulo: "Uso sencillo",
-    descripcion: "La plataforma está pensada para que el cliente pueda solicitar ayuda sin complicaciones.",
+    icono: "🧾",
+    titulo: "Solicitudes organizadas",
+    descripcion:
+      "Más adelante podrás revisar tus solicitudes y hacer seguimiento a su estado.",
   },
   {
-    titulo: "Seguimiento básico",
-    descripcion: "Más adelante podrás revisar tus solicitudes y consultar su estado dentro de HomeFix.",
+    icono: "⚡",
+    titulo: "Uso rápido y sencillo",
+    descripcion:
+      "La interfaz está pensada para que cualquier cliente pueda usarla sin complicarse.",
   },
 ];

@@ -6,9 +6,13 @@ interface ServiceCardProps {
 
 function ServiceCard({ service }: ServiceCardProps) {
   return (
-    <article className="servicio-card">
-      <span className="servicio-icono">{service.icono}</span>
-      <p>{service.nombre}</p>
+    <article className="service-card">
+      <span className="service-card-icon">{service.icono}</span>
+
+      <div>
+        <h4>{service.nombre}</h4>
+        <p>{service.descripcion}</p>
+      </div>
     </article>
   );
 }

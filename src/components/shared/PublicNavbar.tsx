@@ -7,14 +7,23 @@ interface PublicNavbarProps {
 
 function PublicNavbar({ onLoginClick, onRegisterClick }: PublicNavbarProps) {
   return (
-    <nav className="home-nav">
-      <h1 className="home-logo">HomeFix</h1>
-
-      <div className="home-nav-botones">
-        <Button text="Iniciar sesión" onClick={onLoginClick} />
-        <Button text="Registrarse" onClick={onRegisterClick} variant="primary" />
+    <header className="public-navbar">
+      <div className="public-navbar-brand">
+        <span className="public-navbar-logo">⚡</span>
+        <h1>HomeFix</h1>
       </div>
-    </nav>
+
+      <nav className="public-navbar-links">
+        <a href="#servicios">Servicios</a>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#beneficios">Beneficios</a>
+      </nav>
+
+      <div className="public-navbar-actions">
+        <Button text="Inicia sesión" onClick={onLoginClick} />
+        <Button text="Regístrate" onClick={onRegisterClick} variant="primary" />
+      </div>
+    </header>
   );
 }
 
