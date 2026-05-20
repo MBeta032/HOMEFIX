@@ -1,16 +1,29 @@
 :root {
-  --home-dark: #171716;
-  --home-dark-soft: #252522;
-  --home-gray: #3a3935;
-  --home-light: #f4f7fb;
+  --home-dark: #111827;
+  --home-dark-soft: #1f2937;
+  --home-dark-card: #172033;
+
+  --home-gray: #263241;
+  --home-gray-soft: #334155;
+
+  --home-light: #f4f8fb;
   --home-white: #ffffff;
+
   --home-blue: #2563eb;
   --home-blue-dark: #1d4ed8;
-  --home-orange: #ff7a00;
+  --home-blue-deep: #1e40af;
+  --home-blue-soft: #dbeafe;
+  --home-blue-light: #eff6ff;
+
+  --home-cyan: #38bdf8;
+  --home-cyan-soft: #bae6fd;
+
   --home-text: #1f2937;
   --home-muted: #6b7280;
+  --home-border: rgba(255, 255, 255, 0.18);
 }
 
+/* CONTENEDOR GENERAL */
 .home-page {
   min-height: 100vh;
   background-color: var(--home-dark);
@@ -21,7 +34,7 @@
 .public-navbar {
   height: 68px;
   padding: 0 32px;
-  background-color: #262522;
+  background-color: var(--home-dark-soft);
   color: var(--home-white);
   display: flex;
   justify-content: space-between;
@@ -41,11 +54,12 @@
 .public-navbar-logo {
   width: 34px;
   height: 34px;
-  background-color: var(--home-orange);
+  background: linear-gradient(135deg, var(--home-blue), var(--home-cyan));
   border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 8px 18px rgba(56, 189, 248, 0.25);
 }
 
 .public-navbar-brand h1 {
@@ -70,7 +84,7 @@
 }
 
 .public-navbar-links a:hover {
-  color: var(--home-orange);
+  color: var(--home-cyan);
 }
 
 .public-navbar-actions {
@@ -79,7 +93,7 @@
   gap: 12px;
 }
 
-/* BUTTONS */
+/* BOTONES */
 .home-button {
   border: none;
   border-radius: 999px;
@@ -96,8 +110,9 @@
 }
 
 .home-button-primary {
-  background-color: var(--home-orange);
+  background: linear-gradient(135deg, var(--home-blue), var(--home-cyan));
   color: var(--home-white);
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.28);
 }
 
 .home-button-secondary {
@@ -109,20 +124,23 @@
 .home-hero {
   min-height: 650px;
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+  grid-template-columns: 1fr 0.95fr;
   background-color: var(--home-gray);
   overflow: hidden;
 }
 
 .home-hero-content {
-  padding: 150px 48px 90px 95px;
+  min-width: 0;
+  padding: 135px 56px 90px 95px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
+  z-index: 2;
 }
 
 .home-hero-label {
-  color: var(--home-orange);
+  color: var(--home-cyan);
   font-weight: 900;
   margin-bottom: 18px;
   font-size: 15px;
@@ -131,7 +149,7 @@
 }
 
 .home-hero-content h2 {
-  max-width: 650px;
+  max-width: 660px;
   margin: 0 0 18px;
   color: var(--home-white);
   font-size: 48px;
@@ -143,47 +161,66 @@
 .home-hero-content p {
   max-width: 680px;
   margin: 0 0 34px;
-  color: #eeeeee;
+  color: #f1f5f9;
   font-size: 18px;
   line-height: 1.55;
   font-weight: 600;
 }
 
+/* BARRA DE BÚSQUEDA */
 .home-search-box {
-  width: min(100%, 760px);
-  height: 58px;
+  width: 100%;
+  max-width: 680px;
+  min-height: 64px;
   padding: 6px;
-  background-color: transparent;
+  background-color: rgba(15, 23, 42, 0.2);
   border: 1px solid #d7d7d7;
   border-radius: 999px;
   display: flex;
   align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12);
 }
 
 .home-search-box input {
   flex: 1;
-  height: 100%;
+  min-width: 0;
+  height: 50px;
   padding: 0 22px;
   background-color: transparent;
   color: var(--home-white);
   border: none;
   outline: none;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .home-search-box input::placeholder {
-  color: #d6d6d6;
+  color: #e2e8f0;
 }
 
 .home-search-box .home-button {
-  height: 46px;
-  padding: 0 28px;
+  flex-shrink: 0;
+  min-width: 124px;
+  height: 50px;
+  padding: 0 26px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
+/* BLOQUE VISUAL DERECHO */
 .home-hero-visual {
   position: relative;
-  background-color: var(--home-orange);
+  background: linear-gradient(
+    135deg,
+    var(--home-blue-deep) 0%,
+    var(--home-blue) 48%,
+    var(--home-cyan) 100%
+  );
   display: flex;
   justify-content: center;
   align-items: center;
@@ -203,6 +240,17 @@
   z-index: -1;
 }
 
+.home-hero-visual::after {
+  content: "";
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.12);
+  right: -120px;
+  bottom: -140px;
+}
+
 .home-hero-card {
   width: 390px;
   min-height: 300px;
@@ -213,6 +261,8 @@
   text-align: center;
   box-shadow: 0 28px 70px rgba(0, 0, 0, 0.28);
   transform: rotate(-2deg);
+  position: relative;
+  z-index: 2;
 }
 
 .home-hero-icon {
@@ -223,7 +273,7 @@
 
 .home-hero-card h3 {
   margin: 0 0 12px;
-  color: var(--home-blue);
+  color: var(--home-blue-dark);
   font-size: 42px;
   font-weight: 900;
   letter-spacing: -1px;
@@ -237,7 +287,7 @@
   font-weight: 700;
 }
 
-/* SECTION TITLE */
+/* TÍTULOS DE SECCIÓN */
 .section-title {
   text-align: center;
   margin-bottom: 42px;
@@ -245,7 +295,7 @@
 
 .section-title h3 {
   margin: 0 0 8px;
-  color: var(--home-orange);
+  color: var(--home-cyan);
   font-size: 36px;
   font-weight: 900;
   letter-spacing: -1px;
@@ -259,12 +309,12 @@
   line-height: 1.55;
 }
 
-/* COMMON SECTIONS */
+/* SECCIONES GENERALES */
 .home-section {
   padding: 72px 32px;
 }
 
-/* HOW IT WORKS */
+/* CÓMO FUNCIONA */
 .home-steps-section {
   background-color: var(--home-dark);
 }
@@ -279,7 +329,14 @@
 
 .home-step-card {
   text-align: center;
-  padding: 18px;
+  padding: 26px 18px;
+  border-radius: 18px;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.home-step-card:hover {
+  background-color: rgba(255, 255, 255, 0.04);
+  transform: translateY(-4px);
 }
 
 .home-step-card span {
@@ -289,9 +346,9 @@
   width: 74px;
   height: 74px;
   margin-bottom: 18px;
-  border: 3px solid var(--home-orange);
+  border: 3px solid var(--home-cyan);
   border-radius: 22px;
-  color: var(--home-orange);
+  color: var(--home-cyan);
   font-size: 34px;
 }
 
@@ -311,14 +368,14 @@
   font-weight: 600;
 }
 
-/* SERVICES */
+/* SERVICIOS */
 .home-services-section {
-  background-color: #bdd8df;
+  background-color: var(--home-blue-soft);
   color: var(--home-text);
 }
 
 .home-services-section .section-title h3 {
-  color: var(--home-text);
+  color: var(--home-blue-dark);
 }
 
 .home-services-section .section-title p {
@@ -334,7 +391,7 @@
 }
 
 .service-card {
-  min-height: 210px;
+  min-height: 220px;
   padding: 26px;
   background-color: var(--home-white);
   border-radius: 20px;
@@ -355,7 +412,7 @@
   margin-bottom: 18px;
   justify-content: center;
   align-items: center;
-  background-color: #eff6ff;
+  background-color: var(--home-blue-light);
   border-radius: 16px;
   font-size: 28px;
 }
@@ -375,7 +432,7 @@
   font-weight: 600;
 }
 
-/* BENEFITS */
+/* BENEFICIOS */
 .home-benefits-section {
   background-color: var(--home-gray);
   padding: 76px 32px 84px;
@@ -394,7 +451,7 @@
 
 .home-benefits-header h3 {
   margin: 8px 0 0;
-  color: var(--home-orange);
+  color: var(--home-cyan);
   font-size: 38px;
   font-weight: 900;
   letter-spacing: -1px;
@@ -411,15 +468,21 @@
 .home-benefit-card {
   min-height: 250px;
   padding: 34px 28px;
-  background-color: #282826;
+  background-color: var(--home-dark-soft);
   border-radius: 14px;
   color: var(--home-white);
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.22);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.home-benefit-card:hover {
+  transform: translateY(-4px);
+  background-color: var(--home-dark-card);
 }
 
 .home-benefit-card span {
   display: block;
-  color: var(--home-orange);
+  color: var(--home-cyan);
   font-size: 28px;
   margin-bottom: 22px;
 }
@@ -438,7 +501,7 @@
   font-weight: 600;
 }
 
-/* ABOUT */
+/* SOBRE NOSOTROS */
 .home-about-section {
   padding: 82px 95px;
   background-color: var(--home-light);
@@ -452,7 +515,7 @@
 .home-about-label {
   display: inline-block;
   margin-bottom: 12px;
-  color: var(--home-orange);
+  color: var(--home-blue);
   font-size: 14px;
   font-weight: 900;
   text-transform: uppercase;
@@ -466,6 +529,7 @@
   line-height: 1.1;
   font-weight: 900;
   letter-spacing: -1px;
+  color: var(--home-text);
 }
 
 .home-about-section p {
@@ -482,11 +546,12 @@
   border-radius: 22px;
   background-color: var(--home-white);
   box-shadow: 0 18px 38px rgba(31, 41, 55, 0.12);
+  border: 1px solid rgba(37, 99, 235, 0.08);
 }
 
 .home-about-card h4 {
   margin: 0 0 12px;
-  color: var(--home-blue);
+  color: var(--home-blue-dark);
   font-size: 22px;
   font-weight: 900;
 }
@@ -494,7 +559,7 @@
 /* FOOTER */
 .home-footer {
   padding: 54px 32px;
-  background-color: #56534c;
+  background-color: var(--home-dark-soft);
   color: var(--home-white);
   text-align: center;
 }
@@ -510,7 +575,7 @@
 }
 
 .home-footer-brand span {
-  color: var(--home-orange);
+  color: var(--home-cyan);
 }
 
 .home-footer p {
@@ -519,7 +584,7 @@
   font-weight: 600;
 }
 
-/* PLACEHOLDER PAGES */
+/* PÁGINAS TEMPORALES LOGIN / REGISTRO */
 .placeholder-page {
   min-height: 100vh;
   padding: 70px 32px;
@@ -543,7 +608,7 @@
   font-weight: 800;
 }
 
-/* RESPONSIVE */
+/* RESPONSIVE TABLET */
 @media (max-width: 1100px) {
   .public-navbar-links {
     display: none;
@@ -555,6 +620,10 @@
 
   .home-hero-content {
     padding: 90px 40px;
+  }
+
+  .home-search-box {
+    max-width: 760px;
   }
 
   .home-hero-visual {
@@ -575,6 +644,7 @@
   }
 }
 
+/* RESPONSIVE CELULAR */
 @media (max-width: 760px) {
   .public-navbar {
     height: auto;
@@ -586,6 +656,8 @@
 
   .public-navbar-actions {
     width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
   }
 
   .public-navbar-actions .home-button {
@@ -605,24 +677,28 @@
   }
 
   .home-search-box {
-    height: auto;
+    min-height: auto;
     padding: 8px;
     border-radius: 22px;
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
   }
 
   .home-search-box input {
-    height: 46px;
+    height: 48px;
     padding: 0 14px;
   }
 
   .home-search-box .home-button {
     width: 100%;
+    min-width: 100%;
+    height: 48px;
   }
 
   .home-hero-card {
     width: calc(100% - 44px);
+    transform: rotate(0);
   }
 
   .home-steps-grid,
@@ -638,6 +714,10 @@
   }
 
   .home-section {
+    padding: 58px 22px;
+  }
+
+  .home-about-section {
     padding: 58px 22px;
   }
 }
