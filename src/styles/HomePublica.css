@@ -3,6 +3,10 @@
   background-color: #f4f7fb;
 }
 
+.home-container main {
+  padding: 0;
+}
+
 /* NAV */
 .home-nav {
   display: flex;
@@ -24,14 +28,28 @@
   gap: 12px;
 }
 
-.home-nav-botones button {
-  padding: 8px 20px;
-  border: 1px solid #2563eb;
+/* BOTONES */
+.home-button {
+  padding: 9px 20px;
   border-radius: 6px;
-  background-color: transparent;
-  color: #2563eb;
   cursor: pointer;
   font-size: 14px;
+  border: 1px solid #2563eb;
+}
+
+.home-button-secondary {
+  background-color: transparent;
+  color: #2563eb;
+}
+
+.home-button-primary {
+  background-color: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.home-button:hover {
+  opacity: 0.9;
 }
 
 /* HERO */
@@ -44,43 +62,47 @@
 .home-hero h2 {
   font-size: 32px;
   color: #1e3a5f;
-  margin-bottom: 12px;
+  margin: 0 0 12px;
 }
 
 .home-hero p {
+  max-width: 620px;
+  margin: 0 auto 28px;
   font-size: 16px;
   color: #4b5563;
+  line-height: 1.6;
+}
+
+/* TÍTULOS DE SECCIÓN */
+.section-title {
+  text-align: center;
   margin-bottom: 28px;
 }
 
-/* BOTÓN PRIMARIO */
-.btn-primary {
-  background-color: #2563eb !important;
-  color: #ffffff !important;
-  border: none !important;
-  padding: 10px 24px !important;
-  border-radius: 6px !important;
-  cursor: pointer !important;
-  font-size: 15px !important;
+.section-title h3 {
+  font-size: 22px;
+  color: #1e3a5f;
+  margin: 0 0 8px;
+}
+
+.section-title p {
+  max-width: 620px;
+  margin: 0 auto;
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.5;
 }
 
 /* SERVICIOS */
 .home-servicios {
   padding: 48px 32px;
-  text-align: center;
-}
-
-.home-servicios h3 {
-  font-size: 22px;
-  color: #1e3a5f;
-  margin-bottom: 28px;
 }
 
 .servicios-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
-  max-width: 800px;
+  max-width: 850px;
   margin: 0 auto;
 }
 
@@ -88,8 +110,8 @@
   background-color: #ffffff;
   border-radius: 10px;
   padding: 24px 16px;
+  text-align: center;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-  cursor: pointer;
 }
 
 .servicio-card:hover {
@@ -106,4 +128,119 @@
   margin: 0;
   font-size: 14px;
   color: #1f2937;
+}
+
+/* CÓMO FUNCIONA Y BENEFICIOS */
+.home-section {
+  padding: 48px 32px;
+}
+
+.home-how-it-works {
+  background-color: #ffffff;
+}
+
+.home-benefits {
+  background-color: #f4f7fb;
+}
+
+.home-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.home-info-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.home-how-it-works .home-info-card {
+  background-color: #f8fbff;
+}
+
+.home-step-number {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.home-info-card h4 {
+  margin: 0 0 8px;
+  color: #1e3a5f;
+  font-size: 17px;
+}
+
+.home-info-card p {
+  margin: 0;
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* PÁGINAS TEMPORALES */
+.placeholder-page {
+  min-height: 100vh;
+  padding: 48px 32px;
+  text-align: center;
+  background-color: #f4f7fb;
+}
+
+.placeholder-page h2 {
+  color: #1e3a5f;
+}
+
+.placeholder-page a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .home-nav {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .home-hero {
+    padding: 56px 24px;
+  }
+
+  .home-hero h2 {
+    font-size: 26px;
+  }
+
+  .servicios-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .home-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-nav-botones {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .home-button {
+    width: 100%;
+  }
+
+  .servicios-grid {
+    grid-template-columns: 1fr;
+  }
 }
