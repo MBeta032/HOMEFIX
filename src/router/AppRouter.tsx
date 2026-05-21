@@ -12,6 +12,7 @@ import ShoppingCar from "../pages/ShoppingCar";
 import Profile from "../pages/Profile";
 import Traking from "../pages/Traking";
 import Requests from "../pages/Requests";
+import ServiceDetail from "../pages/ServiceDetail";
 
 function AppRouter() {
   return (
@@ -25,6 +26,7 @@ function AppRouter() {
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/servicios" element={<Services />} />
+          <Route path="/dashboard/servicios/:id" element={<ServiceDetail />} />
           <Route path="/dashboard/catalogo" element={<Catalog />} />
           <Route path="/dashboard/historial" element={<History />} />
           <Route path="/dashboard/seguimiento" element={<Traking />} />
