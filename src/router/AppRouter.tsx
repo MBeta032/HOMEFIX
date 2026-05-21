@@ -14,6 +14,11 @@ import Traking from "../pages/Traking"
 import Requests from "../pages/Requests"
 
 function AppRouter() {
+  return (
+    <Routes>
+      <Route path="/" element={<HomePublica />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/registro" element={<Register />} />
 
     const context = useContext(AuthContext)
 
@@ -43,4 +48,4 @@ function AppRouter() {
     )
 }
 
-export default AppRouter
+export default AppRouter;

@@ -1,98 +1,160 @@
-import { useContext, useEffect, useState } from "react"
-import { AuthContext } from "../context/AuthContext"
-import { Link, useNavigate } from "react-router-dom"
-import "../styles/Login.css"
-import { validateLogin } from "../utils/ValidateLogin"
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import "../styles/Login.css";
+import { validateLogin } from "../utils/ValidateLogin";
 
-function Login(){
-    const [email, setEmail] = useState<string>("")
-    const [password, setPassword] = useState<string>("")
-    const [errors, setErrors] = useState<Record<string, string>>({})    
-    const context = useContext(AuthContext)
+function Login() {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  const context = useContext(AuthContext);
+  const navigate = useNavigate();
 
-    if (!context) {
-        throw new Error("AuthContext no disponible")
+  if (!context) {
+    throw new Error("AuthContext no disponible");
+  }
+
+  const { user, login, loginGoogle, loading } = context;
+
+  useEffect(() => {
+    if (!loading && user) {
+      navigate("/dashboard");
     }
+  }, [user, loading, navigate]);
 
-    const { user, login, loading, loginGoogle } = context
+  const handleLogin = async () => {
+    const validationErrors = validateLogin(email, password);
+    setErrors(validationErrors);
 
-    const navigate = useNavigate()
+    if (Object.keys(validationErrors).length > 0) return;
 
+    try {
+      setIsSubmitting(true);
+      setErrors({});
 
-    useEffect(() => {
-        if (!loading && user) {
-            navigate("/dashboard")
-        }
-    }, [user, loading, navigate])
+      await login(email, password);
+      navigate("/dashboard");
+    } catch (error: unknown) {
+      const err = error as { code?: string };
 
-    
-    const handleLogin = async () => {
-        const validationErrors = validateLogin(email, password)
+      switch (err.code) {
+        case "auth/invalid-email":
+          setErrors({ email: "Correo inválido." });
+          break;
 
-        setErrors(validationErrors)
+        case "auth/invalid-credential":
+          setErrors({ general: "Correo o contraseña incorrectos." });
+          break;
 
-        if (Object.keys(validationErrors).length > 0) return
+        case "auth/user-not-found":
+          setErrors({ general: "No existe una cuenta con este correo." });
+          break;
 
-        try {
-            await login(email, password)
-            navigate("/home")
+        case "auth/wrong-password":
+          setErrors({ general: "La contraseña es incorrecta." });
+          break;
 
-        } catch (error: unknown) {
-            const err = error as { code?: string }
-
-            switch (err.code) {
-                case "auth/invalid-email":
-                    setErrors({ email: "Email inválido" })
-                    break
-
-                case "auth/invalid-credential":
-                    setErrors({ general: "Credenciales incorrectas" })
-                    break
-
-                default:
-                    setErrors({ general: "Error inesperado" })
-            }
-        }
+        default:
+          setErrors({
+            general: "No se pudo iniciar sesión. Intenta nuevamente.",
+          });
+      }
+    } finally {
+      setIsSubmitting(false);
     }
+  };
 
-    return (
-        <div className="login-container">
+  const handleGoogleLogin = async () => {
+    try {
+      setIsSubmitting(true);
+      setErrors({});
 
-            <div className="login-card">
+      await loginGoogle();
+      navigate("/dashboard");
+    } catch (error: unknown) {
+      const err = error as { code?: string };
 
-                <h2 className="login-title">Iniciar sesión</h2>
+      switch (err.code) {
+        case "auth/popup-closed-by-user":
+          setErrors({
+            general: "Cerraste la ventana de Google antes de iniciar sesión.",
+          });
+          break;
 
-                {errors.email && (<p className="error-text">{errors.email}</p>)}
-                <input className="login-input"type="email"placeholder="Correo Electronico" value={email} onChange={(e) => setEmail(e.target.value)}
-                />
+        case "auth/cancelled-popup-request":
+          setErrors({
+            general: "Ya hay una ventana de Google abierta.",
+          });
+          break;
 
-                {errors.password && (<p className="error-text">{errors.password}</p>)}
-                <input className="login-input" type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)}/>
+        case "auth/account-exists-with-different-credential":
+          setErrors({
+            general:
+              "Ya existe una cuenta con este correo usando otro método de inicio de sesión.",
+          });
+          break;
 
-                <button onClick={loginGoogle} className="google-button">
-                <img src="/public/Google.png" alt="Google" />
-                Iniciar sesión con Google
-                </button>
+        default:
+          setErrors({
+            general: "No se pudo iniciar sesión con Google. Intenta nuevamente.",
+          });
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
-                <button
-                    className="login-button" onClick={handleLogin} disabled={loading}>
-                    {loading ? "Cargando..." : "Ingresar"}
-                </button>
+  return (
+    <div className="login-container">
+      <div className="login-card">
+        <h2 className="login-title">Iniciar sesión</h2>
 
-                {errors.general && (<p className="error-text">{errors.general}</p>)}
+        {errors.general && <p className="error-text">{errors.general}</p>}
 
-                <p className="login-link">
-                    ¿No tienes cuenta?{" "}
-                    <Link to="/registro">Regístrate</Link>
-                </p>
+        {errors.email && <p className="error-text">{errors.email}</p>}
+        <input
+          className="login-input"
+          type="email"
+          placeholder="Correo electrónico"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+        />
 
-            </div>
+        {errors.password && <p className="error-text">{errors.password}</p>}
+        <input
+          className="login-input"
+          type="password"
+          placeholder="Contraseña"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+        />
 
-        </div>
-    )
+        <button
+          className="login-button"
+          onClick={handleLogin}
+          disabled={isSubmitting || loading}
+        >
+          {isSubmitting ? "Ingresando..." : "Ingresar"}
+        </button>
+
+        <button
+          className="google-button"
+          onClick={handleGoogleLogin}
+          disabled={isSubmitting || loading}
+        >
+          <img src="/google.png" alt="Google" />
+          Continuar con Google
+        </button>
+
+        <p className="login-link">
+          ¿No tienes cuenta? <Link to="/registro">Regístrate</Link>
+        </p>
+      </div>
+    </div>
+  );
 }
 
-
-
-export default Login
+export default Login;
