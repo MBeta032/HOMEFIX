@@ -1,118 +1,47 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/HomePublica.css";
 import { AuthContext } from "../context/AuthContext";
 
-
-
-const servicios = [
-  { icono: "🔧", nombre: "Plomería" },
-  { icono: "⚡", nombre: "Electricidad" },
-  { icono: "🪚", nombre: "Carpintería" },
-  { icono: "🎨", nombre: "Pintura" },
-  { icono: "🧹", nombre: "Limpieza" },
-  { icono: "🌿", nombre: "Jardinería" },
-  { icono: "🔌", nombre: "Electrodomésticos" },
-  { icono: "🏠", nombre: "Mantenimiento" },
-];
-
-
-
 function Dashboard() {
-  const [zona, setZona] = useState("");
-  const [resultado, setResultado] = useState("");
+  const context = useContext(AuthContext);
+  const navigate = useNavigate();
 
-    const context = useContext(AuthContext)
-
-
-    if (!context) {
-        throw new Error("AuthContext no disponible")
-    }
-
-    const { user, logout } = context
-
-
-    const navigate = useNavigate()
-
-  function handleBuscar() {
-    if (zona.trim() === "") {
-      setResultado("Por favor ingresa una zona o barrio.");
-      return;
-    }
-    setResultado(`Buscando servicios en: ${zona}`);
+  if (!context) {
+    throw new Error("AuthContext no disponible");
   }
 
-    const handleLogout = async () => {
-        await logout()
-        navigate("/login")
-    }
+  const { userData, logout } = context;
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+  };
 
   return (
-    <div className="home-container">
-        <nav className="home-nav">
-        <h1 className="home-logo">HomeFix</h1>
+    <main style={{ padding: "32px" }}>
+      <h2>Panel del cliente</h2>
 
-        <div className="home-nav-botones">
+      <p>Sesión iniciada correctamente.</p>
 
-            {user ? (
-            <button onClick={handleLogout}>
-                Cerrar sesión
-            </button>
-            ) : (
-            <>
-                <button onClick={() => navigate("/login")}>
-                Iniciar sesión
-                </button>
-
-                <button
-                onClick={() => navigate("/registro")}
-                className="btn-primary"
-                >
-                Registrarse
-                </button>
-            </>
-            )}
-
+      {userData && (
+        <div>
+          <p>
+            <strong>Nombre:</strong> {userData.name}
+          </p>
+          <p>
+            <strong>Correo:</strong> {userData.email}
+          </p>
+          <p>
+            <strong>Ciudad:</strong> {userData.city}
+          </p>
+          <p>
+            <strong>Zona:</strong> {userData.zone}
+          </p>
         </div>
-        </nav>
+      )}
 
-      <section className="home-hero">
-        <h2>Soluciones confiables para cada rincón de tu hogar.</h2>
-        <p>Encuentra el servicio que necesitas, cuando lo necesitas.</p>
-        <button onClick={() => navigate("/registro")} className="btn-primary">
-          Comenzar ahora
-        </button>
-      </section>
-
-      <section className="home-busqueda">
-        <h3>¿Dónde necesitas el servicio?</h3>
-        <div className="busqueda-contenedor">
-          <input
-            type="text"
-            placeholder="Ingresa tu barrio o zona"
-            value={zona}
-            onChange={(e) => setZona(e.target.value)}
-            className="busqueda-input"
-          />
-          <button onClick={handleBuscar} className="btn-primary">
-            Buscar servicios
-          </button>
-        </div>
-        {resultado && <p className="busqueda-resultado">{resultado}</p>}
-      </section>
-
-      <section className="home-servicios">
-        <h3>Nuestros servicios</h3>
-        <div className="servicios-grid">
-          {servicios.map((s) => (
-            <div key={s.nombre} className="servicio-card">
-              <span className="servicio-icono">{s.icono}</span>
-              <p>{s.nombre}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-    </div>
+      <button onClick={handleLogout}>Cerrar sesión</button>
+    </main>
   );
 }
 
