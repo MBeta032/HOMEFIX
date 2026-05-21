@@ -20,19 +20,24 @@ function Services(){
             <SearchBar 
                 value={search}
                 onChange={(value) => setSearch(value)}
-                onSearch={() =>{}}
+                onSearch={() => setSearch(search.trim())}
                 placeholder="Buscar por servicio, empresa o zona..."
                 buttonText="Buscar"/>
 
             <div className="services-section-header">
                 {search.trim() 
-                    ? <h2>Resultados para: "{search}"</h2>
+                    ? <h2>Resultados para: "{search.trim()}"</h2>
                     : <h2>Servicios disponibles</h2>
                 }
-                <span>{result.length} Servicios encontramos</span>
+                <span>{result.length} servicios encontrados</span>
             </div>
             {result.length === 0 
-                ?<EmptyState />
+                ? (
+                    <EmptyState 
+                        title="No encontramos servicios"
+                        description="Intenta buscar por otro servicio, empresa, categoria o zona."
+                    />
+                )
                 : (
                     <div className="services-grid">{result.map((service => (
                         <ServicesCard key={service.id} service={service}/>

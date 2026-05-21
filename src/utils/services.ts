@@ -1,17 +1,25 @@
 import { servicesMock } from "../data/ServicesMock";
-import type {   ServiceMock } from "../interfaces/data";
+import type { ServiceMock } from "../interfaces/data";
+
+function normalizeText(value: string): string {
+    return value
+        .toLocaleLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+}
 
 function SearchServices(search: string): ServiceMock[]{
-    if(!search.trim()) return servicesMock
+    const text = normalizeText(search)
 
-    const text = search.toLowerCase().trim()
+    if(!text) return servicesMock
 
     return servicesMock.filter(services => 
-        services.name.toLocaleLowerCase().includes(text) || 
-        services.category.toLocaleLowerCase().includes(text) || 
-        services.company.toLocaleLowerCase().includes(text) || 
-        services.zone.toLocaleLowerCase().includes(text) || 
-        services.description.toLocaleLowerCase().includes(text)  
+        normalizeText(services.name).includes(text) || 
+        normalizeText(services.category).includes(text) || 
+        normalizeText(services.company).includes(text) || 
+        normalizeText(services.zone).includes(text) || 
+        normalizeText(services.description).includes(text)  
     )
 }
 export default SearchServices
