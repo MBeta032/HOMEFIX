@@ -11,13 +11,13 @@ function Login() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const context = useContext(AuthContext);
+  const navigate = useNavigate();
 
   if (!context) {
     throw new Error("AuthContext no disponible");
   }
 
   const { user, login, loginGoogle, loading } = context;
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!loading && user) {
@@ -33,6 +33,8 @@ function Login() {
 
     try {
       setIsSubmitting(true);
+      setErrors({});
+
       await login(email, password);
       navigate("/dashboard");
     } catch (error: unknown) {
@@ -143,7 +145,7 @@ function Login() {
           onClick={handleGoogleLogin}
           disabled={isSubmitting || loading}
         >
-          <img src="/Google.png" alt="Google" />
+          <img src="/google.png" alt="Google" />
           Continuar con Google
         </button>
 
