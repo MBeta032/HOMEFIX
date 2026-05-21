@@ -1,106 +1,50 @@
-import PageHeader from "../components/shared/PageHeader";
-import "../styles/Dashboard.css"
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
-const info = [
-  {
-    tittle: "Solicitudes Activas",
-    value: 2,
-    icon: "📦"
-  },
-  {
-    tittle: "Servicios Completados",
-    value: 5,
-    icon: "✅"
-  },
+function Dashboard() {
+  const context = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  {
-    tittle: "Servicios disponibles",
-    value: 8,
-    icon: "🔧",
-  },
+  if (!context) {
+    throw new Error("AuthContext no disponible");
+  }
 
-  {
-    tittle: "Carrito",
-    value: 1,
-    icon: "🛒",
-  },
-]
+  const { userData, logout } = context;
 
-const requests = [
-  {
-    service: "Plomeria",
-    state: "Completado"
-  },
-
-  {
-    service: "Limpieza",
-    state: "Completado"
-  },
-
-  {
-    service: "Electricidad",
-    state: "Pendiente"
-  },
-]
-
-const popular = [
-  "🔧 Plomería",
-  "⚡ Electricidad",
-  "🧹 Limpieza",
-  "🌿 Jardinería",
-]
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+  };
 
  function Dashboard() {
   return (
-    <div className="dashboard-home">
-      <PageHeader
-        title="Dashboard"
-        subtitle="Ten conocimiento sobre tus servicios y solicitudes"
-      />
+    <main style={{ padding: "32px" }}>
+      <h2>Panel del cliente</h2>
 
-      <section className="dashboard-info">
-           {info.map(item => (
-              <div 
-              key={item.tittle}
-              className="info-card">
-                <div className="info-icon">
-                  {item.icon}
-                </div>
-                <h3>{item.value}</h3>
-                <p>{item.tittle}</p>
-              </div>
-           ))}
-      </section>
+      <p>Sesión iniciada correctamente.</p>
 
-      <section className="dashboard-content">
-           <div className="dashboard-box">
-              <h2>Ultimas solicitudes</h2>
-              <div className="requests-list">
-                {requests.map(item =>(
-                  <div key={item.service}
-                  className="requests-item">
-                    <span>{item.service}</span>
-                    <span className="state">{item.state}</span>
-                  </div>
-                ))}
-              </div>
-           </div>
+      {userData && (
+        <div>
+          <p>
+            <strong>Nombre:</strong> {userData.name}
+          </p>
+          <p>
+            <strong>Correo:</strong> {userData.email}
+          </p>
+          <p>
+            <strong>Ciudad:</strong> {userData.city}
+          </p>
+          <p>
+            <strong>Zona:</strong> {userData.zone}
+          </p>
+        </div>
+      )}
 
-           <div className="dashboard-box">
-                <h2>Servicios Populares</h2>
-                <div className="popular-list">
-                  {popular.map(item =>(
-                    <div
-                    key={item}
-                    className="popular-item">
-                      {item}
-                    </div>
-                  ))}
-                </div>
-           </div>
-      </section>
-
-    </div>
+      <button onClick={handleLogout}>Cerrar sesión</button>
+    </main>
+  );
+}
 
   );
 } 

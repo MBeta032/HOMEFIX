@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import DashboardTopbar from "./DashboardTopBar";
-import Sidebar from "./Sidebar";
+import Sidebar from "./SideBar";
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
