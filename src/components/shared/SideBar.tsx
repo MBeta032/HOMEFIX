@@ -1,14 +1,15 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom"
 
 const link = [
-    { name: "Inicio", path: "/dashboard", end: true },
-    { name: "Catalogo", path: "/dashboard/catalogo" },
-    { name: "Servicios", path: "/dashboard/servicios" },
-    { name: "Seguimiento", path: "/dashboard/seguimiento" },
-    { name: "Carrito", path: "/dashboard/carrito" },
-    { name: "Solicitudes", path: "/dashboard/solicitudes" },
-    { name: "Perfil", path: "/dashboard/perfil" },
-];
+  { name: "Inicio", path: "/dashboard", end: true },
+  { name: "Catalogo", path: "/dashboard/catalogo" },
+  { name: "Servicios", path: "/dashboard/servicios" },
+  { name: "Historial", path: "/dashboard/historial" },
+  { name: "Seguimiento", path: "/dashboard/seguimiento" },
+  { name: "Carrito", path: "/dashboard/carrito" },
+  { name: "Solicitudes", path: "/dashboard/solicitudes" },
+  { name: "Perfil", path: "/dashboard/perfil" },
+]
 
 function Sidebar() {
   return (
@@ -18,11 +19,11 @@ function Sidebar() {
       <nav className="sidebar-nav">
         {link.map((link) => (
           <NavLink
-                key={link.path}
-                to={link.path}
-                end={link.end}
-                className={({ isActive }) =>
-                    isActive ? "sidebar-link active" : "sidebar-link"
+            key={link.path}
+            to={link.path}
+            end={link.end}
+            className={({ isActive }) =>
+              isActive ? "sidebar-link active" : "sidebar-link"
             }
           >
             {link.name}
@@ -30,7 +31,7 @@ function Sidebar() {
         ))}
       </nav>
     </aside>
-  );
+  )
 }
 
-export default Sidebar;
+export default Sidebar
