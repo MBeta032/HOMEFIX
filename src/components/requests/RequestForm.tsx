@@ -1,122 +1,123 @@
-import { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
-import Button from "../shared/Button";
-import type { IService } from "../../interfaces/ServiceDetail/service.interface";
-import type { IRequestFormData } from "../../interfaces/Requests/request.interface";
+import { useState } from "react"
+import type { ChangeEvent, FormEvent } from "react"
+import Button from "../shared/Button"
+import type { ServiceMock } from "../../interfaces/InterfaceServices"
+import type { IRequestFormData } from "../../interfaces/Requests/request.interface"
 
 interface RequestFormProps {
-  selectedService: IService;
-  onSubmit: (formData: IRequestFormData) => void;
-  onCancel: () => void;
+  services: ServiceMock[]
+  onSubmit: (formData: IRequestFormData) => void
+  onCancel: () => void
 }
 
-type RequestFormErrors = Partial<Record<keyof IRequestFormData, string>>;
+type RequestFormErrors = Partial<Record<keyof IRequestFormData, string>>
 
 const initialFormData: IRequestFormData = {
   address: "",
   neighborhood: "",
   city: "",
+  zone: "",
   desiredDate: "",
   desiredTime: "",
   paymentMethod: "",
   problemDescription: "",
-};
+}
 
 export default function RequestForm({
-  selectedService,
+  services,
   onSubmit,
   onCancel,
 }: RequestFormProps) {
   const [formData, setFormData] =
-    useState<IRequestFormData>(initialFormData);
+    useState<IRequestFormData>(initialFormData)
 
-  const [errors, setErrors] = useState<RequestFormErrors>({});
-  const [generalError, setGeneralError] = useState<string>("");
+  const [errors, setErrors] = useState<RequestFormErrors>({})
+  const [generalError, setGeneralError] = useState<string>("")
 
   function handleChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ): void {
-    const fieldName = event.target.name as keyof IRequestFormData;
-    const fieldValue = event.target.value;
+    const fieldName = event.target.name as keyof IRequestFormData
+    const fieldValue = event.target.value
 
     setFormData({
       ...formData,
       [fieldName]: fieldValue,
-    });
+    })
 
     setErrors({
       ...errors,
       [fieldName]: "",
-    });
+    })
 
-    setGeneralError("");
+    setGeneralError("")
   }
 
   function validateForm(): boolean {
-    const newErrors: RequestFormErrors = {};
+    const newErrors: RequestFormErrors = {}
 
     if (!formData.address.trim()) {
-      newErrors.address = "La dirección es obligatoria.";
+      newErrors.address = "La dirección es obligatoria."
     }
 
     if (!formData.neighborhood.trim()) {
-      newErrors.neighborhood = "El barrio es obligatorio.";
+      newErrors.neighborhood = "El barrio es obligatorio."
     }
 
     if (!formData.city.trim()) {
-      newErrors.city = "La ciudad es obligatoria.";
+      newErrors.city = "La ciudad es obligatoria."
+    }
+
+    if (!formData.zone.trim()) {
+      newErrors.zone = "La zona es obligatoria."
     }
 
     if (!formData.desiredDate.trim()) {
-      newErrors.desiredDate = "La fecha deseada es obligatoria.";
+      newErrors.desiredDate = "La fecha deseada es obligatoria."
     }
 
     if (!formData.desiredTime.trim()) {
-      newErrors.desiredTime = "La hora deseada es obligatoria.";
+      newErrors.desiredTime = "La hora deseada es obligatoria."
     }
 
     if (!formData.paymentMethod) {
-      newErrors.paymentMethod = "Selecciona un método de pago.";
+      newErrors.paymentMethod = "Selecciona un método de pago."
     }
 
     if (!formData.problemDescription.trim()) {
       newErrors.problemDescription =
-        "La descripción del problema es obligatoria.";
+        "La descripción del problema es obligatoria."
     }
 
-    setErrors(newErrors);
+    setErrors(newErrors)
 
-    return Object.keys(newErrors).length === 0;
+    return Object.keys(newErrors).length === 0
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
-    event.preventDefault();
+    event.preventDefault()
 
-    const isValidForm = validateForm();
+    const isValidForm = validateForm()
 
     if (!isValidForm) {
-      setGeneralError("Completa todos los campos obligatorios antes de continuar.");
-      return;
+      setGeneralError("Completa todos los campos obligatorios antes de continuar.")
+      return
     }
 
-    onSubmit(formData);
-    setFormData(initialFormData);
+    onSubmit(formData)
+    setFormData(initialFormData)
   }
 
   return (
     <form className="request-form" onSubmit={handleSubmit}>
       <div className="request-form-header">
-        <p className="request-selected-label">Servicio seleccionado</p>
+        <p className="request-selected-label">Servicios a confirmar</p>
 
-        <h2>{selectedService.name}</h2>
-
-        <p>
-          Empresa: <strong>{selectedService.company}</strong>
-        </p>
+        <h2>{services.length} servicio(s) del carrito</h2>
 
         <p>
-          Zona de cobertura del servicio:{" "}
-          <strong>{selectedService.zone}</strong>
+          Al enviar este formulario se creará una solicitud pendiente por cada
+          servicio agregado al carrito.
         </p>
       </div>
 
@@ -162,6 +163,19 @@ export default function RequestForm({
             placeholder="Ej: Cali"
           />
           {errors.city && <span>{errors.city}</span>}
+        </div>
+
+        <div className="request-form-group">
+          <label htmlFor="zone">Zona</label>
+          <input
+            id="zone"
+            name="zone"
+            type="text"
+            value={formData.zone}
+            onChange={handleChange}
+            placeholder="Ej: Sur de Cali"
+          />
+          {errors.zone && <span>{errors.zone}</span>}
         </div>
 
         <div className="request-form-group">
@@ -221,13 +235,13 @@ export default function RequestForm({
 
       <div className="request-form-actions">
         <Button type="submit" variant="success">
-          Enviar solicitud
+          Confirmar solicitud
         </Button>
 
         <Button type="button" variant="secondary" onClick={onCancel}>
-          Cancelar selección
+          Volver al carrito
         </Button>
       </div>
     </form>
-  );
+  )
 }
