@@ -3,34 +3,36 @@ export type RequestStatus =
   | "Asignada"
   | "En proceso"
   | "Finalizada"
-  | "Cancelada";
+  | "Cancelada"
 
-export type PaymentMethod = "Efectivo" | "Datáfono";
+export type PaymentMethod = "Efectivo" | "Datáfono"
 
 export interface IRequestFormData {
-  address: string;
-  neighborhood: string;
-  city: string;
-  desiredDate: string;
-  desiredTime: string;
-  paymentMethod: PaymentMethod | "";
-  problemDescription: string;
+  address: string
+  neighborhood: string
+  city: string
+  zone: string
+  desiredDate: string
+  desiredTime: string
+  paymentMethod: PaymentMethod | ""
+  problemDescription: string
 }
 
 export interface IRequest {
-  id: string;
-  serviceId: string;
-  serviceName: string;
-  company: string;
-  price: number;
-  serviceZone: string;
-  address: string;
-  neighborhood: string;
-  city: string;
-  desiredDate: string;
-  desiredTime: string;
-  paymentMethod: PaymentMethod;
-  problemDescription: string;
-  status: RequestStatus;
-  createdAt: string;
+  id: string
+  serviceId: string
+  serviceName: string
+  company: string
+  price: number
+  serviceZone: string
+  address: string
+  neighborhood: string
+  city: string
+  zone: string
+  desiredDate: string
+  desiredTime: string
+  paymentMethod: PaymentMethod
+  problemDescription: string
+  status: RequestStatus
+  createdAt: string
 }
