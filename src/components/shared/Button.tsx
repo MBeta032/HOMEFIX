@@ -1,27 +1,19 @@
-import type { ReactNode } from "react";
-
 interface ButtonProps {
-  children: ReactNode;
-  type?: "button" | "submit" | "reset";
-  variant?: "primary" | "secondary" | "success";
-  className?: string;
-  onClick?: () => void;
+  text: string;
+  onClick: () => void;
+  variant?: "primary" | "secondary";
 }
 
-export default function Button({
-  children,
-  type = "button",
-  variant = "primary",
-  className = "",
-  onClick,
-}: ButtonProps) {
+function Button({ text, onClick, variant = "secondary" }: ButtonProps) {
   return (
     <button
-      type={type}
-      className={`button button-${variant} ${className}`}
+      type="button"
+      className={`home-button home-button-${variant}`}
       onClick={onClick}
     >
-      {children}
+      {text}
     </button>
   );
 }
+
+export default Button;
