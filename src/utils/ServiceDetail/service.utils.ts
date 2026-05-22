@@ -6,5 +6,5 @@ export function getServiceById(id: string | undefined): IService | undefined {
     return undefined;
   }
 
-  return services.find((service: IService) => service.id === id);
+  return services.find((service) => service.id === id);
 }
