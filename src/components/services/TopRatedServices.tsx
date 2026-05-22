@@ -1,9 +1,14 @@
+import type { ServiceMock } from "../../interfaces/InterfaceServices"
 import { getTopRatedServices } from "../../utils/UtilServices"
 import EmptyState from "../shared/EmptyState"
 import ServicesCard from "../shared/ServicesCard"
 
-function TopRatedServices() {
-  const topServices = getTopRatedServices(5)
+interface TopRatedServicesProps {
+  services: ServiceMock[]
+}
+
+function TopRatedServices({ services }: TopRatedServicesProps) {
+  const topServices = getTopRatedServices(services, 5)
 
   return (
     <section className="top-rated-section">
@@ -11,7 +16,7 @@ function TopRatedServices() {
         <div>
           <h2>Servicios mejor valorados</h2>
           <p>
-            Servicios destacados ordenados por valoración usando un árbol
+            Top 5 calculado según los filtros actuales y ordenado con árbol
             binario de búsqueda.
           </p>
         </div>
@@ -22,7 +27,7 @@ function TopRatedServices() {
       {topServices.length === 0 ? (
         <EmptyState
           title="No hay servicios valorados"
-          description="Cuando existan servicios con valoración aparecerán en esta sección."
+          description="Cambia los filtros o limpia la búsqueda para ver servicios destacados."
         />
       ) : (
         <div className="services-grid top-rated-grid">

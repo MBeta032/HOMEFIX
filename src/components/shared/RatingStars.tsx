@@ -7,13 +7,15 @@ function RatingStars({ value, onChange }: RatingStarsProps) {
 
       <div className="stars-container">
         {[1, 2, 3, 4, 5].map((star) => (
-          <span
+          <button
             key={star}
-            className={`star ${star <= value ? "star-active" : ""}`}
+            type="button"
+            className={`star-button ${star <= value ? "star-active" : ""}`}
             onClick={() => onChange(star === value ? 0 : star)}
+            title={`${star} estrellas o más`}
           >
-            ★
-          </span>
+            {star <= value ? "★" : "☆"}
+          </button>
         ))}
 
         {value > 0 && (
@@ -21,6 +23,7 @@ function RatingStars({ value, onChange }: RatingStarsProps) {
             type="button"
             className="star-clear"
             onClick={() => onChange(0)}
+            title="Limpiar valoración"
           >
             x
           </button>

@@ -1,35 +1,32 @@
-import type { SearchBarProps } from "../../interfaces/Interfacecomponents";
-
+import type { SearchBarProps } from "../../interfaces/Interfacecomponents"
 
 function SearchBar({
-    value,
-    onChange,
-    onSearch,
-    placeholder = "Por favor ingresa una zona o barrio.",
-    buttonText = "Buscar", 
-}: SearchBarProps){
-    return (
-        <div className="busqueda-contenedor">
+  value,
+  onChange,
+  onSearch,
+  placeholder,
+  buttonText,
+}: SearchBarProps) {
+  return (
+    <div className="search-box">
+      <input
+        className="search-input"
+        type="text"
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onSearch()
+          }
+        }}
+      />
 
-        <input
-            type="text"
-            placeholder={placeholder}
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            
-            className="busqueda-input"
-        />
-
-        <button
-            onClick={onSearch}
-            className="btn-primary"
-        >
-            {buttonText}
-        </button>
-
-        </div>
-    )
-} 
-
+      <button type="button" className="search-btn" onClick={onSearch}>
+        {buttonText}
+      </button>
+    </div>
+  )
+}
 
 export default SearchBar

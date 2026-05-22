@@ -22,13 +22,14 @@
 }
 
 .profile-card h2 {
-  color: #1e3a5f;
+  color: #0f3767;
   font-size: 22px;
   margin-bottom: 4px;
+  font-weight: 700;
 }
 
 .profile-card p {
-  color: #64748b;
+  color: #42617f;
   font-size: 14px;
 }
 
@@ -49,18 +50,21 @@
 }
 
 .profile-field label {
-  color: #1e3a5f;
+  color: #12385f;
   font-size: 14px;
   font-weight: 600;
 }
 
 .profile-field input {
+  width: 100%;
   border: 1px solid #bfdbfe;
   border-radius: 10px;
   padding: 11px 12px;
   font-size: 14px;
   outline: none;
   background-color: #ffffff;
+  color: #12385f;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .profile-field input:focus {
@@ -82,25 +86,28 @@
 .profile-info {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px 22px;
+  gap: 16px 20px;
 }
 
 .profile-info div {
   background-color: #f8fbff;
-  border: 1px solid #e0f2fe;
+  border: 1px solid #dbeafe;
   border-radius: 12px;
-  padding: 12px;
+  padding: 14px 12px;
 }
 
 .profile-info strong {
-  color: #1e3a5f;
+  display: block;
+  color: #0f3767;
   font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 5px;
 }
 
 .profile-info p {
-  color: #334155;
+  color: #1f2937;
   font-size: 14px;
-  margin-top: 4px;
+  margin: 0;
 }
 
 .profile-alert {
@@ -134,6 +141,62 @@
   margin-bottom: 14px;
 }
 
+/* BOTONES DEL PERFIL */
+.profile-card button,
+.profile-layout button {
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.profile-card .btn-primary,
+.profile-layout .btn-primary {
+  background-color: #2563eb;
+  color: #ffffff;
+  border: 1px solid #2563eb;
+}
+
+.profile-card .btn-primary:hover,
+.profile-layout .btn-primary:hover {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.profile-card .btn-secondary,
+.profile-layout .btn-secondary {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.profile-card .btn-secondary:hover,
+.profile-layout .btn-secondary:hover {
+  background-color: #dbeafe;
+  transform: translateY(-1px);
+}
+
+.profile-card-header .btn-primary,
+.profile-card-header .btn-secondary {
+  min-width: 120px;
+}
+
+.profile-form .btn-primary,
+.profile-form .btn-secondary,
+.profile-google-box .btn-secondary {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.profile-form .btn-secondary {
+  margin-top: 0;
+}
+
 @media (max-width: 900px) {
   .profile-layout {
     grid-template-columns: 1fr;
@@ -145,5 +208,10 @@
 
   .profile-card-header {
     flex-direction: column;
+  }
+
+  .profile-card-header .btn-primary,
+  .profile-card-header .btn-secondary {
+    width: 100%;
   }
 }

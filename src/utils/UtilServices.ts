@@ -58,10 +58,13 @@ function FunServices(
   return result
 }
 
-export function getTopRatedServices(limit: number = 5): ServiceMock[] {
+export function getTopRatedServices(
+  services: ServiceMock[] = servicesMock,
+  limit: number = 5
+): ServiceMock[] {
   const tree = new BinarySearchTree()
 
-  servicesMock.forEach((service) => {
+  services.forEach((service) => {
     if (service.rating > 0) {
       tree.insert(service)
     }

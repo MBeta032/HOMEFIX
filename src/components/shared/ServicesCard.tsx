@@ -34,7 +34,8 @@ function ServicesCard({ service }: { service: ServiceMock }) {
         </span>
 
         <button
-          className="btn-primary"
+          type="button"
+          className="service-detail-btn"
           onClick={() => navigate(`/dashboard/servicios/${service.id}`)}
         >
           Ver detalle

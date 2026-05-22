@@ -21,8 +21,6 @@ function Services() {
         <p>Busca el servicio que necesitas según nombre, empresa o zona.</p>
       </div>
 
-      <TopRatedServices />
-
       <SearchBar
         value={search}
         onChange={(value) => setSearch(value)}
@@ -32,6 +30,8 @@ function Services() {
       />
 
       <FilterBar filters={filters} onChange={setFilters} />
+
+      <TopRatedServices services={result} />
 
       <div className="services-section-header">
         {search.trim() ? (
