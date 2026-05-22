@@ -1,83 +1,22 @@
-import { useEffect } from "react"
-import { useNavigate, useParams } from "react-router-dom"
-import EmptyState from "../components/shared/EmptyState"
-import { useHistory } from "../hooks/History/useHistory"
-import { useCart } from "../hooks/cart/useCart"
-import { servicesMock } from "../data/ServicesMock"
+import ServiceDetailHero from "../components/ServiceDetail/ServiceDetailHero"
+import ServiceDetailInfo from "../components/ServiceDetail/ServiceDetailInfo"
+import ServiceDetailListCard from "../components/ServiceDetail/ServiceDetailListCard"
+import ServiceNotFound from "../components/ServiceDetail/ServiceNotFound"
+import { useServiceDetail } from "../hooks/ServiceDetail/useServiceDetail"
 import "../styles/Services.css"
 
-function formatPrice(price: number): string {
-  return price.toLocaleString("es-CO", {
-    style: "currency",
-    currency: "COP",
-    maximumFractionDigits: 0,
-  })
-}
-
-function renderStars(rating: number): string {
-  const roundedRating = Math.max(0, Math.min(5, Math.round(rating)))
-  const activeStars = "★".repeat(roundedRating)
-  const inactiveStars = "☆".repeat(5 - roundedRating)
-
-  return `${activeStars}${inactiveStars}`
-}
-
 function ServiceDetail() {
-  const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
-  const { addServiceToHistory } = useHistory()
-  const { addToCart } = useCart()
-
-  const service = servicesMock.find((item) => item.id === id)
-
-  useEffect(() => {
-    if (service) {
-      addServiceToHistory(service.id)
-    }
-  }, [service?.id, addServiceToHistory])
-
-  function handleBack(): void {
-    navigate("/dashboard/servicios")
-  }
-
-  function handleAddToCart(): void {
-    if (!service) {
-      return
-    }
-
-    const result = addToCart(service)
-
-    if (result === "added") {
-      alert("Servicio agregado al carrito.")
-      return
-    }
-
-    alert("Este servicio ya está en el carrito.")
-  }
-
-  function handleRequestNow(): void {
-    alert("Esta función se conectará en HU-015.")
-  }
+  const {
+    service,
+    handleBack,
+    handleAddToCart,
+    handleRequestNow,
+  } = useServiceDetail()
 
   if (!service) {
     return (
       <main className="dashboard-page">
-        <section className="service-detail-page">
-          <button
-            type="button"
-            className="service-detail-btn service-detail-btn-secondary"
-            onClick={handleBack}
-          >
-            ← Volver a servicios
-          </button>
-
-          <div className="service-not-found">
-            <EmptyState
-              title="Servicio no encontrado"
-              description="El servicio que intentas consultar no existe o no está disponible."
-            />
-          </div>
-        </section>
+        <ServiceNotFound onBack={handleBack} />
       </main>
     )
   }
@@ -95,153 +34,39 @@ function ServiceDetail() {
           </button>
         </div>
 
-        <section className="service-detail-hero">
-          <div className="service-detail-image">{service.image}</div>
-
-          <div className="service-detail-hero-content">
-            <div className="service-detail-hero-header">
-              <span className="service-card-category">{service.category}</span>
-
-              <span
-                className={`service-card-availability ${
-                  service.availability === "Disponible"
-                    ? "available"
-                    : "unavailable"
-                }`}
-              >
-                {service.availability}
-              </span>
-            </div>
-
-            <h1>{service.name}</h1>
-
-            <p className="service-detail-company">{service.company}</p>
-
-            <p className="service-detail-description">{service.description}</p>
-
-            <div className="service-detail-summary">
-              <span>📍 {service.zone}</span>
-              <span>⏱ {service.duration}</span>
-              <span>
-                ⭐ {renderStars(service.rating)} {service.rating}
-              </span>
-            </div>
-
-            <div className="service-detail-price-row">
-              <strong>{formatPrice(service.price)}</strong>
-
-              <div className="service-detail-actions">
-                <button
-                  type="button"
-                  className="service-detail-btn service-detail-btn-secondary"
-                  onClick={handleAddToCart}
-                >
-                  Agregar al carrito
-                </button>
-
-                <button
-                  type="button"
-                  className="service-detail-btn"
-                  onClick={handleRequestNow}
-                >
-                  Solicitar ahora
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
+        <ServiceDetailHero
+          service={service}
+          onAddToCart={handleAddToCart}
+          onRequestNow={handleRequestNow}
+        />
 
         <section className="service-detail-grid">
-          <article className="service-detail-card">
-            <h2>Información del servicio</h2>
+          <ServiceDetailInfo service={service} />
 
-            <div className="service-detail-data">
-              <div className="info-item">
-                <span>Precio estimado</span>
-                <strong>{formatPrice(service.price)}</strong>
-              </div>
+          <ServiceDetailListCard
+            title="Qué incluye"
+            items={service.includes}
+          />
 
-              <div className="info-item">
-                <span>Duración estimada</span>
-                <strong>{service.duration}</strong>
-              </div>
+          <ServiceDetailListCard
+            title="Qué no incluye"
+            items={service.excludes}
+          />
 
-              <div className="info-item">
-                <span>Empresa o proveedor</span>
-                <strong>{service.company}</strong>
-              </div>
+          <ServiceDetailListCard
+            title="Ideal para"
+            items={service.idealFor}
+          />
 
-              <div className="info-item">
-                <span>Zona de cobertura</span>
-                <strong>{service.zone}</strong>
-              </div>
+          <ServiceDetailListCard
+            title="Proceso del servicio"
+            items={service.serviceProcess}
+          />
 
-              <div className="info-item">
-                <span>Nivel de urgencia</span>
-                <strong>{service.urgencyLevel}</strong>
-              </div>
-
-              <div className="info-item">
-                <span>Garantía</span>
-                <strong>{service.warranty}</strong>
-              </div>
-
-              <div className="info-item">
-                <span>Nota de pago</span>
-                <strong>{service.paymentNote}</strong>
-              </div>
-            </div>
-          </article>
-
-          <article className="service-detail-card">
-            <h2>Qué incluye</h2>
-
-            <ul className="service-detail-list">
-              {service.includes.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-
-          <article className="service-detail-card">
-            <h2>Qué no incluye</h2>
-
-            <ul className="service-detail-list">
-              {service.excludes.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-
-          <article className="service-detail-card">
-            <h2>Ideal para</h2>
-
-            <ul className="service-detail-list">
-              {service.idealFor.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-
-          <article className="service-detail-card">
-            <h2>Proceso del servicio</h2>
-
-            <ul className="service-detail-list">
-              {service.serviceProcess.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-
-          <article className="service-detail-card">
-            <h2>Recomendaciones antes de solicitarlo</h2>
-
-            <ul className="service-detail-list">
-              {service.recommendations.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
+          <ServiceDetailListCard
+            title="Recomendaciones antes de solicitarlo"
+            items={service.recommendations}
+          />
         </section>
       </section>
     </main>
