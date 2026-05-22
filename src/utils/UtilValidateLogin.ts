@@ -1,13 +1,18 @@
 export function validateLogin(email: string, password: string) {
-    const errors: Record<string, string> = {}
+  const errors: Record<string, string> = {};
 
-    if (!email.trim()) {
-        errors.email = "El email es obligatorio*"
-    }
+  const cleanEmail = email.trim();
+  const cleanPassword = password.trim();
 
-    if (!password.trim()) {
-        errors.password = "La contraseña es obligatoria*"
-    }
+  if (!cleanEmail) {
+    errors.email = "El correo es obligatorio*";
+  } else if (!/^\S+@\S+\.\S+$/.test(cleanEmail)) {
+    errors.email = "Formato de correo inválido";
+  }
 
-    return errors
+  if (!cleanPassword) {
+    errors.password = "La contraseña es obligatoria*";
+  }
+
+  return errors;
 }

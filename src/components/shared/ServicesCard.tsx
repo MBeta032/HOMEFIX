@@ -16,14 +16,15 @@ function ServicesCard({service}: {service: ServiceMock}){
             <p className="service-card-company">{service.company}</p>
             <p className="service-card-description">{service.description}</p>
 
-            <div className="service-card-info"></div>
-            <span>📍 {service.zone}</span>
-            <span>⏱ {service.duration}</span>
-            <span>⭐ {service.rating}</span>
+            <div className="service-card-info">
+                <span>📍 {service.zone}</span>
+                <span>⏱ {service.duration}</span>
+                <span>⭐ {service.rating}</span>
+            </div>
 
             <div className="service-card-footer">
                 <span className="service-card-price">{`$${service.price.toLocaleString("es-CO")}`}</span>
-                <button className="btn-primary" onClick={() => navigate(`/dashboard/carrito`)}>Añadir al carrito</button>
+                <button className="btn-primary" onClick={() => navigate(`/dashboard/servicios/${service.id}`)}>Ver detalle</button>
 
             </div>
         </div>

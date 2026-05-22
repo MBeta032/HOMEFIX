@@ -1,34 +1,67 @@
-import "../styles/Catalog.css"
+import { useMemo, useState } from "react";
+import CategoryMenu from "../components/services/CategoryMenu";
+import ServiceList from "../components/services/ServiceList";
+import PageHeader from "../components/shared/PageHeader";
+import { catalogTree } from "../data/CategoriesMock";
+import { servicesMock } from "../data/ServicesMock";
+import type { CatalogCategory } from "../interfaces/InterfaceCatalog";
+import "../styles/Catalog.css";
+import "../styles/Services.css";
 
-const categorias = [
-  { icono: "🔧", nombre: "Plomería" },
-  { icono: "⚡", nombre: "Electricidad" },
-  { icono: "🪚", nombre: "Carpintería" },
-  { icono: "🎨", nombre: "Pintura" },
-  { icono: "🧹", nombre: "Limpieza" },
-  { icono: "🌿", nombre: "Jardinería" },
-  { icono: "🔌", nombre: "Electrodomésticos" },
-  { icono: "🏠", nombre: "Mantenimiento" },
-]
+const catalogMenu = catalogTree.toMenuData();
+const firstCategory = catalogMenu.children[0]?.value ?? catalogMenu.value;
 
 function Catalogo() {
+  const [selectedCategory, setSelectedCategory] =
+    useState<CatalogCategory>(firstCategory);
+
+  const getRelatedServiceCategories = (category: CatalogCategory): string[] => {
+    if (category.serviceCategory) {
+      return [category.serviceCategory];
+    }
+
+    const categoryNode = catalogTree.findNode(category.id);
+
+    if (!categoryNode) {
+      return [];
+    }
+
+    return categoryNode.children
+      .map((child) => child.value.serviceCategory)
+      .filter((serviceCategory): serviceCategory is string =>
+        Boolean(serviceCategory)
+      );
+  };
+
+  const selectedServices = useMemo(() => {
+    const relatedCategories = getRelatedServiceCategories(selectedCategory);
+
+    return servicesMock.filter((service) =>
+      relatedCategories.includes(service.category)
+    );
+  }, [selectedCategory]);
+
   return (
     <div className="dashboard-page">
-      <div className="page-header">
-        <h1>Nuestros servicios</h1>
-        <p>Explora todas las categorías disponibles en HomeFix</p>
-      </div>
+      <PageHeader
+        title="Nuestros servicios"
+        subtitle="Explora las categorías y subcategorías disponibles en HomeFix"
+      />
 
-      <div className="catalogo-grid">
-        {categorias.map((cat) => (
-          <div key={cat.nombre} className="catalogo-card">
-            <span className="catalogo-icono">{cat.icono}</span>
-            <p>{cat.nombre}</p>
-          </div>
-        ))}
+      <div className="catalogo-layout">
+        <CategoryMenu
+          tree={catalogMenu}
+          selectedCategoryId={selectedCategory.id}
+          onSelectCategory={setSelectedCategory}
+        />
+
+        <ServiceList
+          services={selectedServices}
+          selectedCategoryName={selectedCategory.name}
+        />
       </div>
     </div>
-  )
+  );
 }
 
-export default Catalogo
+export default Catalogo;
