@@ -1,7 +1,7 @@
 interface Props {
-  score: number;
-  onSelect?: (value: number) => void;
-  readonly?: boolean;
+  score: number
+  onSelect?: (value: number) => void
+  readonly?: boolean
 }
 
 export function RatingStars({ score, onSelect, readonly = false }: Props) {
@@ -11,7 +11,9 @@ export function RatingStars({ score, onSelect, readonly = false }: Props) {
         <button
           key={star}
           type="button"
-          className={`rating-star ${star <= score ? "rating-star--filled" : "rating-star--empty"}`}
+          className={`rating-star ${
+            star <= score ? "rating-star--filled" : "rating-star--empty"
+          }`}
           onClick={() => !readonly && onSelect && onSelect(star)}
           disabled={readonly}
           aria-label={`${star} estrella${star > 1 ? "s" : ""}`}
@@ -20,5 +22,5 @@ export function RatingStars({ score, onSelect, readonly = false }: Props) {
         </button>
       ))}
     </div>
-  );
+  )
 }

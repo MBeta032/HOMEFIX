@@ -1,24 +1,26 @@
-import { useState } from "react";
-import type { IRequest } from "../../interfaces/Requests/request.interface";
-import type { IRating } from "../../interfaces/Rating/rating.interface";
-import { useRatings } from "../../hooks/rating/useRatings";
-import { RatingStars } from "./RatingStars";
+import { useState } from "react"
+import type { IRequest } from "../../interfaces/Requests/request.interface"
+import type { IRating } from "../../interfaces/Rating/rating.interface"
+import { useRatings } from "../../hooks/rating/useRatings"
+import { RatingStars } from "./RatingStars"
+import Button from "../shared/Button"
 
-interface Props {
-  request: IRequest;
+interface RatingFormProps {
+  request: IRequest
+  onSaved?: () => void
 }
 
-export function RatingForm({ request }: Props) {
-  const { addRating } = useRatings();
-  const [score, setScore] = useState<number>(0);
-  const [comment, setComment] = useState<string>("");
-  const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<boolean>(false);
+export function RatingForm({ request, onSaved }: RatingFormProps) {
+  const { addRating } = useRatings()
+  const [score, setScore] = useState<number>(0)
+  const [comment, setComment] = useState<string>("")
+  const [error, setError] = useState<string>("")
+  const [success, setSuccess] = useState<boolean>(false)
 
   function handleSubmit(): void {
-    if (score === 0) {
-      setError("Selecciona una puntuación antes de guardar.");
-      return;
+    if (score < 1 || score > 5) {
+      setError("Selecciona una puntuación entre 1 y 5 estrellas.")
+      return
     }
 
     const newRating: IRating = {
@@ -28,56 +30,58 @@ export function RatingForm({ request }: Props) {
       serviceName: request.serviceName,
       company: request.company,
       score,
-      comment,
+      comment: comment.trim(),
       createdAt: new Date().toISOString(),
-    };
+    }
 
-    addRating(newRating);
-    setSuccess(true);
-    setError("");
+    addRating(newRating)
+    setSuccess(true)
+    setError("")
+
+    if (onSaved) {
+      onSaved()
+    }
   }
 
   if (success) {
     return (
       <p className="rating-success">✅ Calificación guardada correctamente.</p>
-    );
+    )
   }
 
   return (
     <div className="rating-form">
-      <h4 className="rating-form__title">Califica tu experiencia</h4>
-      <p className="rating-form__subtitle">
+      <h4 className="rating-form-title">Califica tu experiencia</h4>
+      <p className="rating-form-subtitle">
         Tu opinión ayuda a mejorar la calidad de los servicios.
       </p>
 
-      <div className="rating-form__field">
-        <span className="rating-form__label">Puntuación</span>
+      <div className="rating-form-field">
+        <span className="rating-form-label">Puntuación</span>
         <RatingStars score={score} onSelect={setScore} />
       </div>
 
-      <div className="rating-form__field">
-        <label className="rating-form__label" htmlFor={`comment-${request.id}`}>
-          Comentario
+      <div className="rating-form-field">
+        <label className="rating-form-label" htmlFor={`comment-${request.id}`}>
+          Comentario opcional
         </label>
         <textarea
           id={`comment-${request.id}`}
-          className="rating-form__textarea"
+          className="rating-form-textarea"
           placeholder="Cuéntanos cómo fue tu experiencia..."
           value={comment}
-          onChange={(e) => setComment(e.target.value)}
+          onChange={(event) => setComment(event.target.value)}
           rows={3}
+          maxLength={200}
         />
+        <span className="rating-form-counter">{comment.length}/200</span>
       </div>
 
-      {error && <p className="rating-form__error">{error}</p>}
+      {error && <p className="rating-form-error">{error}</p>}
 
-      <button
-        type="button"
-        className="rating-form__btn"
-        onClick={handleSubmit}
-      >
+      <Button variant="success" onClick={handleSubmit}>
         Guardar calificación
-      </button>
+      </Button>
     </div>
-  );
+  )
 }
