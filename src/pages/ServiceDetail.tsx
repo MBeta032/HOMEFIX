@@ -1,5 +1,7 @@
+import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import EmptyState from "../components/shared/EmptyState"
+import { useHistory } from "../hooks/History/useHistory"
 import { servicesMock } from "../data/ServicesMock"
 import "../styles/Services.css"
 
@@ -22,8 +24,15 @@ function renderStars(rating: number): string {
 function ServiceDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { addServiceToHistory } = useHistory()
 
   const service = servicesMock.find((item) => item.id === id)
+
+  useEffect(() => {
+    if (service) {
+      addServiceToHistory(service.id)
+    }
+  }, [service?.id, addServiceToHistory])
 
   function handleBack(): void {
     navigate("/dashboard/servicios")
@@ -100,7 +109,9 @@ function ServiceDetail() {
             <div className="service-detail-summary">
               <span>📍 {service.zone}</span>
               <span>⏱ {service.duration}</span>
-              <span>⭐ {renderStars(service.rating)} {service.rating}</span>
+              <span>
+                ⭐ {renderStars(service.rating)} {service.rating}
+              </span>
             </div>
 
             <div className="service-detail-price-row">
