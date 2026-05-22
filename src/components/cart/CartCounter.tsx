@@ -1,17 +1,17 @@
-import { useNavigate } from "react-router-dom";
-import { useCart } from "../../hooks/cart/useCart";
-import "../../styles/Cart/index.css";
+import { useNavigate } from "react-router-dom"
+import { useCart } from "../../hooks/cart/useCart"
+import "../../styles/Cart/index.css"
 
 interface CartCounterProps {
-  className?: string;
+  className?: string
 }
 
 export default function CartCounter({ className = "" }: CartCounterProps) {
-  const navigate = useNavigate();
-  const { cartCount } = useCart();
+  const navigate = useNavigate()
+  const { cartCount } = useCart()
 
   function handleGoToCart(): void {
-    navigate("/cart");
+    navigate("/dashboard/carrito")
   }
 
   return (
@@ -23,5 +23,5 @@ export default function CartCounter({ className = "" }: CartCounterProps) {
       <span className="cart-counter-icon">🛒</span>
       <strong className="cart-counter-text">Carrito ({cartCount})</strong>
     </button>
-  );
+  )
 }

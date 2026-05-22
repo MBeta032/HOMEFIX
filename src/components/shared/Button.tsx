@@ -1,19 +1,22 @@
-interface ButtonProps {
-  text: string;
-  onClick: () => void;
-  variant?: "primary" | "secondary";
-}
+import type { ButtonProps } from "../../interfaces/Interfacecomponents"
 
-function Button({ text, onClick, variant = "secondary" }: ButtonProps) {
+function Button({
+  text,
+  children,
+  type = "button",
+  onClick,
+  variant = "secondary",
+  className = "",
+}: ButtonProps) {
   return (
     <button
-      type="button"
-      className={`home-button home-button-${variant}`}
+      type={type}
+      className={`home-button home-button-${variant} ${className}`.trim()}
       onClick={onClick}
     >
-      {text}
+      {children ?? text}
     </button>
-  );
+  )
 }
 
-export default Button;
+export default Button

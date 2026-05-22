@@ -1,11 +1,10 @@
-import { useNavigate } from "react-router-dom";
-import type { IService } from "../../interfaces/ServiceDetail/service.interface";
-import Button from "../shared/Button";
-import RatingStars from "../shared/RatingStars";
+import { useNavigate } from "react-router-dom"
+import type { ServiceMock } from "../../interfaces/InterfaceServices"
+import Button from "../shared/Button"
 
 interface CartItemProps {
-  service: IService;
-  onRemove: (id: string) => void;
+  service: ServiceMock
+  onRemove: (id: string) => void
 }
 
 function formatPrice(price: number): string {
@@ -13,18 +12,18 @@ function formatPrice(price: number): string {
     style: "currency",
     currency: "COP",
     maximumFractionDigits: 0,
-  });
+  })
 }
 
 export default function CartItem({ service, onRemove }: CartItemProps) {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   function handleViewDetail(): void {
-    navigate(`/service-detail/${service.id}`);
+    navigate(`/dashboard/servicios/${service.id}`)
   }
 
   function handleRemove(): void {
-    onRemove(service.id);
+    onRemove(service.id)
   }
 
   return (
@@ -51,7 +50,9 @@ export default function CartItem({ service, onRemove }: CartItemProps) {
           <span>Zona: {service.zone}</span>
         </div>
 
-        <RatingStars rating={service.rating} />
+        <p className="cart-item-rating">
+          ⭐ {service.rating.toFixed(1)} de calificación
+        </p>
 
         <div className="cart-item-actions">
           <Button variant="primary" onClick={handleViewDetail}>
@@ -68,5 +69,5 @@ export default function CartItem({ service, onRemove }: CartItemProps) {
         </div>
       </div>
     </article>
-  );
+  )
 }

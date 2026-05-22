@@ -1,9 +1,9 @@
-import { useState } from "react";
-import Button from "../shared/Button";
+import { useState } from "react"
+import Button from "../shared/Button"
 
 interface CartSummaryProps {
-  cartCount: number;
-  cartTotal: number;
+  cartCount: number
+  cartTotal: number
 }
 
 function formatPrice(price: number): string {
@@ -11,17 +11,17 @@ function formatPrice(price: number): string {
     style: "currency",
     currency: "COP",
     maximumFractionDigits: 0,
-  });
+  })
 }
 
 export default function CartSummary({
   cartCount,
   cartTotal,
 }: CartSummaryProps) {
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>("")
 
   function handleConfirmRequest(): void {
-    setMessage("La confirmación de solicitud se implementará en la HU-015.");
+    setMessage("La confirmación de solicitud se implementará en la HU-015.")
   }
 
   return (
@@ -43,11 +43,11 @@ export default function CartSummary({
         servicio.
       </p>
 
-      <Button variant="success" onClick={handleConfirmRequest}>
+      <Button variant="primary" onClick={handleConfirmRequest}>
         Confirmar solicitud
       </Button>
 
       {message && <p className="cart-temporary-message">{message}</p>}
     </aside>
-  );
+  )
 }

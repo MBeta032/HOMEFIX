@@ -1,14 +1,27 @@
-import type { PageHeaderProps } from "../../interfaces/Interfacecomponents";
-
+import type { PageHeaderProps } from "../../interfaces/Interfacecomponents"
 
 export default function PageHeader({
   title,
   subtitle,
+  showBackButton = false,
+  onBack,
 }: PageHeaderProps) {
   return (
     <div className="page-header">
-      <h1>{title}</h1>
-      {subtitle && <p>{subtitle}</p>}
+      <div className="page-header-content">
+        <h1>{title}</h1>
+        {subtitle && <p>{subtitle}</p>}
+      </div>
+
+      {showBackButton && onBack && (
+        <button
+          type="button"
+          className="page-header-back-button"
+          onClick={onBack}
+        >
+          ← Volver
+        </button>
+      )}
     </div>
-  );
+  )
 }
