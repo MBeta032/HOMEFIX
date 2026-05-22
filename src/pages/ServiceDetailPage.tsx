@@ -15,14 +15,16 @@ export default function ServiceDetailPage() {
   }
 
   return (
-    <section className="service-detail-page">
-      <button
-        type="button"
-        className="service-detail-btn service-detail-btn-secondary service-back-btn"
-        onClick={handleBack}
-      >
-        Volver
-      </button>
+    <main className="service-detail-page">
+      <div className="service-detail-topbar">
+        <button
+          type="button"
+          className="service-detail-btn service-detail-btn-secondary"
+          onClick={handleBack}
+        >
+          ← Volver a servicios
+        </button>
+      </div>
 
       <PageHeader
         title="Detalle del servicio"
@@ -42,11 +44,18 @@ export default function ServiceDetailPage() {
 
         <ServiceDetailList title="Qué no incluye" items={service.excludes} />
 
+        <ServiceDetailList title="Ideal para" items={service.idealFor} />
+
+        <ServiceDetailList
+          title="Proceso del servicio"
+          items={service.serviceProcess}
+        />
+
         <ServiceDetailList
           title="Recomendaciones antes de solicitarlo"
           items={service.recommendations}
         />
       </section>
-    </section>
+    </main>
   )
 }

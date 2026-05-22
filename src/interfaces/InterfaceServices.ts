@@ -16,6 +16,11 @@ export interface ServiceMock extends ServiceBaseMock {
   includes: string[]
   excludes: string[]
   recommendations: string[]
+  idealFor: string[]
+  serviceProcess: string[]
+  warranty: string
+  urgencyLevel: string
+  paymentNote: string
 }
 
 export interface FilterServices {

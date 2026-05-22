@@ -25,6 +25,9 @@ export default function ServiceDetailInfo({ service }: ServiceDetailInfoProps) {
         <InfoItem label="Empresa o proveedor" value={service.company} />
         <InfoItem label="Zona de cobertura" value={service.zone} />
         <InfoItem label="Disponibilidad" value={service.availability} />
+        <InfoItem label="Nivel de urgencia" value={service.urgencyLevel} />
+        <InfoItem label="Garantía" value={service.warranty} />
+        <InfoItem label="Nota de pago" value={service.paymentNote} />
       </div>
     </article>
   )

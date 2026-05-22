@@ -13,7 +13,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "2 horas",
     availability: "Disponible",
   },
-
   {
     id: "2",
     name: "Instalacion de sanitarios",
@@ -26,7 +25,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "3 horas",
     availability: "Disponible",
   },
-
   {
     id: "3",
     name: "Destape de cañerias",
@@ -39,7 +37,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "1 hora",
     availability: "Disponible",
   },
-
   {
     id: "4",
     name: "Instalacion electrica",
@@ -52,7 +49,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "4 horas",
     availability: "Disponible",
   },
-
   {
     id: "5",
     name: "Revision de tablero electrico",
@@ -77,7 +73,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "2 horas",
     availability: "Disponible",
   },
-
   {
     id: "7",
     name: "Reparacion de muebles",
@@ -90,7 +85,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "3 horas",
     availability: "Disponible",
   },
-
   {
     id: "8",
     name: "Instalacion de closets",
@@ -103,7 +97,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "6 horas",
     availability: "Disponible",
   },
-
   {
     id: "9",
     name: "Instalacion de puertas y ventanas",
@@ -116,7 +109,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "4 horas",
     availability: "Disponible",
   },
-
   {
     id: "10",
     name: "Pintura de interiores",
@@ -129,7 +121,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "5 horas",
     availability: "Disponible",
   },
-
   {
     id: "11",
     name: "Pintura de fachadas",
@@ -142,7 +133,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "8 horas",
     availability: "No disponible",
   },
-
   {
     id: "12",
     name: "Pintura de rejas y estructuras metalicas",
@@ -155,7 +145,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "3 horas",
     availability: "Disponible",
   },
-
   {
     id: "13",
     name: "Limpieza profunda del hogar",
@@ -168,7 +157,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "4 horas",
     availability: "Disponible",
   },
-
   {
     id: "14",
     name: "Lavado de tapetes y muebles",
@@ -181,7 +169,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "3 horas",
     availability: "Disponible",
   },
-
   {
     id: "15",
     name: "Limpieza de ventanas y vidrios",
@@ -194,7 +181,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "2 horas",
     availability: "Disponible",
   },
-
   {
     id: "16",
     name: "Mantenimiento de jardines",
@@ -207,7 +193,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "2 horas",
     availability: "Disponible",
   },
-
   {
     id: "17",
     name: "Diseno de jardines",
@@ -220,7 +205,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "1 dia",
     availability: "Disponible",
   },
-
   {
     id: "18",
     name: "Instalacion de sistemas de riego",
@@ -233,7 +217,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "5 horas",
     availability: "No disponible",
   },
-
   {
     id: "19",
     name: "Reparacion de lavadoras",
@@ -246,7 +229,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "2 horas",
     availability: "Disponible",
   },
-
   {
     id: "20",
     name: "Mantenimiento de neveras",
@@ -259,7 +241,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "2 horas",
     availability: "No disponible",
   },
-
   {
     id: "21",
     name: "Reparacion de estufas y hornos",
@@ -272,7 +253,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "2 horas",
     availability: "Disponible",
   },
-
   {
     id: "22",
     name: "Mantenimiento general del hogar",
@@ -285,7 +265,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "5 horas",
     availability: "Disponible",
   },
-
   {
     id: "23",
     name: "Impermeabilizacion de terrazas",
@@ -298,7 +277,6 @@ const baseServicesMock: ServiceBaseMock[] = [
     duration: "6 horas",
     availability: "Disponible",
   },
-  
   {
     id: "24",
     name: "Reparacion de grietas y humedades",
@@ -312,207 +290,819 @@ const baseServicesMock: ServiceBaseMock[] = [
     availability: "Disponible",
   },
 ]
+
 interface ServiceDetailExtra {
   image: string
   includes: string[]
   excludes: string[]
   recommendations: string[]
+  idealFor: string[]
+  serviceProcess: string[]
+  warranty: string
+  urgencyLevel: string
+  paymentNote: string
 }
 
-const detailByCategory: Record<string, ServiceDetailExtra> = {
-  Plomeria: {
+const serviceDetailsMock: Record<string, ServiceDetailExtra> = {
+  "1": {
     image: "🔧",
     includes: [
-      "Revisión inicial del problema",
-      "Diagnóstico básico del daño",
-      "Mano de obra del servicio",
-      "Prueba final del arreglo",
+      "Revision de tuberias visibles",
+      "Sellado basico de filtraciones",
+      "Prueba de presion del agua",
+      "Limpieza del area intervenida",
     ],
     excludes: [
-      "Repuestos especiales",
-      "Daños ocultos dentro de muros",
-      "Trabajos de remodelación",
+      "Rompimiento de paredes o pisos",
+      "Cambio completo de red hidraulica",
+      "Materiales especiales no disponibles en visita",
     ],
     recommendations: [
-      "Cerrar la llave de paso si hay fuga fuerte",
-      "Despejar el área antes de la visita",
-      "Tomar fotos del problema para explicar mejor el daño",
+      "Cerrar la llave de paso antes de la visita si hay fuga fuerte",
+      "Tomar fotos del punto exacto de la filtracion",
+      "Retirar objetos cercanos al lavamanos, lavadero o cocina",
     ],
+    idealFor: [
+      "Goteras pequenas o medianas",
+      "Tuberias visibles con humedad",
+      "Fugas debajo de lavamanos o lavaderos",
+    ],
+    serviceProcess: [
+      "El tecnico revisa el punto reportado",
+      "Identifica si la fuga es visible o interna",
+      "Realiza el ajuste o sellado inicial",
+      "Prueba que el agua fluya sin filtraciones",
+    ],
+    warranty: "Garantia de 15 dias sobre el punto reparado.",
+    urgencyLevel: "Media",
+    paymentNote: "El precio puede variar si se requieren repuestos o apertura de pared.",
   },
-
-  Electricidad: {
-    image: "💡",
+  "2": {
+    image: "🚽",
     includes: [
-      "Revisión del punto eléctrico",
-      "Diagnóstico básico",
-      "Instalación o ajuste sencillo",
+      "Retiro del sanitario o lavamanos anterior si aplica",
+      "Instalacion de sanitario, lavamanos o ducha",
+      "Ajuste de conexiones de agua",
+      "Prueba de descarga y fugas",
+    ],
+    excludes: [
+      "Compra del sanitario o lavamanos",
+      "Adecuacion completa de tuberias",
+      "Obra civil o enchape",
+    ],
+    recommendations: [
+      "Tener comprado el sanitario o accesorio antes de la visita",
+      "Verificar medidas del espacio",
+      "Enviar foto del punto donde se instalara",
+    ],
+    idealFor: [
+      "Cambio de sanitario antiguo",
+      "Instalacion de lavamanos nuevo",
+      "Cambio de ducha o griferia sencilla",
+    ],
+    serviceProcess: [
+      "Se valida el espacio y las conexiones",
+      "Se retira el elemento anterior si es necesario",
+      "Se instala y ajusta el nuevo elemento",
+      "Se revisa que no queden fugas",
+    ],
+    warranty: "Garantia de 20 dias sobre instalacion.",
+    urgencyLevel: "Baja",
+    paymentNote: "No incluye el valor del sanitario, lavamanos o griferia.",
+  },
+  "3": {
+    image: "🌀",
+    includes: [
+      "Revision del punto obstruido",
+      "Destape con herramienta manual",
+      "Prueba de drenaje",
+      "Recomendaciones para evitar nuevas obstrucciones",
+    ],
+    excludes: [
+      "Camara de inspeccion profesional",
+      "Destape de red principal del edificio",
+      "Rompimiento de tuberia",
+    ],
+    recommendations: [
+      "No aplicar quimicos fuertes antes de la visita",
+      "Evitar usar el punto obstruido",
+      "Indicar si el problema ocurre en varios desagues",
+    ],
+    idealFor: [
+      "Lavaplatos tapado",
+      "Ducha con drenaje lento",
+      "Lavamanos obstruido",
+    ],
+    serviceProcess: [
+      "Se revisa el flujo del agua",
+      "Se identifica el tipo de obstruccion",
+      "Se realiza el destape",
+      "Se prueba el drenaje final",
+    ],
+    warranty: "Garantia de 8 dias si la obstruccion es en el mismo punto.",
+    urgencyLevel: "Alta",
+    paymentNote: "Puede variar si la obstruccion esta en una red profunda.",
+  },
+  "4": {
+    image: "⚡",
+    includes: [
+      "Revision del punto electrico",
+      "Instalacion de tomas o interruptores",
+      "Organizacion basica del cableado",
       "Prueba de funcionamiento",
     ],
     excludes: [
-      "Cableado completo nuevo",
-      "Materiales eléctricos especiales",
-      "Reparaciones de alto riesgo",
+      "Cableado completo de vivienda",
+      "Materiales electricos especiales",
+      "Certificaciones RETIE",
     ],
     recommendations: [
+      "Bajar el breaker si hay chispas o corto",
       "No manipular cables antes de la visita",
-      "Bajar el breaker si hay corto o chispas",
-      "Tener claro el punto donde se hará el trabajo",
+      "Tener claro cuantos puntos se desean instalar",
     ],
+    idealFor: [
+      "Nuevos puntos de energia",
+      "Cambio de interruptores",
+      "Instalacion de tomas residenciales",
+    ],
+    serviceProcess: [
+      "Se revisa el circuito disponible",
+      "Se define el punto de instalacion",
+      "Se realiza la conexion",
+      "Se prueba carga y funcionamiento",
+    ],
+    warranty: "Garantia de 15 dias sobre la instalacion realizada.",
+    urgencyLevel: "Media",
+    paymentNote: "No incluye tomas, canaletas o cable adicional.",
   },
-
-  Carpinteria: {
-    image: "🪚",
+  "5": {
+    image: "🧯",
     includes: [
-      "Revisión de la pieza o estructura",
-      "Ajuste o reparación básica",
-      "Mano de obra del servicio",
-      "Recomendaciones de cuidado",
+      "Revision visual del tablero",
+      "Validacion de breakers",
+      "Identificacion de sobrecargas evidentes",
+      "Recomendaciones de seguridad",
     ],
     excludes: [
-      "Cambio completo de muebles",
-      "Materiales especiales",
-      "Pintura o barniz adicional",
+      "Cambio completo del tablero",
+      "Certificacion tecnica formal",
+      "Reparacion de red interna oculta",
     ],
     recommendations: [
-      "Enviar foto previa del daño si es posible",
-      "Despejar el espacio de trabajo",
-      "Avisar si la madera tiene humedad",
+      "No abrir el tablero sin tecnico",
+      "Informar si se bajan los breakers con frecuencia",
+      "Evitar conectar equipos de alto consumo antes de la revision",
     ],
+    idealFor: [
+      "Breakers que se disparan",
+      "Olor a quemado cerca del tablero",
+      "Revision preventiva del sistema electrico",
+    ],
+    serviceProcess: [
+      "Se inspecciona el tablero",
+      "Se prueban los circuitos principales",
+      "Se detectan riesgos basicos",
+      "Se entrega recomendacion de ajuste o cambio",
+    ],
+    warranty: "Servicio de diagnostico sin garantia sobre fallas no intervenidas.",
+    urgencyLevel: "Alta",
+    paymentNote: "Si se requiere cambio de breakers se cotiza por separado.",
   },
-
-  Pintura: {
+  "6": {
+    image: "💡",
+    includes: [
+      "Instalacion de lampara o ventilador",
+      "Conexion electrica basica",
+      "Fijacion segura al techo o pared",
+      "Prueba de encendido",
+    ],
+    excludes: [
+      "Compra de lampara o ventilador",
+      "Refuerzo estructural del techo",
+      "Cableado nuevo desde tablero",
+    ],
+    recommendations: [
+      "Tener la lampara o ventilador listo",
+      "Confirmar altura del techo",
+      "Despejar el area de instalacion",
+    ],
+    idealFor: [
+      "Lamparas decorativas",
+      "Ventiladores de techo",
+      "Cambio de puntos de luz",
+    ],
+    serviceProcess: [
+      "Se valida el punto electrico",
+      "Se arma el elemento si aplica",
+      "Se fija y conecta",
+      "Se prueba velocidad o iluminacion",
+    ],
+    warranty: "Garantia de 15 dias sobre instalacion.",
+    urgencyLevel: "Baja",
+    paymentNote: "No incluye soporte especial ni extensiones de cable.",
+  },
+  "7": {
+    image: "🪑",
+    includes: [
+      "Revision del mueble",
+      "Ajuste de piezas flojas",
+      "Refuerzo basico de estructura",
+      "Lijado o acabado menor si aplica",
+    ],
+    excludes: [
+      "Restauracion completa profesional",
+      "Cambio total de madera",
+      "Tapiceria",
+    ],
+    recommendations: [
+      "Enviar foto del mueble antes de solicitar",
+      "Indicar si el mueble tiene humedad",
+      "Desocupar cajones o superficies",
+    ],
+    idealFor: [
+      "Sillas flojas",
+      "Mesas inestables",
+      "Cajones trabados",
+    ],
+    serviceProcess: [
+      "Se revisa la estabilidad",
+      "Se identifican piezas danadas",
+      "Se realiza ajuste o refuerzo",
+      "Se prueba el uso del mueble",
+    ],
+    warranty: "Garantia de 10 dias sobre el ajuste realizado.",
+    urgencyLevel: "Baja",
+    paymentNote: "Materiales adicionales se cobran aparte.",
+  },
+  "8": {
+    image: "🚪",
+    includes: [
+      "Revision del espacio",
+      "Toma de medidas basicas",
+      "Instalacion del closet o armario",
+      "Ajuste de puertas y rieles",
+    ],
+    excludes: [
+      "Fabricacion completa desde cero",
+      "Compra de madera o accesorios",
+      "Diseno 3D profesional",
+    ],
+    recommendations: [
+      "Tener medidas aproximadas del espacio",
+      "Retirar ropa u objetos del area",
+      "Confirmar si el closet ya esta comprado",
+    ],
+    idealFor: [
+      "Closets prefabricados",
+      "Armarios modulares",
+      "Instalacion de puertas de closet",
+    ],
+    serviceProcess: [
+      "Se valida el espacio disponible",
+      "Se organizan las piezas",
+      "Se instala la estructura",
+      "Se ajustan puertas y niveles",
+    ],
+    warranty: "Garantia de 20 dias sobre instalacion.",
+    urgencyLevel: "Media",
+    paymentNote: "El precio puede subir segun tamano y complejidad.",
+  },
+  "9": {
+    image: "🪟",
+    includes: [
+      "Instalacion o ajuste de puerta o ventana",
+      "Revision de bisagras y marcos",
+      "Nivelacion basica",
+      "Prueba de apertura y cierre",
+    ],
+    excludes: [
+      "Fabricacion de puerta o ventana",
+      "Cambio completo de marco",
+      "Vidrios o accesorios especiales",
+    ],
+    recommendations: [
+      "Confirmar medidas del elemento",
+      "Despejar el acceso",
+      "Informar si el marco esta torcido o podrido",
+    ],
+    idealFor: [
+      "Puertas descolgadas",
+      "Ventanas que no cierran bien",
+      "Cambio de bisagras",
+    ],
+    serviceProcess: [
+      "Se revisa el marco",
+      "Se ajustan bisagras o puntos de apoyo",
+      "Se instala el elemento",
+      "Se prueba apertura y cierre",
+    ],
+    warranty: "Garantia de 15 dias sobre ajuste o instalacion.",
+    urgencyLevel: "Media",
+    paymentNote: "No incluye compra de puertas, ventanas o cerraduras.",
+  },
+  "10": {
     image: "🎨",
     includes: [
-      "Preparación básica del área",
-      "Aplicación de pintura",
-      "Revisión final del acabado",
-      "Limpieza básica del espacio trabajado",
+      "Preparacion basica del area",
+      "Aplicacion de pintura en interiores",
+      "Proteccion sencilla de bordes",
+      "Limpieza basica al finalizar",
     ],
     excludes: [
-      "Compra de pintura",
-      "Reparación profunda de humedad",
+      "Reparacion profunda de humedad",
       "Movimiento de muebles pesados",
+      "Pintura premium no acordada",
     ],
     recommendations: [
-      "Comprar la pintura antes del servicio",
-      "Retirar objetos pequeños del área",
-      "Avisar si hay humedad o grietas grandes",
+      "Retirar cuadros y objetos decorativos",
+      "Ventilar el espacio",
+      "Definir color antes de la visita",
     ],
+    idealFor: [
+      "Habitaciones",
+      "Salas pequenas",
+      "Cocinas o pasillos",
+    ],
+    serviceProcess: [
+      "Se revisa el estado de la pared",
+      "Se prepara el area",
+      "Se aplica la pintura",
+      "Se revisa acabado y retoques",
+    ],
+    warranty: "Garantia de 8 dias sobre desprendimientos por aplicacion.",
+    urgencyLevel: "Baja",
+    paymentNote: "Incluye materiales solo si fueron acordados previamente.",
   },
-
-  Limpieza: {
+  "11": {
+    image: "🏠",
+    includes: [
+      "Limpieza basica de superficie exterior",
+      "Aplicacion de pintura para fachada",
+      "Retoques visibles",
+      "Revision final del acabado",
+    ],
+    excludes: [
+      "Trabajo en altura riesgoso sin equipo",
+      "Reparacion estructural de fachada",
+      "Lavado profesional a presion",
+    ],
+    recommendations: [
+      "Programar en dia sin lluvia",
+      "Retirar objetos cercanos a la fachada",
+      "Avisar si hay grietas o humedad",
+    ],
+    idealFor: [
+      "Fachadas residenciales",
+      "Muros exteriores",
+      "Retoques de pintura externa",
+    ],
+    serviceProcess: [
+      "Se revisa la fachada",
+      "Se limpia el area basica",
+      "Se aplica pintura exterior",
+      "Se valida cobertura y acabado",
+    ],
+    warranty: "Garantia de 10 dias sobre aplicacion.",
+    urgencyLevel: "Baja",
+    paymentNote: "No incluye andamios ni equipos especiales de altura.",
+  },
+  "12": {
+    image: "🛡️",
+    includes: [
+      "Limpieza basica de la estructura",
+      "Aplicacion de pintura anticorrosiva",
+      "Retoques en zonas visibles",
+      "Revision final de cobertura",
+    ],
+    excludes: [
+      "Soldadura",
+      "Cambio de rejas o piezas metalicas",
+      "Decapado profundo",
+    ],
+    recommendations: [
+      "Evitar mojar la estructura antes del servicio",
+      "Informar si hay oxido avanzado",
+      "Retirar objetos cerca de la reja",
+    ],
+    idealFor: [
+      "Rejas residenciales",
+      "Puertas metalicas",
+      "Barandas",
+    ],
+    serviceProcess: [
+      "Se limpia la superficie",
+      "Se revisan puntos con oxido",
+      "Se aplica pintura anticorrosiva",
+      "Se deja secar segun recomendacion",
+    ],
+    warranty: "Garantia de 7 dias sobre aplicacion visible.",
+    urgencyLevel: "Baja",
+    paymentNote: "No incluye soldadura ni reparacion metalica.",
+  },
+  "13": {
     image: "🧽",
     includes: [
-      "Limpieza de superficies visibles",
-      "Desinfección básica",
-      "Organización general del área",
-      "Revisión final del servicio",
+      "Limpieza profunda de cocina",
+      "Limpieza de banos",
+      "Desinfeccion de superficies",
+      "Organizacion basica de zonas comunes",
     ],
     excludes: [
       "Control de plagas",
-      "Limpieza interna de electrodomésticos",
-      "Retiro de residuos peligrosos",
+      "Lavado de fachadas",
+      "Retiro de escombros",
     ],
     recommendations: [
-      "Retirar objetos delicados antes del servicio",
-      "Avisar si hay manchas difíciles",
-      "Permitir ventilación durante la limpieza",
+      "Guardar objetos de valor",
+      "Indicar areas prioritarias",
+      "Tener productos especiales si se desean marcas especificas",
     ],
+    idealFor: [
+      "Apartamentos despues de mudanza",
+      "Limpieza mensual profunda",
+      "Hogares con alta acumulacion de polvo",
+    ],
+    serviceProcess: [
+      "Se revisan las areas a limpiar",
+      "Se priorizan cocina y banos",
+      "Se realiza limpieza profunda",
+      "Se revisa el resultado con el cliente",
+    ],
+    warranty: "Garantia de satisfaccion durante la revision final del servicio.",
+    urgencyLevel: "Media",
+    paymentNote: "El precio puede variar segun tamano del hogar.",
   },
-
-  Jardineria: {
-    image: "🌱",
+  "14": {
+    image: "🛋️",
     includes: [
-      "Revisión del jardín",
-      "Corte o mantenimiento básico",
-      "Limpieza general de hojas o residuos",
-      "Recomendaciones de cuidado",
+      "Aspirado inicial",
+      "Lavado de tapetes, sofas o colchones",
+      "Desinfeccion basica",
+      "Recomendaciones de secado",
     ],
     excludes: [
-      "Compra de plantas",
-      "Diseño completo de jardín",
-      "Instalación de sistemas complejos",
+      "Eliminacion garantizada de manchas antiguas",
+      "Reparacion de telas",
+      "Tratamientos antiacaros premium",
     ],
     recommendations: [
-      "Retirar objetos del jardín",
-      "Avisar si hay plantas delicadas",
-      "Informar si hay mascotas en la zona",
+      "No usar el mueble inmediatamente despues del lavado",
+      "Indicar manchas especificas",
+      "Permitir ventilacion del espacio",
     ],
+    idealFor: [
+      "Sofas con polvo o manchas recientes",
+      "Tapetes de sala",
+      "Colchones con mantenimiento pendiente",
+    ],
+    serviceProcess: [
+      "Se revisa el tipo de tela",
+      "Se aspira la superficie",
+      "Se aplica lavado y desinfeccion",
+      "Se dan indicaciones de secado",
+    ],
+    warranty: "Garantia de revision al finalizar el lavado.",
+    urgencyLevel: "Media",
+    paymentNote: "El precio depende de la cantidad y tamano de muebles.",
   },
-
-  Electrodomesticos: {
+  "15": {
+    image: "🪟",
+    includes: [
+      "Limpieza de vidrios interiores",
+      "Limpieza de espejos",
+      "Retiro de polvo en marcos",
+      "Secado para evitar manchas",
+    ],
+    excludes: [
+      "Trabajo exterior en altura",
+      "Limpieza de fachadas completas",
+      "Retiro de adhesivos complejos",
+    ],
+    recommendations: [
+      "Retirar cortinas u objetos cercanos",
+      "Informar si hay ventanas de dificil acceso",
+      "Evitar mojar vidrios antes de la visita",
+    ],
+    idealFor: [
+      "Ventanas residenciales",
+      "Espejos grandes",
+      "Vidrios con polvo o marcas de agua",
+    ],
+    serviceProcess: [
+      "Se revisan los vidrios a limpiar",
+      "Se retira polvo superficial",
+      "Se limpia con producto adecuado",
+      "Se seca y revisa el acabado",
+    ],
+    warranty: "Garantia de revision visual al finalizar.",
+    urgencyLevel: "Baja",
+    paymentNote: "No incluye trabajo de alto riesgo o alturas.",
+  },
+  "16": {
+    image: "🌿",
+    includes: [
+      "Corte de cesped",
+      "Poda basica de arbustos",
+      "Limpieza de hojas",
+      "Recomendaciones de mantenimiento",
+    ],
+    excludes: [
+      "Diseno paisajistico",
+      "Compra de plantas",
+      "Retiro de grandes cantidades de escombro vegetal",
+    ],
+    recommendations: [
+      "Retirar objetos del jardin",
+      "Avisar si hay mascotas",
+      "Indicar plantas que no deben podarse",
+    ],
+    idealFor: [
+      "Jardines residenciales",
+      "Zonas verdes pequenas",
+      "Mantenimiento mensual",
+    ],
+    serviceProcess: [
+      "Se revisa el jardin",
+      "Se define el mantenimiento basico",
+      "Se corta y limpia la zona",
+      "Se entregan recomendaciones",
+    ],
+    warranty: "Servicio validado al finalizar con el cliente.",
+    urgencyLevel: "Baja",
+    paymentNote: "El precio puede cambiar segun tamano del jardin.",
+  },
+  "17": {
+    image: "🌸",
+    includes: [
+      "Propuesta basica de distribucion",
+      "Seleccion sugerida de plantas",
+      "Adecuacion inicial del espacio",
+      "Recomendaciones de riego y cuidado",
+    ],
+    excludes: [
+      "Compra de plantas premium",
+      "Render profesional 3D",
+      "Sistema de riego automatizado",
+    ],
+    recommendations: [
+      "Enviar fotos del espacio",
+      "Definir si se busca sombra, decoracion o bajo mantenimiento",
+      "Informar horas de sol del jardin",
+    ],
+    idealFor: [
+      "Patios pequenos",
+      "Jardines decorativos",
+      "Espacios sin distribucion clara",
+    ],
+    serviceProcess: [
+      "Se analiza el espacio",
+      "Se plantea una distribucion basica",
+      "Se adecua el terreno inicial",
+      "Se explican cuidados posteriores",
+    ],
+    warranty: "Garantia de asesoria sobre distribucion inicial.",
+    urgencyLevel: "Baja",
+    paymentNote: "Plantas, tierra y materas se cotizan aparte.",
+  },
+  "18": {
+    image: "💧",
+    includes: [
+      "Revision del area verde",
+      "Instalacion basica de sistema de riego",
+      "Ajuste de puntos de salida",
+      "Prueba de funcionamiento",
+    ],
+    excludes: [
+      "Sistema inteligente avanzado",
+      "Excavaciones profundas",
+      "Compra de equipos premium",
+    ],
+    recommendations: [
+      "Tener acceso a punto de agua",
+      "Definir zonas que necesitan riego",
+      "Evitar pisar el area durante la instalacion",
+    ],
+    idealFor: [
+      "Jardines medianos",
+      "Zonas verdes con riego frecuente",
+      "Clientes que viajan o no pueden regar diario",
+    ],
+    serviceProcess: [
+      "Se revisa el jardin",
+      "Se ubican puntos de riego",
+      "Se instala el sistema",
+      "Se prueba presion y cobertura",
+    ],
+    warranty: "Garantia de 15 dias sobre instalacion.",
+    urgencyLevel: "Media",
+    paymentNote: "No incluye equipos o mangueras especiales.",
+  },
+  "19": {
     image: "🧺",
     includes: [
-      "Revisión externa del electrodoméstico",
-      "Diagnóstico inicial",
-      "Explicación del posible daño",
-      "Recomendación de reparación",
+      "Diagnostico inicial",
+      "Revision de mangueras y filtros",
+      "Prueba de centrifugado o llenado",
+      "Recomendacion de reparacion",
     ],
     excludes: [
-      "Repuestos",
-      "Traslado del electrodoméstico",
-      "Reparaciones avanzadas no diagnosticadas",
+      "Repuestos internos",
+      "Traslado de lavadora",
+      "Reparacion de tarjeta electronica avanzada",
     ],
     recommendations: [
-      "No usar el equipo si presenta corto o humo",
-      "Tener acceso libre al electrodoméstico",
-      "Informar marca y modelo si los conoce",
+      "No usar la lavadora si bota agua",
+      "Tener acceso libre al equipo",
+      "Informar marca y modelo si se conoce",
     ],
+    idealFor: [
+      "Lavadoras que no centrifugan",
+      "Equipos con fuga de agua",
+      "Lavadoras que no llenan correctamente",
+    ],
+    serviceProcess: [
+      "Se revisa el funcionamiento",
+      "Se identifica posible falla",
+      "Se realiza ajuste basico si aplica",
+      "Se informa si requiere repuesto",
+    ],
+    warranty: "Garantia de 8 dias sobre ajuste basico realizado.",
+    urgencyLevel: "Media",
+    paymentNote: "Repuestos se cobran por separado.",
   },
-
-  Mantenimiento: {
+  "20": {
+    image: "🧊",
+    includes: [
+      "Revision general de nevera",
+      "Limpieza basica de zona accesible",
+      "Diagnostico de enfriamiento",
+      "Recomendacion de reparacion",
+    ],
+    excludes: [
+      "Carga de gas si no fue cotizada",
+      "Cambio de compresor",
+      "Repuestos electronicos",
+    ],
+    recommendations: [
+      "No desconectar la nevera sin indicacion",
+      "Retirar objetos cercanos",
+      "Informar si congela demasiado o no enfria",
+    ],
+    idealFor: [
+      "Neveras que enfrian poco",
+      "Equipos con ruido",
+      "Mantenimiento preventivo",
+    ],
+    serviceProcess: [
+      "Se revisa temperatura y ruido",
+      "Se inspeccionan partes visibles",
+      "Se realiza limpieza o ajuste inicial",
+      "Se indica si requiere reparacion mayor",
+    ],
+    warranty: "Garantia de diagnostico y ajuste por 8 dias.",
+    urgencyLevel: "Alta",
+    paymentNote: "Carga de gas y repuestos se cotizan aparte.",
+  },
+  "21": {
+    image: "🔥",
+    includes: [
+      "Revision de quemadores",
+      "Limpieza basica de puntos de gas",
+      "Prueba de encendido",
+      "Diagnostico de horno si aplica",
+    ],
+    excludes: [
+      "Cambio de manguera de gas no cotizada",
+      "Repuestos internos",
+      "Certificacion de gas",
+    ],
+    recommendations: [
+      "No usar la estufa si hay olor a gas",
+      "Ventilar el espacio",
+      "Indicar si falla un quemador especifico",
+    ],
+    idealFor: [
+      "Quemadores que no prenden",
+      "Horno que no calienta bien",
+      "Estufas con llama irregular",
+    ],
+    serviceProcess: [
+      "Se revisan quemadores",
+      "Se limpia zona funcional",
+      "Se prueba encendido",
+      "Se recomienda cambio si hay riesgo",
+    ],
+    warranty: "Garantia de 8 dias sobre limpieza o ajuste realizado.",
+    urgencyLevel: "Alta",
+    paymentNote: "No incluye repuestos ni certificacion tecnica de gas.",
+  },
+  "22": {
     image: "🧰",
     includes: [
-      "Revisión general del problema",
-      "Ajustes menores",
-      "Mano de obra básica",
-      "Recomendaciones finales",
+      "Revision general de arreglos menores",
+      "Ajuste de puertas, ventanas o goteras simples",
+      "Reparaciones pequenas del hogar",
+      "Lista de recomendaciones finales",
     ],
     excludes: [
-      "Repuestos",
-      "Obras o remodelaciones grandes",
-      "Trabajos especializados fuera del diagnóstico",
+      "Remodelaciones grandes",
+      "Trabajos especializados de alto riesgo",
+      "Repuestos o materiales costosos",
     ],
     recommendations: [
-      "Hacer una lista de los arreglos necesarios",
-      "Tomar fotos de los daños principales",
-      "Confirmar que haya alguien en casa durante la visita",
+      "Preparar una lista de pendientes",
+      "Priorizar los arreglos mas importantes",
+      "Enviar fotos si hay varios puntos",
     ],
+    idealFor: [
+      "Arreglos pequenos acumulados",
+      "Mantenimiento preventivo del hogar",
+      "Revision antes de entregar o recibir vivienda",
+    ],
+    serviceProcess: [
+      "Se revisa la lista de pendientes",
+      "Se priorizan los trabajos posibles",
+      "Se realizan ajustes menores",
+      "Se explican trabajos que requieren cotizacion aparte",
+    ],
+    warranty: "Garantia de 15 dias sobre ajustes realizados.",
+    urgencyLevel: "Media",
+    paymentNote: "Materiales y repuestos se cobran aparte.",
   },
-}
-
-const defaultDetail: ServiceDetailExtra = {
-  image: "🏠",
-  includes: [
-    "Revisión inicial del servicio",
-    "Diagnóstico básico",
-    "Mano de obra del servicio",
-    "Recomendaciones finales",
-  ],
-  excludes: [
-    "Repuestos especiales",
-    "Trabajos adicionales no acordados",
-    "Servicios fuera del alcance inicial",
-  ],
-  recommendations: [
-    "Despejar el área de trabajo",
-    "Explicar claramente el problema",
-    "Tener disponibilidad durante la visita",
-  ],
-}
-
-function getDetailByCategory(category: string): ServiceDetailExtra {
-  return detailByCategory[category] || defaultDetail
+  "23": {
+    image: "☔",
+    includes: [
+      "Revision de superficie",
+      "Aplicacion de impermeabilizante",
+      "Sellado basico de puntos criticos",
+      "Recomendaciones de secado",
+    ],
+    excludes: [
+      "Reparacion estructural de losa",
+      "Retiro completo de impermeabilizante antiguo",
+      "Trabajo con lluvia o superficie mojada",
+    ],
+    recommendations: [
+      "Programar en dia seco",
+      "Retirar objetos de la terraza",
+      "Informar si hay filtraciones internas",
+    ],
+    idealFor: [
+      "Terrazas con humedad",
+      "Cubiertas con filtracion leve",
+      "Prevencion antes de temporada de lluvia",
+    ],
+    serviceProcess: [
+      "Se revisa la terraza",
+      "Se limpia la superficie basica",
+      "Se aplica impermeabilizante",
+      "Se explica tiempo de secado",
+    ],
+    warranty: "Garantia de 20 dias sobre aplicacion en el area intervenida.",
+    urgencyLevel: "Media",
+    paymentNote: "El precio varia segun metros cuadrados y material requerido.",
+  },
+  "24": {
+    image: "🧱",
+    includes: [
+      "Revision de grietas o humedad visible",
+      "Tratamiento basico del area afectada",
+      "Sellado inicial",
+      "Recomendaciones para evitar avance del daño",
+    ],
+    excludes: [
+      "Reparacion estructural profunda",
+      "Pintura completa del muro",
+      "Solucion de filtraciones internas no visibles",
+    ],
+    recommendations: [
+      "Tomar fotos del avance de la humedad",
+      "Evitar cubrir el area con muebles",
+      "Informar si la grieta ha crecido",
+    ],
+    idealFor: [
+      "Grietas pequenas o medianas",
+      "Humedad superficial",
+      "Paredes con deterioro visible",
+    ],
+    serviceProcess: [
+      "Se revisa el origen visible del daño",
+      "Se limpia el area",
+      "Se aplica tratamiento basico",
+      "Se indica si requiere trabajo mayor",
+    ],
+    warranty: "Garantia de 10 dias sobre el tratamiento superficial.",
+    urgencyLevel: "Media",
+    paymentNote: "No incluye pintura completa ni reparacion estructural.",
+  },
 }
 
 export const servicesMock: ServiceMock[] = baseServicesMock.map((service) => {
-  const detail = getDetailByCategory(service.category)
+  const detail = serviceDetailsMock[service.id]
 
   return {
     ...service,
-    image: detail.image,
-    includes: detail.includes,
-    excludes: detail.excludes,
-    recommendations: detail.recommendations,
+    ...detail,
   }
 })
