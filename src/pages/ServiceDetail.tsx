@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import EmptyState from "../components/shared/EmptyState"
 import { useHistory } from "../hooks/History/useHistory"
+import { useCart } from "../hooks/cart/useCart"
 import { servicesMock } from "../data/ServicesMock"
 import "../styles/Services.css"
 
@@ -25,6 +26,7 @@ function ServiceDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { addServiceToHistory } = useHistory()
+  const { addToCart } = useCart()
 
   const service = servicesMock.find((item) => item.id === id)
 
@@ -39,7 +41,18 @@ function ServiceDetail() {
   }
 
   function handleAddToCart(): void {
-    alert("Esta función se conectará en HU-013.")
+    if (!service) {
+      return
+    }
+
+    const result = addToCart(service)
+
+    if (result === "added") {
+      alert("Servicio agregado al carrito.")
+      return
+    }
+
+    alert("Este servicio ya está en el carrito.")
   }
 
   function handleRequestNow(): void {
