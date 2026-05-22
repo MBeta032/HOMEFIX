@@ -1,12 +1,14 @@
 import type { User } from "firebase/auth"
  
 export interface RegisterData {
-    name : string
-    email : string
-    password : string
-    confirmPassword : string
-    phone : string
-    address : string
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    phone: string;
+    address: string;
+    city: string;
+    zone: string;
 }
 
 export interface UserData{
