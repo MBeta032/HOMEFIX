@@ -13,6 +13,7 @@ import Catalog from "../pages/Catalog"
 import ServiceDetail from "../pages/ServiceDetail"
 import History from "../pages/History"
 import RequestPage from "../pages/RequestPage"
+import RequestsPage from "../pages/RequestsPage"
 
 function AppRouter() {
   return (
@@ -29,15 +30,16 @@ function AppRouter() {
           <Route path="/dashboard/servicios/:id" element={<ServiceDetail />} />
           <Route path="/dashboard/catalogo" element={<Catalog />} />
           <Route path="/dashboard/historial" element={<History />} />
+          <Route path="/dashboard/seguimiento" element={<Traking />} />
+          <Route path="/dashboard/carrito" element={<CartPage />} />
+          <Route path="/dashboard/checkout" element={<RequestPage />} />
+          <Route path="/dashboard/solicitudes" element={<RequestsPage />} />
+          <Route path="/dashboard/perfil" element={<Profile />} />
 
           <Route
             path="/history"
             element={<Navigate to="/dashboard/historial" replace />}
           />
-
-          <Route path="/dashboard/seguimiento" element={<Traking />} />
-          <Route path="/dashboard/carrito" element={<CartPage />} />
-          <Route path="/dashboard/checkout" element={<RequestPage />} />
 
           <Route
             path="/cart"
@@ -49,8 +51,10 @@ function AppRouter() {
             element={<Navigate to="/dashboard/checkout" replace />}
           />
 
-          <Route path="/dashboard/solicitudes" element={<Requests />} />
-          <Route path="/dashboard/perfil" element={<Profile />} />
+          <Route
+            path="/requests"
+            element={<Navigate to="/dashboard/solicitudes" replace />}
+          />
         </Route>
       </Route>
     </Routes>
