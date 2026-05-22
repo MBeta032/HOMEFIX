@@ -1,4 +1,80 @@
 /* CATALOGO */
+.catalogo-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.catalogo-menu {
+  background-color: white;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.catalogo-menu-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.catalogo-parent-btn,
+.catalogo-subcategory-btn {
+  border: none;
+  background-color: white;
+  color: #1f2937;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  transition: 0.2s;
+}
+
+.catalogo-parent-btn {
+  font-size: 15px;
+  font-weight: 700;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.catalogo-parent-btn:hover,
+.catalogo-parent-btn.active {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+.catalogo-subcategory-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 14px;
+}
+
+.catalogo-subcategory-btn {
+  font-size: 14px;
+  gap: 8px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  color: #4b5563;
+}
+
+.catalogo-subcategory-btn:hover,
+.catalogo-subcategory-btn.active {
+  background-color: #f0f7ff;
+  color: #1e3a5f;
+  font-weight: 600;
+}
+
+.catalogo-services {
+  width: 100%;
+}
+
+/* Se deja esta clase por si alguna parte vieja del catalogo la sigue usando */
 .catalogo-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -33,4 +109,24 @@
   margin: 0;
   font-size: 14px;
   color: #1f2937;
+}
+
+@media (max-width: 900px) {
+  .catalogo-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .catalogo-menu {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .catalogo-parent-btn {
+    font-size: 14px;
+  }
+
+  .catalogo-subcategory-btn {
+    font-size: 13px;
+  }
 }
