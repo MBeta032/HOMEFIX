@@ -1,37 +1,37 @@
-import { useNavigate } from "react-router-dom";
-import RequestCard from "../components/requests/RequestCard";
-import Button from "../components/shared/Button";
-import PageHeader from "../components/shared/PageHeader";
-import { useRequests } from "../hooks/request/useRequests";
-import type { IRequest } from "../interfaces/Requests/request.interface";
-import "../styles/Requests/index.css";
+import { useNavigate } from "react-router-dom"
+import RequestCard from "../components/requests/RequestCard"
+import Button from "../components/shared/Button"
+import PageHeader from "../components/shared/PageHeader"
+import { useRequests } from "../hooks/request/useRequests"
+import type { IRequest } from "../interfaces/Requests/request.interface"
+import "../styles/Requests.css"
 
 function getRequestDateValue(request: IRequest): number {
-  const date = new Date(request.createdAt);
-  const dateValue = date.getTime();
+  const date = new Date(request.createdAt)
+  const dateValue = date.getTime()
 
   if (Number.isNaN(dateValue)) {
-    return 0;
+    return 0
   }
 
-  return dateValue;
+  return dateValue
 }
 
 export default function RequestsPage() {
-  const navigate = useNavigate();
-  const { requests, requestCount } = useRequests();
+  const navigate = useNavigate()
+  const { requests, requestCount } = useRequests()
 
   const sortedRequests: IRequest[] = [...requests].sort(
     (firstRequest, secondRequest) =>
       getRequestDateValue(secondRequest) - getRequestDateValue(firstRequest)
-  );
+  )
 
   function handleGoToCart(): void {
-    navigate("/cart");
+    navigate("/dashboard/carrito")
   }
 
   function handleGoToServices(): void {
-    navigate("/services");
+    navigate("/dashboard/servicios")
   }
 
   return (
@@ -87,5 +87,5 @@ export default function RequestsPage() {
         )}
       </section>
     </main>
-  );
+  )
 }
