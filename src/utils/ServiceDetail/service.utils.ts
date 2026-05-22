@@ -1,10 +1,10 @@
-import { services } from "../../data/service.data";
-import type { IService } from "../../interfaces/ServiceDetail/service.interface";
+import { servicesMock } from "../../data/ServicesMock"
+import type { ServiceMock } from "../../interfaces/InterfaceServices"
 
-export function getServiceById(id: string | undefined): IService | undefined {
+export function getServiceById(id: string | undefined): ServiceMock | undefined {
   if (!id) {
-    return undefined;
+    return undefined
   }
 
-  return services.find((service: IService) => service.id === id);
+  return servicesMock.find((service) => service.id === id)
 }
