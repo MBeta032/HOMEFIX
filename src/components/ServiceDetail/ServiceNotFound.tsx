@@ -1,4 +1,4 @@
-import Button from "../shared/Button";
+import EmptyState from "../shared/EmptyState";
 
 interface ServiceNotFoundProps {
   onBack: () => void;
@@ -6,16 +6,21 @@ interface ServiceNotFoundProps {
 
 export default function ServiceNotFound({ onBack }: ServiceNotFoundProps) {
   return (
-    <main className="service-detail-page">
-      <section className="service-not-found">
-        <h1>Servicio no encontrado.</h1>
+    <section className="service-detail-page">
+      <div className="service-not-found">
+        <EmptyState
+          title="Servicio no encontrado."
+          description="Este servicio todavía no existe o el id no es válido."
+        />
 
-        <p>Este servicio todavía no existe o el id no es válido.</p>
-
-        <Button variant="primary" onClick={onBack}>
-          Volver
-        </Button>
-      </section>
-    </main>
+        <button
+          type="button"
+          className="service-detail-btn"
+          onClick={onBack}
+        >
+          Volver a servicios
+        </button>
+      </div>
+    </section>
   );
 }

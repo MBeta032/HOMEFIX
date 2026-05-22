@@ -1,5 +1,3 @@
-import Button from "../shared/Button";
-
 interface ServiceDetailActionsProps {
   onAddToCart: () => void;
   onRequestNow: () => void;
@@ -11,13 +9,21 @@ export default function ServiceDetailActions({
 }: ServiceDetailActionsProps) {
   return (
     <div className="service-detail-actions">
-      <Button variant="primary" onClick={onAddToCart}>
+      <button
+        type="button"
+        className="service-detail-btn service-detail-btn-secondary"
+        onClick={onAddToCart}
+      >
         Agregar al carrito
-      </Button>
+      </button>
 
-      <Button variant="success" onClick={onRequestNow}>
+      <button
+        type="button"
+        className="service-detail-btn"
+        onClick={onRequestNow}
+      >
         Solicitar ahora
-      </Button>
+      </button>
     </div>
   );
 }

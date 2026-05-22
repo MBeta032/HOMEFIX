@@ -4,35 +4,36 @@ import ServiceDetailInfo from "../components/ServiceDetail/ServiceDetailInfo";
 import ServiceDetailList from "../components/ServiceDetail/ServiceDetailList";
 import ServiceNotFound from "../components/ServiceDetail/ServiceNotFound";
 import { useServiceDetail } from "../hooks/ServiceDetail/userServiceDetail";
+import "../styles/Services.css";
 
 export default function ServiceDetailPage() {
-  const {
-    service,
-    handleBack,
-    handleAddToCart,
-    handleRequestNow,
-  } = useServiceDetail();
+  const { service, handleBack, handleAddToCart, handleRequestNow } =
+    useServiceDetail();
 
   if (!service) {
     return <ServiceNotFound onBack={handleBack} />;
   }
 
   return (
-    <main className="service-detail-page">
-      <section className="service-detail-header">
-        <PageHeader
-          title="Detalle del servicio"
-          subtitle="Revisa la información antes de solicitar el servicio."
-          showBackButton
-          onBack={handleBack}
-        />
+    <section className="service-detail-page">
+      <button
+        type="button"
+        className="service-detail-btn service-detail-btn-secondary service-back-btn"
+        onClick={handleBack}
+      >
+        Volver
+      </button>
 
-        <ServiceDetailHero
-          service={service}
-          onAddToCart={handleAddToCart}
-          onRequestNow={handleRequestNow}
-        />
-      </section>
+      <PageHeader
+        title="Detalle del servicio"
+        subtitle="Revisa la información antes de solicitar el servicio."
+      />
+
+      <ServiceDetailHero
+        service={service}
+        onAddToCart={handleAddToCart}
+        onRequestNow={handleRequestNow}
+      />
 
       <section className="service-detail-grid">
         <ServiceDetailInfo service={service} />
@@ -46,6 +47,6 @@ export default function ServiceDetailPage() {
           items={service.recommendations}
         />
       </section>
-    </main>
+    </section>
   );
 }
