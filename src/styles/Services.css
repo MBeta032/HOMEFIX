@@ -527,3 +527,170 @@
     width: 100%;
   }
 }
+/* SERVICE DETAIL PAGE */
+.service-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.service-back-btn {
+  width: fit-content;
+  margin-bottom: 4px;
+}
+
+.service-detail-main-card {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 24px;
+  align-items: center;
+  padding: 28px;
+  background-color: #ffffff;
+  border: 1px solid #dbeafe;
+  border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
+}
+
+.service-detail-image {
+  min-height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eff6ff;
+  border-radius: 16px;
+  font-size: 64px;
+}
+
+.service-detail-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.service-detail-info h1 {
+  margin: 0;
+  font-size: 32px;
+  color: #111827;
+}
+
+.service-detail-info p {
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.service-detail-rating {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.service-detail-stars {
+  color: #f59e0b;
+  font-size: 22px;
+  letter-spacing: 2px;
+}
+
+.service-detail-rating strong {
+  color: #111827;
+  font-size: 14px;
+}
+
+.service-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.service-detail-btn-secondary {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.service-detail-btn-secondary:hover {
+  background-color: #dbeafe;
+}
+
+.service-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.service-detail-card {
+  padding: 22px;
+  background-color: #ffffff;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+}
+
+.service-detail-card h2 {
+  margin-top: 0;
+  margin-bottom: 14px;
+  color: #1e3a5f;
+  font-size: 21px;
+}
+
+.service-detail-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 11px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-item span {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.info-item strong {
+  color: #111827;
+  font-size: 15px;
+}
+
+.service-detail-list {
+  padding-left: 20px;
+  line-height: 1.7;
+  color: #4b5563;
+}
+
+.service-not-found {
+  max-width: 620px;
+  margin: 40px auto;
+  padding: 28px;
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.07);
+}
+
+@media (max-width: 900px) {
+  .service-detail-main-card {
+    grid-template-columns: 1fr;
+  }
+
+  .service-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-detail-image {
+    min-height: 110px;
+  }
+
+  .service-detail-info h1 {
+    font-size: 28px;
+  }
+}
