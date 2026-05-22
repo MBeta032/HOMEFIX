@@ -8,6 +8,8 @@ interface RequestFormProps {
   services: ServiceMock[]
   onSubmit: (formData: IRequestFormData) => void
   onCancel: () => void
+  submitText?: string
+  cancelText?: string
 }
 
 type RequestFormErrors = Partial<Record<keyof IRequestFormData, string>>
@@ -27,12 +29,15 @@ export default function RequestForm({
   services,
   onSubmit,
   onCancel,
+  submitText = "Confirmar solicitud",
+  cancelText = "Volver al carrito",
 }: RequestFormProps) {
-  const [formData, setFormData] =
-    useState<IRequestFormData>(initialFormData)
-
+  const [formData, setFormData] = useState<IRequestFormData>(initialFormData)
   const [errors, setErrors] = useState<RequestFormErrors>({})
   const [generalError, setGeneralError] = useState<string>("")
+
+  const isSingleService = services.length === 1
+  const selectedServiceName = services[0]?.name || "servicio seleccionado"
 
   function handleChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -111,13 +116,20 @@ export default function RequestForm({
   return (
     <form className="request-form" onSubmit={handleSubmit}>
       <div className="request-form-header">
-        <p className="request-selected-label">Servicios a confirmar</p>
+        <p className="request-selected-label">
+          {isSingleService ? "Servicio a confirmar" : "Servicios a confirmar"}
+        </p>
 
-        <h2>{services.length} servicio(s) del carrito</h2>
+        <h2>
+          {isSingleService
+            ? selectedServiceName
+            : `${services.length} servicio(s) del carrito`}
+        </h2>
 
         <p>
-          Al enviar este formulario se creará una solicitud pendiente por cada
-          servicio agregado al carrito.
+          {isSingleService
+            ? "Al enviar este formulario se creará una solicitud pendiente solo para este servicio."
+            : "Al enviar este formulario se creará una solicitud pendiente por cada servicio agregado al carrito."}
         </p>
       </div>
 
@@ -128,6 +140,7 @@ export default function RequestForm({
       <div className="request-form-grid">
         <div className="request-form-group">
           <label htmlFor="address">Dirección</label>
+
           <input
             id="address"
             name="address"
@@ -136,11 +149,13 @@ export default function RequestForm({
             onChange={handleChange}
             placeholder="Ej: Calle 10 # 20-30"
           />
+
           {errors.address && <span>{errors.address}</span>}
         </div>
 
         <div className="request-form-group">
           <label htmlFor="neighborhood">Barrio</label>
+
           <input
             id="neighborhood"
             name="neighborhood"
@@ -149,11 +164,13 @@ export default function RequestForm({
             onChange={handleChange}
             placeholder="Ej: San Fernando"
           />
+
           {errors.neighborhood && <span>{errors.neighborhood}</span>}
         </div>
 
         <div className="request-form-group">
           <label htmlFor="city">Ciudad</label>
+
           <input
             id="city"
             name="city"
@@ -162,11 +179,13 @@ export default function RequestForm({
             onChange={handleChange}
             placeholder="Ej: Cali"
           />
+
           {errors.city && <span>{errors.city}</span>}
         </div>
 
         <div className="request-form-group">
           <label htmlFor="zone">Zona</label>
+
           <input
             id="zone"
             name="zone"
@@ -175,11 +194,13 @@ export default function RequestForm({
             onChange={handleChange}
             placeholder="Ej: Sur de Cali"
           />
+
           {errors.zone && <span>{errors.zone}</span>}
         </div>
 
         <div className="request-form-group">
           <label htmlFor="desiredDate">Fecha deseada</label>
+
           <input
             id="desiredDate"
             name="desiredDate"
@@ -187,11 +208,13 @@ export default function RequestForm({
             value={formData.desiredDate}
             onChange={handleChange}
           />
+
           {errors.desiredDate && <span>{errors.desiredDate}</span>}
         </div>
 
         <div className="request-form-group">
           <label htmlFor="desiredTime">Hora deseada</label>
+
           <input
             id="desiredTime"
             name="desiredTime"
@@ -199,11 +222,13 @@ export default function RequestForm({
             value={formData.desiredTime}
             onChange={handleChange}
           />
+
           {errors.desiredTime && <span>{errors.desiredTime}</span>}
         </div>
 
         <div className="request-form-group">
           <label htmlFor="paymentMethod">Método de pago</label>
+
           <select
             id="paymentMethod"
             name="paymentMethod"
@@ -214,12 +239,14 @@ export default function RequestForm({
             <option value="Efectivo">Efectivo</option>
             <option value="Datáfono">Datáfono</option>
           </select>
+
           {errors.paymentMethod && <span>{errors.paymentMethod}</span>}
         </div>
       </div>
 
       <div className="request-form-group">
         <label htmlFor="problemDescription">Descripción del problema</label>
+
         <textarea
           id="problemDescription"
           name="problemDescription"
@@ -228,6 +255,7 @@ export default function RequestForm({
           placeholder="Describe qué necesitas que revise la empresa."
           rows={5}
         />
+
         {errors.problemDescription && (
           <span>{errors.problemDescription}</span>
         )}
@@ -235,11 +263,11 @@ export default function RequestForm({
 
       <div className="request-form-actions">
         <Button type="submit" variant="success">
-          Confirmar solicitud
+          {submitText}
         </Button>
 
         <Button type="button" variant="secondary" onClick={onCancel}>
-          Volver al carrito
+          {cancelText}
         </Button>
       </div>
     </form>

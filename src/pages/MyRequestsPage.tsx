@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
-import RequestCard from "../components/requests/RequestCard"
-import Button from "../components/shared/Button"
+import RequestsEmptyState from "../components/requests/RequestsEmptyState"
+import RequestsList from "../components/requests/RequestsList"
+import RequestsSummary from "../components/requests/RequestsSummary"
 import PageHeader from "../components/shared/PageHeader"
 import { useRequests } from "../hooks/request/useRequests"
 import type { IRequest } from "../interfaces/Requests/request.interface"
@@ -17,7 +18,7 @@ function getRequestDateValue(request: IRequest): number {
   return dateValue
 }
 
-export default function RequestsPage() {
+export default function MyRequestsPage() {
   const navigate = useNavigate()
   const { requests, requestCount } = useRequests()
 
@@ -45,44 +46,14 @@ export default function RequestsPage() {
         />
 
         {requests.length === 0 ? (
-          <section className="requests-empty-card">
-            <div className="requests-empty-icon">📋</div>
-
-            <h2>Aún no tienes solicitudes.</h2>
-
-            <p>
-              Cuando confirmes servicios desde el carrito, aparecerán aquí para
-              que puedas revisar su estado.
-            </p>
-
-            <div className="requests-empty-actions">
-              <Button variant="primary" onClick={handleGoToCart}>
-                Ir al carrito
-              </Button>
-
-              <Button variant="secondary" onClick={handleGoToServices}>
-                Explorar servicios
-              </Button>
-            </div>
-          </section>
+          <RequestsEmptyState
+            onGoToCart={handleGoToCart}
+            onGoToServices={handleGoToServices}
+          />
         ) : (
           <>
-            <section className="requests-summary-card">
-              <div>
-                <p>Total de solicitudes</p>
-                <strong>{requestCount}</strong>
-              </div>
-
-              <span>
-                Las solicitudes se muestran de la más reciente a la más antigua.
-              </span>
-            </section>
-
-            <section className="requests-list">
-              {sortedRequests.map((request: IRequest) => (
-                <RequestCard key={request.id} request={request} />
-              ))}
-            </section>
+            <RequestsSummary requestCount={requestCount} />
+            <RequestsList requests={sortedRequests} />
           </>
         )}
       </section>
