@@ -290,3 +290,126 @@
     padding: 26px 18px;
   }
 }
+
+/* =========================
+   CART SHARED COMPONENT FIXES
+========================= */
+
+.cart-page .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.cart-page .page-header-content h1 {
+  margin: 0;
+  color: #10213f;
+  font-size: 32px;
+}
+
+.cart-page .page-header-content p {
+  margin: 8px 0 0;
+  color: #4d5f7a;
+  line-height: 1.5;
+}
+
+.page-header-back-button {
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  padding: 10px 16px;
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.page-header-back-button:hover {
+  background-color: #dbeafe;
+}
+
+.cart-page .home-button {
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  border: none;
+}
+
+.cart-page .home-button-primary {
+  background-color: #2563eb;
+  color: #ffffff;
+}
+
+.cart-page .home-button-primary:hover {
+  background-color: #1d4ed8;
+}
+
+.cart-page .home-button-secondary {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.cart-page .home-button-secondary:hover {
+  background-color: #dbeafe;
+}
+
+.cart-page .cart-remove-button {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.cart-page .cart-remove-button:hover {
+  background-color: #fecaca;
+}
+
+.cart-item-rating {
+  margin: 0;
+  color: #92400e;
+  font-weight: 700;
+}
+
+.empty-state-action {
+  margin-top: 18px;
+  border: none;
+  border-radius: 999px;
+  padding: 11px 20px;
+  background-color: #2563eb;
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.empty-state-action:hover {
+  background-color: #1d4ed8;
+}
+
+.cart-summary-card .home-button {
+  width: 100%;
+  margin-top: 4px;
+}
+
+@media (max-width: 700px) {
+  .cart-page .page-header {
+    flex-direction: column;
+  }
+
+  .page-header-back-button {
+    width: fit-content;
+  }
+
+  .cart-item-card {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-item-header {
+    flex-direction: column;
+  }
+
+  .cart-item-price {
+    white-space: normal;
+  }
+}

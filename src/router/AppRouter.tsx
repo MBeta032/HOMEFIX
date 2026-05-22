@@ -6,7 +6,7 @@ import Login from "../pages/Login"
 import Dashboard from "../pages/Dashboard"
 import DashboardLayout from "../components/shared/DashboardLayout"
 import Services from "../pages/Services"
-import ShoppingCar from "../pages/ShoppingCar"
+import CartPage from "../pages/CartPage"
 import Profile from "../pages/Profile"
 import Traking from "../pages/Traking"
 import Requests from "../pages/Requests"
@@ -29,12 +29,20 @@ function AppRouter() {
           <Route path="/dashboard/servicios/:id" element={<ServiceDetail />} />
           <Route path="/dashboard/catalogo" element={<Catalog />} />
           <Route path="/dashboard/historial" element={<History />} />
+
           <Route
             path="/history"
             element={<Navigate to="/dashboard/historial" replace />}
           />
+
           <Route path="/dashboard/seguimiento" element={<Traking />} />
-          <Route path="/dashboard/carrito" element={<ShoppingCar />} />
+          <Route path="/dashboard/carrito" element={<CartPage />} />
+
+          <Route
+            path="/cart"
+            element={<Navigate to="/dashboard/carrito" replace />}
+          />
+
           <Route path="/dashboard/solicitudes" element={<Requests />} />
           <Route path="/dashboard/perfil" element={<Profile />} />
         </Route>
