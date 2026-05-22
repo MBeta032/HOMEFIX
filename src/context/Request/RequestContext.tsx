@@ -1,33 +1,37 @@
-import { createContext, useEffect, useState } from "react";
-import type { ReactNode } from "react";
-import RequestQueue from "../../algorithms/RequestQueue";
-import type { IService } from "../../interfaces/ServiceDetail/service.interface";
+import { createContext, useEffect, useState } from "react"
+import type { ReactNode } from "react"
+import RequestQueue from "../../algorithms/RequestQueue"
+import type { ServiceMock } from "../../interfaces/InterfaceServices"
 import type {
   IRequest,
   IRequestFormData,
   PaymentMethod,
   RequestStatus,
-} from "../../interfaces/Requests/request.interface";
+} from "../../interfaces/Requests/request.interface"
 
 interface RequestProviderProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export interface RequestContextType {
-  requests: IRequest[];
-  requestCount: number;
+  requests: IRequest[]
+  requestCount: number
   createRequestFromService: (
-    service: IService,
+    service: ServiceMock,
     formData: IRequestFormData
-  ) => IRequest;
-  clearRequests: () => void;
+  ) => IRequest
+  createRequestsFromCart: (
+    services: ServiceMock[],
+    formData: IRequestFormData
+  ) => IRequest[]
+  clearRequests: () => void
 }
 
 export const RequestContext = createContext<RequestContextType | undefined>(
   undefined
-);
+)
 
-const REQUEST_STORAGE_KEY = "homefix-requests";
+const REQUEST_STORAGE_KEY = "homefix-requests"
 
 const VALID_REQUEST_STATUS: RequestStatus[] = [
   "Pendiente",
@@ -35,24 +39,24 @@ const VALID_REQUEST_STATUS: RequestStatus[] = [
   "En proceso",
   "Finalizada",
   "Cancelada",
-];
+]
 
-const VALID_PAYMENT_METHODS: PaymentMethod[] = ["Efectivo", "Datáfono"];
+const VALID_PAYMENT_METHODS: PaymentMethod[] = ["Efectivo", "Datáfono"]
 
 function isRequestStatus(status: unknown): status is RequestStatus {
-  return VALID_REQUEST_STATUS.includes(status as RequestStatus);
+  return VALID_REQUEST_STATUS.includes(status as RequestStatus)
 }
 
 function isPaymentMethod(method: unknown): method is PaymentMethod {
-  return VALID_PAYMENT_METHODS.includes(method as PaymentMethod);
+  return VALID_PAYMENT_METHODS.includes(method as PaymentMethod)
 }
 
 function isValidRequest(request: unknown): request is IRequest {
   if (typeof request !== "object" || request === null) {
-    return false;
+    return false
   }
 
-  const possibleRequest = request as Partial<IRequest>;
+  const possibleRequest = request as Partial<IRequest>
 
   return (
     typeof possibleRequest.id === "string" &&
@@ -64,102 +68,129 @@ function isValidRequest(request: unknown): request is IRequest {
     typeof possibleRequest.address === "string" &&
     typeof possibleRequest.neighborhood === "string" &&
     typeof possibleRequest.city === "string" &&
+    typeof possibleRequest.zone === "string" &&
     typeof possibleRequest.desiredDate === "string" &&
     typeof possibleRequest.desiredTime === "string" &&
     isPaymentMethod(possibleRequest.paymentMethod) &&
     typeof possibleRequest.problemDescription === "string" &&
     isRequestStatus(possibleRequest.status) &&
     typeof possibleRequest.createdAt === "string"
-  );
+  )
 }
 
 function getRequestsFromStorage(): IRequest[] {
-  const savedRequests = localStorage.getItem(REQUEST_STORAGE_KEY);
+  if (typeof window === "undefined") {
+    return []
+  }
+
+  const savedRequests = localStorage.getItem(REQUEST_STORAGE_KEY)
 
   if (!savedRequests) {
-    return [];
+    return []
   }
 
   try {
-    const parsedRequests = JSON.parse(savedRequests) as unknown;
+    const parsedRequests = JSON.parse(savedRequests) as unknown
 
     if (!Array.isArray(parsedRequests)) {
-      return [];
+      return []
     }
 
-    return parsedRequests.filter(isValidRequest);
+    return parsedRequests.filter(isValidRequest)
   } catch {
-    return [];
+    return []
   }
 }
 
-function createRequestId(serviceId: string): string {
-  return `REQ-${Date.now()}-${serviceId}`;
+function createRequestId(serviceId: string, index: number = 0): string {
+  return `REQ-${Date.now()}-${serviceId}-${index}`
 }
 
 function getPaymentMethod(method: PaymentMethod | ""): PaymentMethod {
   if (method === "Datáfono") {
-    return "Datáfono";
+    return "Datáfono"
   }
 
-  return "Efectivo";
+  return "Efectivo"
+}
+
+function buildRequest(
+  service: ServiceMock,
+  formData: IRequestFormData,
+  index: number = 0
+): IRequest {
+  return {
+    id: createRequestId(service.id, index),
+    serviceId: service.id,
+    serviceName: service.name,
+    company: service.company,
+    price: service.price,
+    serviceZone: service.zone,
+    address: formData.address,
+    neighborhood: formData.neighborhood,
+    city: formData.city,
+    zone: formData.zone,
+    desiredDate: formData.desiredDate,
+    desiredTime: formData.desiredTime,
+    paymentMethod: getPaymentMethod(formData.paymentMethod),
+    problemDescription: formData.problemDescription,
+    status: "Pendiente",
+    createdAt: new Date().toISOString(),
+  }
 }
 
 export function RequestProvider({ children }: RequestProviderProps) {
   const [requests, setRequests] = useState<IRequest[]>(() =>
     getRequestsFromStorage()
-  );
+  )
 
-  const requestQueue = new RequestQueue(requests);
-
-  const requestCount: number = requestQueue.size();
+  const requestQueue = new RequestQueue(requests)
+  const requestCount: number = requestQueue.size()
 
   useEffect(() => {
     if (requests.length === 0) {
-      localStorage.removeItem(REQUEST_STORAGE_KEY);
-      return;
+      localStorage.removeItem(REQUEST_STORAGE_KEY)
+      return
     }
 
-    localStorage.setItem(REQUEST_STORAGE_KEY, JSON.stringify(requests));
-  }, [requests]);
+    localStorage.setItem(REQUEST_STORAGE_KEY, JSON.stringify(requests))
+  }, [requests])
 
   function createRequestFromService(
-    service: IService,
+    service: ServiceMock,
     formData: IRequestFormData
   ): IRequest {
-    const queue = new RequestQueue(requests);
+    const queue = new RequestQueue(requests)
+    const newRequest = buildRequest(service, formData)
 
-    const newRequest: IRequest = {
-      id: createRequestId(service.id),
-      serviceId: service.id,
-      serviceName: service.name,
-      company: service.company,
-      price: service.price,
-      serviceZone: service.zone,
-      address: formData.address,
-      neighborhood: formData.neighborhood,
-      city: formData.city,
-      desiredDate: formData.desiredDate,
-      desiredTime: formData.desiredTime,
-      paymentMethod: getPaymentMethod(formData.paymentMethod),
-      problemDescription: formData.problemDescription,
-      status: "Pendiente",
-      createdAt: new Date().toISOString(),
-    };
+    queue.enqueue(newRequest)
+    setRequests(queue.getItems())
 
-    queue.enqueue(newRequest);
+    return newRequest
+  }
 
-    setRequests(queue.getItems());
+  function createRequestsFromCart(
+    services: ServiceMock[],
+    formData: IRequestFormData
+  ): IRequest[] {
+    const queue = new RequestQueue(requests)
 
-    return newRequest;
+    const newRequests = services.map((service, index) => {
+      const request = buildRequest(service, formData, index)
+      queue.enqueue(request)
+      return request
+    })
+
+    setRequests(queue.getItems())
+
+    return newRequests
   }
 
   function clearRequests(): void {
-    const queue = new RequestQueue(requests);
+    const queue = new RequestQueue(requests)
 
-    queue.clear();
-
-    setRequests(queue.getItems());
+    queue.clear()
+    setRequests(queue.getItems())
   }
 
   return (
@@ -168,10 +199,11 @@ export function RequestProvider({ children }: RequestProviderProps) {
         requests,
         requestCount,
         createRequestFromService,
+        createRequestsFromCart,
         clearRequests,
       }}
     >
       {children}
     </RequestContext.Provider>
-  );
+  )
 }

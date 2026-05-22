@@ -1,9 +1,9 @@
-import { useNavigate } from "react-router-dom";
-import Button from "../shared/Button";
+import { useNavigate } from "react-router-dom"
+import Button from "../shared/Button"
 
 interface CartSummaryProps {
-  cartCount: number;
-  cartTotal: number;
+  cartCount: number
+  cartTotal: number
 }
 
 function formatPrice(price: number): string {
@@ -11,17 +11,17 @@ function formatPrice(price: number): string {
     style: "currency",
     currency: "COP",
     maximumFractionDigits: 0,
-  });
+  })
 }
 
 export default function CartSummary({
   cartCount,
   cartTotal,
 }: CartSummaryProps) {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   function handleConfirmRequest(): void {
-    navigate("/checkout");
+    navigate("/dashboard/checkout")
   }
 
   return (
@@ -43,9 +43,9 @@ export default function CartSummary({
         servicio.
       </p>
 
-      <Button variant="success" onClick={handleConfirmRequest}>
+      <Button variant="primary" onClick={handleConfirmRequest}>
         Confirmar solicitud
       </Button>
     </aside>
-  );
+  )
 }
