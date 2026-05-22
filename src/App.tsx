@@ -4,6 +4,7 @@ import { AuthProvider } from "./context/AuthContext"
 import { HistoryProvider } from "./context/HistoryContext"
 import { CartProvider } from "./context/Cart/CartContext"
 import { RequestProvider } from "./context/Request/RequestContext"
+import { RatingProvider } from "./context/Rating/RatingContext"
 
 function App() {
   return (
@@ -11,9 +12,11 @@ function App() {
       <HistoryProvider>
         <CartProvider>
           <RequestProvider>
-            <BrowserRouter>
-              <AppRouter />
-            </BrowserRouter>
+            <RatingProvider>
+              <BrowserRouter>
+                <AppRouter />
+              </BrowserRouter>
+            </RatingProvider>
           </RequestProvider>
         </CartProvider>
       </HistoryProvider>
