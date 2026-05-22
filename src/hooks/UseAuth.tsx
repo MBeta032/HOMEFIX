@@ -1,34 +1,41 @@
 import {
+  EmailAuthProvider,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  reauthenticateWithCredential,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updateEmail,
+  updatePassword,
   updateProfile,
   type User,
-} from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { useEffect, useState } from "react";
-import { auth, db } from "../firebase/config";
-import type { RegisterData, UserData } from "../interfaces/Auth/InterfaceAuth";
+} from "firebase/auth"
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
+import { useEffect, useState } from "react"
+import { auth, db } from "../firebase/config"
+import type { RegisterData, UserData } from "../interfaces/Auth/InterfaceAuth"
 
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null);
-  const [userData, setUserData] = useState<UserData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User | null>(null)
+  const [userData, setUserData] = useState<UserData | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
 
-  const googleProvider = new GoogleAuthProvider();
+  const googleProvider = new GoogleAuthProvider()
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        setUser(firebaseUser);
+        setUser(firebaseUser)
 
-        const userRef = doc(db, "usuarios", firebaseUser.uid);
-        const snap = await getDoc(userRef);
+        const userRef = doc(db, "usuarios", firebaseUser.uid)
+        const userSnap = await getDoc(userRef)
 
-        if (!snap.exists()) {
+        if (userSnap.exists()) {
+          setUserData(userSnap.data() as UserData)
+        } else {
           const newUserData: UserData = {
             uid: firebaseUser.uid,
             name: firebaseUser.displayName || "Cliente",
@@ -39,23 +46,21 @@ export function useAuth() {
             zone: "",
             rol: "cliente",
             createdIn: new Date().toISOString(),
-          };
+          }
 
-          await setDoc(userRef, newUserData);
-          setUserData(newUserData);
-        } else {
-          setUserData(snap.data() as UserData);
+          await setDoc(userRef, newUserData)
+          setUserData(newUserData)
         }
       } else {
-        setUser(null);
-        setUserData(null);
+        setUser(null)
+        setUserData(null)
       }
 
-      setLoading(false);
-    });
+      setLoading(false)
+    })
 
-    return () => unsub();
-  }, []);
+    return () => unsubscribe()
+  }, [])
 
   const register = async ({
     name,
@@ -66,16 +71,14 @@ export function useAuth() {
     city,
     zone,
   }: RegisterData): Promise<void> => {
-    const { user: firebaseUser } = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    const result = await createUserWithEmailAndPassword(auth, email, password)
 
-    await updateProfile(firebaseUser, { displayName: name });
+    await updateProfile(result.user, {
+      displayName: name,
+    })
 
     const newUser: UserData = {
-      uid: firebaseUser.uid,
+      uid: result.user.uid,
       name,
       email,
       phone,
@@ -84,24 +87,24 @@ export function useAuth() {
       zone,
       rol: "cliente",
       createdIn: new Date().toISOString(),
-    };
+    }
 
-    await setDoc(doc(db, "usuarios", firebaseUser.uid), newUser);
-    setUserData(newUser);
-  };
+    await setDoc(doc(db, "usuarios", result.user.uid), newUser)
+    setUserData(newUser)
+  }
 
   const login = async (email: string, password: string): Promise<void> => {
-    await signInWithEmailAndPassword(auth, email, password);
-  };
+    await signInWithEmailAndPassword(auth, email, password)
+  }
 
   const loginGoogle = async (): Promise<User> => {
-    const result = await signInWithPopup(auth, googleProvider);
-    const firebaseUser = result.user;
+    const result = await signInWithPopup(auth, googleProvider)
+    const firebaseUser = result.user
 
-    const userRef = doc(db, "usuarios", firebaseUser.uid);
-    const snap = await getDoc(userRef);
+    const userRef = doc(db, "usuarios", firebaseUser.uid)
+    const userSnap = await getDoc(userRef)
 
-    if (!snap.exists()) {
+    if (!userSnap.exists()) {
       const newUserData: UserData = {
         uid: firebaseUser.uid,
         name: firebaseUser.displayName || "Cliente",
@@ -112,28 +115,92 @@ export function useAuth() {
         zone: "",
         rol: "cliente",
         createdIn: new Date().toISOString(),
-      };
+      }
 
-      await setDoc(userRef, newUserData);
-      setUserData(newUserData);
+      await setDoc(userRef, newUserData)
+      setUserData(newUserData)
+    } else {
+      setUserData(userSnap.data() as UserData)
     }
 
-    return firebaseUser;
-  };
+    return firebaseUser
+  }
+
+  const updateUserData = async (data: Partial<UserData>): Promise<void> => {
+    if (!user) {
+      throw new Error("No hay usuario autenticado")
+    }
+
+    const userRef = doc(db, "usuarios", user.uid)
+
+    await updateDoc(userRef, data)
+
+    if (data.name) {
+      await updateProfile(user, {
+        displayName: data.name,
+      })
+    }
+
+    setUserData((prev) => {
+      if (!prev) return prev
+      return { ...prev, ...data }
+    })
+  }
+
+  const rechargeAuth = async (currentPassword: string): Promise<void> => {
+    if (!user || !user.email) {
+      throw new Error("No hay usuario autenticado")
+    }
+
+    const credential = EmailAuthProvider.credential(user.email, currentPassword)
+    await reauthenticateWithCredential(user, credential)
+  }
+
+  const changePassword = async (newPassword: string): Promise<void> => {
+    if (!user) {
+      throw new Error("No hay usuario autenticado")
+    }
+
+    await updatePassword(user, newPassword)
+  }
+
+  const changeEmail = async (newEmail: string): Promise<void> => {
+    if (!user) {
+      throw new Error("No hay usuario autenticado")
+    }
+
+    await updateEmail(user, newEmail)
+    await updateUserData({ email: newEmail })
+  }
+
+  const resetPassword = async (): Promise<void> => {
+    const email = user?.email || userData?.email
+
+    if (!email) {
+      throw new Error("No hay correo disponible")
+    }
+
+    await sendPasswordResetEmail(auth, email)
+  }
 
   const logout = async (): Promise<void> => {
-    await signOut(auth);
-  };
+    await signOut(auth)
+  }
 
   return {
-    user,
-    userData,
-    register,
-    login,
-    logout,
-    loading,
-    loginGoogle,
-  };
+      user,
+      userData,
+      loading,
+      register,
+      login,
+      loginGoogle,
+      updateUserData,
+      rechargeAuth,
+      changePassword,
+      changeEmail,
+      resetPassword,
+      logout,
+  }
 }
 
-export default useAuth;
+export default useAuth

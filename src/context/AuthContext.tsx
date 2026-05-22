@@ -1,22 +1,45 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext } from "react"
-import type {  AuthContextType } from "../interfaces/Auth/InterfaceAuth"
+import type { ReactNode } from "react"
+import type { AuthContextType } from "../interfaces/Auth/InterfaceAuth"
 import useAuth from "../hooks/UseAuth"
 
 export const AuthContext = createContext<AuthContextType | null>(null)
 
-export function AuthProvider({children} : {children : React.ReactNode}){
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const {
+    user,
+    userData,
+    loading,
+    register,
+    login,
+    loginGoogle,
+    updateUserData,
+    rechargeAuth,
+    changePassword,
+    changeEmail,
+    resetPassword,
+    logout,
+  } = useAuth()
 
-    const {user, userData, register, login, updateUserData, changePassword, changeEmail, rechargeAuth, resetPassword, logout, loading, loginGoogle} = useAuth()
-
-    return(
-        <AuthContext.Provider value={{user, userData, register, login, updateUserData, changePassword, changeEmail, rechargeAuth, resetPassword, logout, loading, loginGoogle}}>
-            {children}
-        </AuthContext.Provider>
-    )
-
-
+  return (
+    <AuthContext.Provider
+      value={{
+            user,
+            userData,
+            loading,
+            register,
+            login,
+            loginGoogle,
+            updateUserData,
+            rechargeAuth,
+            changePassword,
+            changeEmail,
+            resetPassword,
+            logout
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  )
 }
-
-    
-
