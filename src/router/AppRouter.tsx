@@ -1,18 +1,18 @@
-import { Navigate, Route, Routes } from "react-router-dom"
-import PrivateRoute from "./PrivateRoutes"
-import Register from "../pages/Register"
-import HomePublica from "../pages/HomePublica"
-import Login from "../pages/Login"
-import Dashboard from "../pages/Dashboard"
-import { useContext } from "react"
-import { AuthContext } from "../context/AuthContext"
-import DashboardLayout from "../components/shared/DashboardLayout"
-import Services from "../pages/Services"
-import ShoppingCar from "../pages/ShoppingCar"
-import Profile from "../pages/Profile"
-import Traking from "../pages/Traking"
-import Requests from "../pages/Requests"
-import Catalog from "../pages/Catalog"
+import { Navigate, Route, Routes } from "react-router-dom";
+import PrivateRoute from "./PrivateRoutes";
+import Register from "../pages/Register";
+import HomePublica from "../pages/HomePublica";
+import Login from "../pages/Login";
+import Dashboard from "../pages/Dashboard";
+import DashboardLayout from "../components/shared/DashboardLayout";
+import Services from "../pages/Services";
+import ShoppingCar from "../pages/ShoppingCar";
+import Profile from "../pages/Profile";
+import Traking from "../pages/Traking";
+import Requests from "../pages/Requests";
+import Catalog from "../pages/Catalog";
+import ServiceDetail from "../pages/ServiceDetail";
+import History from "../pages/History";
 
 function AppRouter() {
   return (
