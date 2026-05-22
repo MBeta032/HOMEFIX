@@ -1,4 +1,4 @@
-import type { SearchBarProps } from "../../interfaces/components";
+import type { SearchBarProps } from "../../interfaces/Interfacecomponents";
 
 
 function SearchBar({

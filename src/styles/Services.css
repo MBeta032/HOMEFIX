@@ -1,5 +1,4 @@
-
-
+/* SERVICE CARD */
 .service-card {
   background-color: white;
   border-radius: 14px;
@@ -85,16 +84,6 @@
   color: #1e3a5f;
 }
 
-.btn-primary {
-  background-color: #2563eb !important;
-  color: #ffffff !important;
-  border: none !important;
-  padding: 10px 24px !important;
-  border-radius: 6px !important;
-  cursor: pointer !important;
-  font-size: 15px !important;
-}
-
 /* SERVICES PAGE */
 .services-section-header {
   display: flex;
@@ -132,4 +121,87 @@
   }
 }
 
+/* SELECT FIELD */
+.select-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
+.select-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.select-input {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  color: #111827;
+  background-color: white;
+  outline: none;
+  cursor: pointer;
+}
+
+.select-input:focus {
+  border-color: #2563eb;
+}
+
+/* FILTER BAR */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+  background-color: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 24px;
+}
+
+.filter-clear {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background-color: white;
+  color: #6b7280;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
+  align-self: flex-end;
+}
+
+.filter-clear:hover {
+  background-color: #fef2f2;
+  color: #ef4444;
+  border-color: #fecaca;
+}
+
+/* EMPTY STATE */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  gap: 12px;
+}
+
+.empty-state-icon {
+  font-size: 48px;
+}
+
+.empty-state-title {
+  font-size: 20px;
+  color: #111827;
+  font-weight: 600;
+}
+
+.empty-state-description {
+  font-size: 15px;
+  color: #6b7280;
+}

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import type { DashboardTopbarProps } from "../../interfaces/components";
+import type { DashboardTopbarProps } from "../../interfaces/Interfacecomponents";
 import { AuthContext } from "../../context/AuthContext";
 
 
