@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext } from "react"
-import type {  AuthContextType } from "../interfaces/InterfaceAuth"
+import type {  AuthContextType } from "../interfaces/Auth/InterfaceAuth"
 import useAuth from "../hooks/UseAuth"
 
 export const AuthContext = createContext<AuthContextType | null>(null)

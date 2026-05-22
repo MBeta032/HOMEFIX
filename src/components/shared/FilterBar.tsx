@@ -3,6 +3,7 @@ import type { FilterBarProps, FilterServices } from "../../interfaces/InterfaceS
 import SelectField from "./SelectField";
 
 const categorys = [...new Set(servicesMock.map(s => s.category))].map((c => ({label: c, value: c})))
+const companies = [...new Set(servicesMock.map(s => s.company))].map((c => ({label: c, value: c})))
 const zones = [...new Set(servicesMock.map(s => s.zone))].map((z => ({label: z, value: z})))
 const availability = [...new Set(servicesMock.map(s => s.availability))].map((a => ({label: a, value: a})))
 
@@ -11,6 +12,11 @@ const price = [
     { label: "$100.000", value: "100000" },
     { label: "$150.000", value: "150000" },
     { label: "$200.000", value: "200000" },
+]
+
+const ratings = [
+    { label: "4.0 o más", value: "4" },
+    { label: "4.5 o más", value: "4.5" },
 ]
 
 function FilterBar({filters, onChange}: FilterBarProps){
@@ -24,6 +30,13 @@ function FilterBar({filters, onChange}: FilterBarProps){
             value={filters.category || ""}
             onChange={(v) => update("category", v)}
             options={categorys}
+            />
+
+            <SelectField
+            label="Empresa"
+            value={filters.company || ""}
+            onChange={(v) => update("company", v)}
+            options={companies}
             />
 
             <SelectField
@@ -47,12 +60,16 @@ function FilterBar({filters, onChange}: FilterBarProps){
             options={price}
             />
 
-            <button className="filter-clear" onClick={() => onChange({})}>Limpiar filtros</button>  
-            
+            <SelectField
+            label="Valoracion minima"
+            value={filters.rating?.toString() || ""}
+            onChange={(v) => onChange({...filters, rating: v ? Number(v) : undefined})}
+            options={ratings}
+            />
 
+            <button className="filter-clear" onClick={() => onChange({})}>Limpiar filtros</button>  
         </div>
     )
 }
 
 export default FilterBar
-
