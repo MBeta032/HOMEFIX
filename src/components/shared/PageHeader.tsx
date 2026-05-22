@@ -1,11 +1,4 @@
-import Button from "./Button";
-
-interface PageHeaderProps {
-  title: string;
-  subtitle?: string;
-  showBackButton?: boolean;
-  onBack?: () => void;
-}
+import type { PageHeaderProps } from "../../interfaces/Interfacecomponents"
 
 export default function PageHeader({
   title,
@@ -14,18 +7,21 @@ export default function PageHeader({
   onBack,
 }: PageHeaderProps) {
   return (
-    <header className="page-header">
-      {showBackButton && (
-        <Button variant="secondary" onClick={onBack}>
-          ← Volver
-        </Button>
-      )}
-
+    <div className="page-header">
       <div className="page-header-content">
         <h1>{title}</h1>
-
         {subtitle && <p>{subtitle}</p>}
       </div>
-    </header>
-  );
+
+      {showBackButton && onBack && (
+        <button
+          type="button"
+          className="page-header-back-button"
+          onClick={onBack}
+        >
+          ← Volver
+        </button>
+      )}
+    </div>
+  )
 }

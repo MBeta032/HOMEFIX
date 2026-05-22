@@ -1,27 +1,33 @@
-import Button from "./Button";
-
 interface EmptyStateProps {
-  title: string;
-  message: string;
-  actionText: string;
-  onAction: () => void;
+  title: string
+  description?: string
+  actionText?: string
+  onAction?: () => void
 }
 
-export default function EmptyState({
+function EmptyState({
   title,
-  message,
+  description,
   actionText,
   onAction,
 }: EmptyStateProps) {
   return (
-    <section className="empty-state">
-      <h2>{title}</h2>
+    <div className="empty-state">
+      <h4>{title}</h4>
 
-      <p>{message}</p>
+      {description && <p>{description}</p>}
 
-      <Button variant="primary" onClick={onAction}>
-        {actionText}
-      </Button>
-    </section>
-  );
+      {actionText && onAction && (
+        <button
+          type="button"
+          className="empty-state-action"
+          onClick={onAction}
+        >
+          {actionText}
+        </button>
+      )}
+    </div>
+  )
 }
+
+export default EmptyState
