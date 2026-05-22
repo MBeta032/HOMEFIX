@@ -1,86 +1,99 @@
-import { createContext, useEffect, useState } from "react";
-import type { ReactNode } from "react";
-import { Stack } from "../algorithms/detailStack";
-import { services } from "../data/service.data";
-import type { IService } from "../interfaces/ServiceDetail/service.interface";
+import { createContext, useCallback, useEffect, useMemo, useState } from "react"
+import type { ReactNode } from "react"
+import { Stack } from "../algorithms/Stack"
+import { servicesMock } from "../data/ServicesMock"
+import type { ServiceMock } from "../interfaces/InterfaceServices"
 
 export interface HistoryContextType {
-  history: IService[];
-  addServiceToHistory: (serviceId: string) => void;
-  clearHistory: () => void;
+  history: ServiceMock[]
+  addServiceToHistory: (serviceId: string) => void
+  clearHistory: () => void
 }
 
 interface HistoryProviderProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export const HistoryContext = createContext<HistoryContextType | undefined>(
   undefined
-);
+)
 
-const STORAGE_KEY = "homefix-history";
-const MAX_HISTORY_SIZE = 5;
+const STORAGE_KEY = "homefix-history"
+const MAX_HISTORY_SIZE = 5
+
+function serviceExists(serviceId: string): boolean {
+  return servicesMock.some((service) => service.id === serviceId)
+}
 
 function getHistoryIdsFromStorage(): string[] {
-  const savedHistory = localStorage.getItem(STORAGE_KEY);
+  if (typeof window === "undefined") {
+    return []
+  }
+
+  const savedHistory = localStorage.getItem(STORAGE_KEY)
 
   if (!savedHistory) {
-    return [];
+    return []
   }
 
   try {
-    const parsedHistory = JSON.parse(savedHistory) as string[];
+    const parsedHistory: unknown = JSON.parse(savedHistory)
 
     if (!Array.isArray(parsedHistory)) {
-      return [];
+      return []
     }
 
-    return parsedHistory;
+    return parsedHistory.filter(
+      (id): id is string => typeof id === "string" && serviceExists(id)
+    )
   } catch {
-    return [];
+    return []
   }
 }
 
 export function HistoryProvider({ children }: HistoryProviderProps) {
   const [historyIds, setHistoryIds] = useState<string[]>(
     getHistoryIdsFromStorage
-  );
+  )
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(historyIds));
-  }, [historyIds]);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(historyIds))
+  }, [historyIds])
 
-  const history: IService[] = historyIds
-    .map((id) => services.find((service) => service.id === id))
-    .filter((service): service is IService => service !== undefined);
+  const history = useMemo<ServiceMock[]>(() => {
+    return [...historyIds]
+      .reverse()
+      .map((id) => servicesMock.find((service) => service.id === id))
+      .filter((service): service is ServiceMock => service !== undefined)
+  }, [historyIds])
 
-  function addServiceToHistory(serviceId: string): void {
+  const addServiceToHistory = useCallback((serviceId: string): void => {
+    if (!serviceExists(serviceId)) {
+      return
+    }
+
     setHistoryIds((currentHistoryIds) => {
-      const stack = new Stack();
+      const stack = new Stack<string>()
 
       const historyWithoutRepeated = currentHistoryIds.filter(
         (id) => id !== serviceId
-      );
+      )
 
       const limitedHistory = historyWithoutRepeated.slice(
-        0,
-        MAX_HISTORY_SIZE - 1
-      );
+        -(MAX_HISTORY_SIZE - 1)
+      )
 
-      limitedHistory.reverse().forEach((id) => {
-        stack.push(id);
-      });
+      limitedHistory.forEach((id) => stack.push(id))
+      stack.push(serviceId)
 
-      stack.push(serviceId);
+      return stack.toArray()
+    })
+  }, [])
 
-      return stack.print().reverse();
-    });
-  }
-
-  function clearHistory(): void {
-    setHistoryIds([]);
-    localStorage.removeItem(STORAGE_KEY);
-  }
+  const clearHistory = useCallback((): void => {
+    setHistoryIds([])
+    localStorage.removeItem(STORAGE_KEY)
+  }, [])
 
   return (
     <HistoryContext.Provider
@@ -92,5 +105,5 @@ export function HistoryProvider({ children }: HistoryProviderProps) {
     >
       {children}
     </HistoryContext.Provider>
-  );
+  )
 }
