@@ -12,8 +12,8 @@ import Traking from "../pages/Traking"
 import Catalog from "../pages/Catalog"
 import ServiceDetail from "../pages/ServiceDetail"
 import History from "../pages/History"
-import RequestPage from "../pages/RequestPage"
-import RequestsPage from "../pages/RequestsPage"
+import RequestPage from "../pages/CheckoutRequestPage"
+import RequestsPage from "../pages/MyRequestsPage"
 
 function AppRouter() {
   return (
