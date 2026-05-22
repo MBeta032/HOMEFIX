@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { useCart } from "../../hooks/cart/useCart"
-import "../../styles/Cart/index.css"
+import "../../styles/Cart.css"
 
 interface CartCounterProps {
   className?: string

@@ -4,7 +4,7 @@ import CartSummary from "../components/cart/CartSummary"
 import EmptyState from "../components/shared/EmptyState"
 import PageHeader from "../components/shared/PageHeader"
 import { useCart } from "../hooks/cart/useCart"
-import "../styles/Cart/index.css"
+import "../styles/Cart.css"
 
 export default function CartPage() {
   const navigate = useNavigate()
