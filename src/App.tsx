@@ -3,15 +3,18 @@ import AppRouter from "./router/AppRouter"
 import { AuthProvider } from "./context/AuthContext"
 import { HistoryProvider } from "./context/HistoryContext"
 import { CartProvider } from "./context/Cart/CartContext"
+import { RequestProvider } from "./context/Request/RequestContext"
 
 function App() {
   return (
     <AuthProvider>
       <HistoryProvider>
         <CartProvider>
-          <BrowserRouter>
-            <AppRouter />
-          </BrowserRouter>
+          <RequestProvider>
+            <BrowserRouter>
+              <AppRouter />
+            </BrowserRouter>
+          </RequestProvider>
         </CartProvider>
       </HistoryProvider>
     </AuthProvider>

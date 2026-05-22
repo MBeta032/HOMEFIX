@@ -13,6 +13,7 @@ import Requests from "../pages/Requests"
 import Catalog from "../pages/Catalog"
 import ServiceDetail from "../pages/ServiceDetail"
 import History from "../pages/History"
+import RequestPage from "../pages/RequestPage"
 
 function AppRouter() {
   return (
@@ -37,10 +38,16 @@ function AppRouter() {
 
           <Route path="/dashboard/seguimiento" element={<Traking />} />
           <Route path="/dashboard/carrito" element={<CartPage />} />
+          <Route path="/dashboard/checkout" element={<RequestPage />} />
 
           <Route
             path="/cart"
             element={<Navigate to="/dashboard/carrito" replace />}
+          />
+
+          <Route
+            path="/checkout"
+            element={<Navigate to="/dashboard/checkout" replace />}
           />
 
           <Route path="/dashboard/solicitudes" element={<Requests />} />

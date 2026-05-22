@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import Button from "../shared/Button"
 
 interface CartSummaryProps {
@@ -18,10 +18,10 @@ export default function CartSummary({
   cartCount,
   cartTotal,
 }: CartSummaryProps) {
-  const [message, setMessage] = useState<string>("")
+  const navigate = useNavigate()
 
   function handleConfirmRequest(): void {
-    setMessage("La confirmación de solicitud se implementará en la HU-015.")
+    navigate("/dashboard/checkout")
   }
 
   return (
