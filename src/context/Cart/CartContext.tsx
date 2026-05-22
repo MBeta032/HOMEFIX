@@ -7,7 +7,9 @@ export type AddToCartResult = "added" | "exists"
 export interface CartContextType {
   cartItems: ServiceMock[]
   cartCount: number
+  cartTotal: number
   addToCart: (service: ServiceMock) => AddToCartResult
+  removeFromCart: (id: string) => void
   clearCart: () => void
 }
 
@@ -65,6 +67,11 @@ export function CartProvider({ children }: CartProviderProps) {
 
   const cartCount = cartItems.length
 
+  const cartTotal = cartItems.reduce(
+    (total, service) => total + service.price,
+    0
+  )
+
   useEffect(() => {
     if (cartItems.length === 0) {
       localStorage.removeItem(CART_STORAGE_KEY)
@@ -88,11 +95,9 @@ export function CartProvider({ children }: CartProviderProps) {
   }
 
   function removeFromCart(id: string): void {
-    const queue = new CartQueue(cartItems);
-
-    queue.removeById(id);
-
-    setCartItems(queue.getItems());
+    setCartItems((currentItems) =>
+      currentItems.filter((cartItem) => cartItem.id !== id)
+    )
   }
 
   function clearCart(): void {
