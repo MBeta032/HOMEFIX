@@ -248,3 +248,38 @@
   color: #ef4444;
   border-color: #fecaca;
 }
+.rating-stars {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stars-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 40px;
+}
+
+.star {
+  color: #cbd5e1;
+  cursor: pointer;
+  font-size: 22px;
+  transition: 0.2s ease;
+}
+
+.star:hover,
+.star-active {
+  color: #f59e0b;
+}
+
+.star-clear {
+  border: none;
+  background-color: #e2e8f0;
+  color: #334155;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  font-size: 12px;
+}
