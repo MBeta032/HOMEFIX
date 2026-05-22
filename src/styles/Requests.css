@@ -138,6 +138,16 @@
   line-height: 1.6;
 }
 
+.request-next-feature {
+  margin-top: 18px;
+  padding: 12px 14px;
+  background-color: #ecfdf5;
+  border: 1px solid #bbf7d0;
+  border-radius: 14px;
+  color: #166534;
+  font-weight: 700;
+}
+
 .request-card-footer {
   display: flex;
   justify-content: space-between;
@@ -246,7 +256,7 @@
    BUTTONS INSIDE REQUESTS PAGE
 ========================= */
 
-.requests-page .button {
+.requests-page .home-button {
   border: none;
   border-radius: 10px;
   padding: 11px 16px;
@@ -256,21 +266,21 @@
   white-space: nowrap;
 }
 
-.requests-page .button:hover {
+.requests-page .home-button:hover {
   opacity: 0.9;
 }
 
-.requests-page .button-primary {
+.requests-page .home-button-primary {
   background-color: #1f6ed4;
   color: white;
 }
 
-.requests-page .button-secondary {
+.requests-page .home-button-secondary {
   background-color: #1f4f8f;
   color: white;
 }
 
-.requests-page .button-success {
+.requests-page .home-button-success {
   background-color: #22a06b;
   color: white;
 }
@@ -301,7 +311,7 @@
     padding: 18px;
   }
 
-  .requests-page .button {
+  .requests-page .home-button {
     width: 100%;
   }
 

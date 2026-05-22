@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
-import type { IRequest } from "../../interfaces/Requests/request.interface";
-import Button from "../shared/Button";
-import RequestStatusBadge from "./RequestStatusBadge";
+import { useNavigate } from "react-router-dom"
+import type { IRequest } from "../../interfaces/Requests/request.interface"
+import Button from "../shared/Button"
+import RequestStatusBadge from "./RequestStatusBadge"
 
 interface RequestCardProps {
-  request: IRequest;
+  request: IRequest
 }
 
 function formatPrice(price: number): string {
@@ -12,74 +12,74 @@ function formatPrice(price: number): string {
     style: "currency",
     currency: "COP",
     maximumFractionDigits: 0,
-  });
+  })
 }
 
 function formatDesiredDate(dateValue: string): string {
-  const dateParts = dateValue.split("-");
+  const dateParts = dateValue.split("-")
 
   if (dateParts.length !== 3) {
-    return dateValue;
+    return dateValue
   }
 
-  const year = Number(dateParts[0]);
-  const month = Number(dateParts[1]) - 1;
-  const day = Number(dateParts[2]);
+  const year = Number(dateParts[0])
+  const month = Number(dateParts[1]) - 1
+  const day = Number(dateParts[2])
 
-  const date = new Date(year, month, day);
+  const date = new Date(year, month, day)
 
   if (Number.isNaN(date.getTime())) {
-    return dateValue;
+    return dateValue
   }
 
   return date.toLocaleDateString("es-CO", {
     year: "numeric",
     month: "long",
     day: "numeric",
-  });
+  })
 }
 
 function formatTime(timeValue: string): string {
-  const timeParts = timeValue.split(":");
+  const timeParts = timeValue.split(":")
 
   if (timeParts.length < 2) {
-    return timeValue;
+    return timeValue
   }
 
-  const hours = Number(timeParts[0]);
-  const minutes = Number(timeParts[1]);
+  const hours = Number(timeParts[0])
+  const minutes = Number(timeParts[1])
 
-  const date = new Date(2026, 0, 1, hours, minutes);
+  const date = new Date(2026, 0, 1, hours, minutes)
 
   if (Number.isNaN(date.getTime())) {
-    return timeValue;
+    return timeValue
   }
 
   return date.toLocaleTimeString("es-CO", {
     hour: "numeric",
     minute: "2-digit",
-  });
+  })
 }
 
 function formatCreatedAt(createdAt: string): string {
-  const date = new Date(createdAt);
+  const date = new Date(createdAt)
 
   if (Number.isNaN(date.getTime())) {
-    return createdAt;
+    return createdAt
   }
 
   return date.toLocaleDateString("es-CO", {
     year: "numeric",
     month: "long",
     day: "numeric",
-  });
+  })
 }
 
 export default function RequestCard({ request }: RequestCardProps) {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   function handleViewService(): void {
-    navigate("/services");
+    navigate(`/dashboard/servicios/${request.serviceId}`)
   }
 
   return (
@@ -140,6 +140,11 @@ export default function RequestCard({ request }: RequestCardProps) {
           </div>
 
           <div className="request-info-item">
+            <span>Zona del cliente</span>
+            <strong>{request.zone}</strong>
+          </div>
+
+          <div className="request-info-item">
             <span>Zona de cobertura</span>
             <strong>{request.serviceZone}</strong>
           </div>
@@ -153,6 +158,12 @@ export default function RequestCard({ request }: RequestCardProps) {
         </p>
       </div>
 
+      {request.status === "Finalizada" && (
+        <div className="request-next-feature">
+          Calificación disponible próximamente.
+        </div>
+      )}
+
       <div className="request-card-footer">
         <p>
           Creada el: <strong>{formatCreatedAt(request.createdAt)}</strong>
@@ -163,5 +174,5 @@ export default function RequestCard({ request }: RequestCardProps) {
         </Button>
       </div>
     </article>
-  );
+  )
 }
