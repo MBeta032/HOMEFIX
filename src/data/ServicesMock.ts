@@ -1,7 +1,6 @@
-import type { ServiceMock } from "../interfaces/InterfaceServices";
+import type { ServiceBaseMock, ServiceMock } from "../interfaces/InterfaceServices"
 
-export const servicesMock: ServiceMock[] = [
-
+const baseServicesMock: ServiceBaseMock[] = [
   {
     id: "1",
     name: "Reparacion de tuberias",
@@ -313,3 +312,207 @@ export const servicesMock: ServiceMock[] = [
     availability: "Disponible",
   },
 ]
+interface ServiceDetailExtra {
+  image: string
+  includes: string[]
+  excludes: string[]
+  recommendations: string[]
+}
+
+const detailByCategory: Record<string, ServiceDetailExtra> = {
+  Plomeria: {
+    image: "🔧",
+    includes: [
+      "Revisión inicial del problema",
+      "Diagnóstico básico del daño",
+      "Mano de obra del servicio",
+      "Prueba final del arreglo",
+    ],
+    excludes: [
+      "Repuestos especiales",
+      "Daños ocultos dentro de muros",
+      "Trabajos de remodelación",
+    ],
+    recommendations: [
+      "Cerrar la llave de paso si hay fuga fuerte",
+      "Despejar el área antes de la visita",
+      "Tomar fotos del problema para explicar mejor el daño",
+    ],
+  },
+
+  Electricidad: {
+    image: "💡",
+    includes: [
+      "Revisión del punto eléctrico",
+      "Diagnóstico básico",
+      "Instalación o ajuste sencillo",
+      "Prueba de funcionamiento",
+    ],
+    excludes: [
+      "Cableado completo nuevo",
+      "Materiales eléctricos especiales",
+      "Reparaciones de alto riesgo",
+    ],
+    recommendations: [
+      "No manipular cables antes de la visita",
+      "Bajar el breaker si hay corto o chispas",
+      "Tener claro el punto donde se hará el trabajo",
+    ],
+  },
+
+  Carpinteria: {
+    image: "🪚",
+    includes: [
+      "Revisión de la pieza o estructura",
+      "Ajuste o reparación básica",
+      "Mano de obra del servicio",
+      "Recomendaciones de cuidado",
+    ],
+    excludes: [
+      "Cambio completo de muebles",
+      "Materiales especiales",
+      "Pintura o barniz adicional",
+    ],
+    recommendations: [
+      "Enviar foto previa del daño si es posible",
+      "Despejar el espacio de trabajo",
+      "Avisar si la madera tiene humedad",
+    ],
+  },
+
+  Pintura: {
+    image: "🎨",
+    includes: [
+      "Preparación básica del área",
+      "Aplicación de pintura",
+      "Revisión final del acabado",
+      "Limpieza básica del espacio trabajado",
+    ],
+    excludes: [
+      "Compra de pintura",
+      "Reparación profunda de humedad",
+      "Movimiento de muebles pesados",
+    ],
+    recommendations: [
+      "Comprar la pintura antes del servicio",
+      "Retirar objetos pequeños del área",
+      "Avisar si hay humedad o grietas grandes",
+    ],
+  },
+
+  Limpieza: {
+    image: "🧽",
+    includes: [
+      "Limpieza de superficies visibles",
+      "Desinfección básica",
+      "Organización general del área",
+      "Revisión final del servicio",
+    ],
+    excludes: [
+      "Control de plagas",
+      "Limpieza interna de electrodomésticos",
+      "Retiro de residuos peligrosos",
+    ],
+    recommendations: [
+      "Retirar objetos delicados antes del servicio",
+      "Avisar si hay manchas difíciles",
+      "Permitir ventilación durante la limpieza",
+    ],
+  },
+
+  Jardineria: {
+    image: "🌱",
+    includes: [
+      "Revisión del jardín",
+      "Corte o mantenimiento básico",
+      "Limpieza general de hojas o residuos",
+      "Recomendaciones de cuidado",
+    ],
+    excludes: [
+      "Compra de plantas",
+      "Diseño completo de jardín",
+      "Instalación de sistemas complejos",
+    ],
+    recommendations: [
+      "Retirar objetos del jardín",
+      "Avisar si hay plantas delicadas",
+      "Informar si hay mascotas en la zona",
+    ],
+  },
+
+  Electrodomesticos: {
+    image: "🧺",
+    includes: [
+      "Revisión externa del electrodoméstico",
+      "Diagnóstico inicial",
+      "Explicación del posible daño",
+      "Recomendación de reparación",
+    ],
+    excludes: [
+      "Repuestos",
+      "Traslado del electrodoméstico",
+      "Reparaciones avanzadas no diagnosticadas",
+    ],
+    recommendations: [
+      "No usar el equipo si presenta corto o humo",
+      "Tener acceso libre al electrodoméstico",
+      "Informar marca y modelo si los conoce",
+    ],
+  },
+
+  Mantenimiento: {
+    image: "🧰",
+    includes: [
+      "Revisión general del problema",
+      "Ajustes menores",
+      "Mano de obra básica",
+      "Recomendaciones finales",
+    ],
+    excludes: [
+      "Repuestos",
+      "Obras o remodelaciones grandes",
+      "Trabajos especializados fuera del diagnóstico",
+    ],
+    recommendations: [
+      "Hacer una lista de los arreglos necesarios",
+      "Tomar fotos de los daños principales",
+      "Confirmar que haya alguien en casa durante la visita",
+    ],
+  },
+}
+
+const defaultDetail: ServiceDetailExtra = {
+  image: "🏠",
+  includes: [
+    "Revisión inicial del servicio",
+    "Diagnóstico básico",
+    "Mano de obra del servicio",
+    "Recomendaciones finales",
+  ],
+  excludes: [
+    "Repuestos especiales",
+    "Trabajos adicionales no acordados",
+    "Servicios fuera del alcance inicial",
+  ],
+  recommendations: [
+    "Despejar el área de trabajo",
+    "Explicar claramente el problema",
+    "Tener disponibilidad durante la visita",
+  ],
+}
+
+function getDetailByCategory(category: string): ServiceDetailExtra {
+  return detailByCategory[category] || defaultDetail
+}
+
+export const servicesMock: ServiceMock[] = baseServicesMock.map((service) => {
+  const detail = getDetailByCategory(service.category)
+
+  return {
+    ...service,
+    image: detail.image,
+    includes: detail.includes,
+    excludes: detail.excludes,
+    recommendations: detail.recommendations,
+  }
+})

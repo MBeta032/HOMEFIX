@@ -1,23 +1,30 @@
-export interface ServiceMock{
-    id: string
-    name: string
-    category: string
-    price: number
-    description: string
-    company: string
-    zone: string
-    rating: number
-    duration: string
-    availability: string
+export interface ServiceBaseMock {
+  id: string
+  name: string
+  category: string
+  price: number
+  description: string
+  company: string
+  zone: string
+  rating: number
+  duration: string
+  availability: string
 }
 
-export interface FilterServices{
-    category?: string
-    company?: string
-    maxPrice?: number
-    zone?: string
-    rating?: number
-    availability?: string
+export interface ServiceMock extends ServiceBaseMock {
+  image: string
+  includes: string[]
+  excludes: string[]
+  recommendations: string[]
+}
+
+export interface FilterServices {
+  category?: string
+  company?: string
+  maxPrice?: number
+  zone?: string
+  rating?: number
+  availability?: string
 }
 
 export interface SelectFieldProps {

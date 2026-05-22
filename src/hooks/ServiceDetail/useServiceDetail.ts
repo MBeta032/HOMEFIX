@@ -1,30 +1,30 @@
-import { useNavigate, useParams } from "react-router-dom";
-import type { IService } from "../../interfaces/ServiceDetail/service.interface";
-import { getServiceById } from "../../utils/ServiceDetail/service.utils";
+import { useNavigate, useParams } from "react-router-dom"
+import type { ServiceMock } from "../../interfaces/InterfaceServices"
+import { getServiceById } from "../../utils/ServiceDetail/service.utils"
 
 interface UseServiceDetailResult {
-  service: IService | undefined;
-  handleBack: () => void;
-  handleAddToCart: () => void;
-  handleRequestNow: () => void;
+  service: ServiceMock | undefined
+  handleBack: () => void
+  handleAddToCart: () => void
+  handleRequestNow: () => void
 }
 
 export function useServiceDetail(): UseServiceDetailResult {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
 
-  const service = getServiceById(id);
+  const service = getServiceById(id)
 
   function handleBack(): void {
-    navigate("/dashboard/servicios");
+    navigate("/dashboard/servicios")
   }
 
   function handleAddToCart(): void {
-    alert("Esta función se conectará en HU-013.");
+    alert("Esta función se conectará en HU-013.")
   }
 
   function handleRequestNow(): void {
-    alert("Esta función se conectará en HU-015.");
+    alert("Esta función se conectará en HU-015.")
   }
 
   return {
@@ -32,5 +32,5 @@ export function useServiceDetail(): UseServiceDetailResult {
     handleBack,
     handleAddToCart,
     handleRequestNow,
-  };
+  }
 }

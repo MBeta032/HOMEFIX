@@ -1,17 +1,17 @@
-import PageHeader from "../components/shared/PageHeader";
-import ServiceDetailHero from "../components/ServiceDetail/ServiceDetailHero";
-import ServiceDetailInfo from "../components/ServiceDetail/ServiceDetailInfo";
-import ServiceDetailList from "../components/ServiceDetail/ServiceDetailList";
-import ServiceNotFound from "../components/ServiceDetail/ServiceNotFound";
-import { useServiceDetail } from "../hooks/ServiceDetail/useServiceDetail";
-import "../styles/Services.css";
+import PageHeader from "../components/shared/PageHeader"
+import ServiceDetailHero from "../components/ServiceDetail/ServiceDetailHero"
+import ServiceDetailInfo from "../components/ServiceDetail/ServiceDetailInfo"
+import ServiceDetailList from "../components/ServiceDetail/ServiceDetailList"
+import ServiceNotFound from "../components/ServiceDetail/ServiceNotFound"
+import { useServiceDetail } from "../hooks/ServiceDetail/useServiceDetail"
+import "../styles/Services.css"
 
 export default function ServiceDetailPage() {
   const { service, handleBack, handleAddToCart, handleRequestNow } =
-    useServiceDetail();
+    useServiceDetail()
 
   if (!service) {
-    return <ServiceNotFound onBack={handleBack} />;
+    return <ServiceNotFound onBack={handleBack} />
   }
 
   return (
@@ -48,5 +48,5 @@ export default function ServiceDetailPage() {
         />
       </section>
     </section>
-  );
+  )
 }

@@ -1,8 +1,8 @@
-import type { IService } from "../../interfaces/ServiceDetail/service.interface";
-import InfoItem from "../shared/InfoItem";
+import type { ServiceMock } from "../../interfaces/InterfaceServices"
+import InfoItem from "../shared/InfoItem"
 
 interface ServiceDetailInfoProps {
-  service: IService;
+  service: ServiceMock
 }
 
 function formatPrice(price: number): string {
@@ -10,7 +10,7 @@ function formatPrice(price: number): string {
     style: "currency",
     currency: "COP",
     maximumFractionDigits: 0,
-  });
+  })
 }
 
 export default function ServiceDetailInfo({ service }: ServiceDetailInfoProps) {
@@ -27,5 +27,5 @@ export default function ServiceDetailInfo({ service }: ServiceDetailInfoProps) {
         <InfoItem label="Disponibilidad" value={service.availability} />
       </div>
     </article>
-  );
+  )
 }

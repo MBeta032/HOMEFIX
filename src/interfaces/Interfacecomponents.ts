@@ -29,8 +29,6 @@ export interface PageHeaderProps {
 }
 
 export interface RatingStarsProps {
-  value: number;
-  onChange?: (value: number) => void;
-  label?: string;
-  readOnly?: boolean;
+  value: number
+  onChange: (value: number) => void
 }
