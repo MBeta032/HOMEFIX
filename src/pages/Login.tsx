@@ -9,7 +9,6 @@ import {
   showWarningAlert,
 } from "../utils/alerts"
 import { getFirebaseErrorMessage } from "../utils/firebaseErrors"
-import googleIcon from "../assets/images/google.png"
 
 function Login() {
   const [email, setEmail] = useState<string>("")
@@ -155,7 +154,7 @@ function Login() {
           onClick={() => void handleGoogleLogin()}
           disabled={isSubmitting || loading}
         >
-          <img src={googleIcon} alt="Google" />
+          <img src="/src/assets/images/google.png" alt="Google" />
           Continuar con Google
         </button>
 
