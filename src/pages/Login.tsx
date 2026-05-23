@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, type FormEvent } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { Link, useNavigate } from "react-router-dom"
 import "../styles/Login.css"
@@ -9,6 +9,7 @@ import {
   showWarningAlert,
 } from "../utils/alerts"
 import { getFirebaseErrorMessage } from "../utils/firebaseErrors"
+import googleIcon from "../assets/images/google.png"
 
 function Login() {
   const [email, setEmail] = useState<string>("")
@@ -30,6 +31,10 @@ function Login() {
       navigate("/dashboard")
     }
   }, [user, loading, navigate])
+
+  const handleBackHome = (): void => {
+    navigate("/")
+  }
 
   const handleLogin = async (): Promise<void> => {
     const validationErrors = validateLogin(email, password)
@@ -65,6 +70,11 @@ function Login() {
     }
   }
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault()
+    void handleLogin()
+  }
+
   const handleGoogleLogin = async (): Promise<void> => {
     try {
       setIsSubmitting(true)
@@ -91,42 +101,61 @@ function Login() {
   return (
     <div className="login-container">
       <div className="login-card">
-        <h2 className="login-title">Iniciar sesión</h2>
-
-        {errors.general && <p className="error-text">{errors.general}</p>}
-
-        {errors.email && <p className="error-text">{errors.email}</p>}
-        <input
-          className="login-input"
-          type="email"
-          placeholder="Correo electrónico"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-        />
-
-        {errors.password && <p className="error-text">{errors.password}</p>}
-        <input
-          className="login-input"
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-        />
-
         <button
-          className="login-button"
-          onClick={() => void handleLogin()}
-          disabled={isSubmitting || loading}
+          type="button"
+          className="login-back-button"
+          onClick={handleBackHome}
         >
-          {isSubmitting ? "Ingresando..." : "Ingresar"}
+          ← Volver al inicio
         </button>
+
+        <form className="login-form" onSubmit={handleSubmit}>
+          <h2 className="login-title">Iniciar sesión</h2>
+
+          {errors.general && <p className="error-text">{errors.general}</p>}
+
+          <label className="login-label" htmlFor="email">
+            Correo electrónico
+          </label>
+          {errors.email && <p className="error-text">{errors.email}</p>}
+          <input
+            id="email"
+            className="login-input"
+            type="email"
+            placeholder="correo@ejemplo.com"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+
+          <label className="login-label" htmlFor="password">
+            Contraseña
+          </label>
+          {errors.password && <p className="error-text">{errors.password}</p>}
+          <input
+            id="password"
+            className="login-input"
+            type="password"
+            placeholder="Ingresa tu contraseña"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+
+          <button
+            className="login-button"
+            type="submit"
+            disabled={isSubmitting || loading}
+          >
+            {isSubmitting ? "Ingresando..." : "Ingresar"}
+          </button>
+        </form>
 
         <button
           className="google-button"
+          type="button"
           onClick={() => void handleGoogleLogin()}
           disabled={isSubmitting || loading}
         >
-          <img src="/src/assets/images/google.png" alt="Google" />
+          <img src={googleIcon} alt="Google" />
           Continuar con Google
         </button>
 

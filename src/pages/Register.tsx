@@ -1,4 +1,9 @@
-import { useContext, useState, type ChangeEvent } from "react"
+import {
+  useContext,
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+} from "react"
 import type { RegisterData } from "../interfaces/Auth/InterfaceAuth"
 import { AuthContext } from "../context/AuthContext"
 import { Link, useNavigate } from "react-router-dom"
@@ -27,13 +32,17 @@ function Register() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const context = useContext(AuthContext)
+  const navigate = useNavigate()
 
   if (!context) {
     throw new Error("AuthContext no disponible")
   }
 
   const { register } = context
-  const navigate = useNavigate()
+
+  const handleBackHome = (): void => {
+    navigate("/")
+  }
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     setForm({
@@ -56,6 +65,8 @@ function Register() {
 
     try {
       setIsSubmitting(true)
+      setErrors({})
+
       await register(form)
 
       showSuccessAlert(
@@ -74,99 +85,146 @@ function Register() {
     }
   }
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault()
+    void handleRegister()
+  }
+
   return (
     <div className="register-container">
       <div className="register-card">
-        <h2 className="register-title">Crear cuenta</h2>
-
-        {errors.general && <p className="register-error">{errors.general}</p>}
-
-        {errors.name && <p className="register-error">{errors.name}</p>}
-        <input
-          className="register-input"
-          name="name"
-          placeholder="Nombre"
-          value={form.name}
-          onChange={handleChange}
-        />
-
-        {errors.email && <p className="register-error">{errors.email}</p>}
-        <input
-          className="register-input"
-          name="email"
-          type="email"
-          placeholder="Correo electrónico"
-          value={form.email}
-          onChange={handleChange}
-        />
-
-        {errors.password && <p className="register-error">{errors.password}</p>}
-        <input
-          className="register-input"
-          name="password"
-          type="password"
-          placeholder="Contraseña"
-          value={form.password}
-          onChange={handleChange}
-        />
-
-        {errors.confirmPassword && (
-          <p className="register-error">{errors.confirmPassword}</p>
-        )}
-        <input
-          className="register-input"
-          name="confirmPassword"
-          type="password"
-          placeholder="Confirmar contraseña"
-          value={form.confirmPassword}
-          onChange={handleChange}
-        />
-
-        {errors.phone && <p className="register-error">{errors.phone}</p>}
-        <input
-          className="register-input"
-          name="phone"
-          placeholder="Teléfono"
-          value={form.phone}
-          onChange={handleChange}
-        />
-
-        {errors.address && <p className="register-error">{errors.address}</p>}
-        <input
-          className="register-input"
-          name="address"
-          placeholder="Dirección"
-          value={form.address}
-          onChange={handleChange}
-        />
-
-        {errors.city && <p className="register-error">{errors.city}</p>}
-        <input
-          className="register-input"
-          name="city"
-          placeholder="Ciudad"
-          value={form.city}
-          onChange={handleChange}
-        />
-
-        {errors.zone && <p className="register-error">{errors.zone}</p>}
-        <input
-          className="register-input"
-          name="zone"
-          placeholder="Zona o barrio"
-          value={form.zone}
-          onChange={handleChange}
-        />
-
         <button
-          className="register-button"
-          onClick={() => void handleRegister()}
-          disabled={isSubmitting}
+          type="button"
+          className="register-back-button"
+          onClick={handleBackHome}
         >
-          {isSubmitting ? "Registrando..." : "Registrarse"}
+          ← Volver al inicio
         </button>
 
-        <p className="login-link">
+        <form className="register-form" onSubmit={handleSubmit}>
+          <h2 className="register-title">Crear cuenta</h2>
+
+          {errors.general && <p className="register-error">{errors.general}</p>}
+
+          <label className="register-label" htmlFor="name">
+            Nombre completo
+          </label>
+          {errors.name && <p className="register-error">{errors.name}</p>}
+          <input
+            id="name"
+            className="register-input"
+            name="name"
+            placeholder="Nombre"
+            value={form.name}
+            onChange={handleChange}
+          />
+
+          <label className="register-label" htmlFor="email">
+            Correo electrónico
+          </label>
+          {errors.email && <p className="register-error">{errors.email}</p>}
+          <input
+            id="email"
+            className="register-input"
+            name="email"
+            type="email"
+            placeholder="correo@ejemplo.com"
+            value={form.email}
+            onChange={handleChange}
+          />
+
+          <label className="register-label" htmlFor="password">
+            Contraseña
+          </label>
+          {errors.password && <p className="register-error">{errors.password}</p>}
+          <input
+            id="password"
+            className="register-input"
+            name="password"
+            type="password"
+            placeholder="Mínimo 6 caracteres"
+            value={form.password}
+            onChange={handleChange}
+          />
+
+          <label className="register-label" htmlFor="confirmPassword">
+            Confirmar contraseña
+          </label>
+          {errors.confirmPassword && (
+            <p className="register-error">{errors.confirmPassword}</p>
+          )}
+          <input
+            id="confirmPassword"
+            className="register-input"
+            name="confirmPassword"
+            type="password"
+            placeholder="Repite tu contraseña"
+            value={form.confirmPassword}
+            onChange={handleChange}
+          />
+
+          <label className="register-label" htmlFor="phone">
+            Teléfono
+          </label>
+          {errors.phone && <p className="register-error">{errors.phone}</p>}
+          <input
+            id="phone"
+            className="register-input"
+            name="phone"
+            placeholder="3001234567"
+            value={form.phone}
+            onChange={handleChange}
+          />
+
+          <label className="register-label" htmlFor="address">
+            Dirección
+          </label>
+          {errors.address && <p className="register-error">{errors.address}</p>}
+          <input
+            id="address"
+            className="register-input"
+            name="address"
+            placeholder="Calle 10 # 20-30"
+            value={form.address}
+            onChange={handleChange}
+          />
+
+          <label className="register-label" htmlFor="city">
+            Ciudad
+          </label>
+          {errors.city && <p className="register-error">{errors.city}</p>}
+          <input
+            id="city"
+            className="register-input"
+            name="city"
+            placeholder="Cali"
+            value={form.city}
+            onChange={handleChange}
+          />
+
+          <label className="register-label" htmlFor="zone">
+            Zona o barrio
+          </label>
+          {errors.zone && <p className="register-error">{errors.zone}</p>}
+          <input
+            id="zone"
+            className="register-input"
+            name="zone"
+            placeholder="Sur, norte, centro o barrio"
+            value={form.zone}
+            onChange={handleChange}
+          />
+
+          <button
+            className="register-button"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Registrando..." : "Registrarse"}
+          </button>
+        </form>
+
+        <p className="register-link">
           ¿Ya tienes cuenta? <Link to="/login">Iniciar sesión</Link>
         </p>
       </div>

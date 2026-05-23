@@ -29,7 +29,7 @@ export default function DashboardTopbar({ name }: DashboardTopbarProps) {
     try {
       await logout()
       showToast("Sesión cerrada correctamente", "success")
-      navigate("/login")
+      navigate("/")
     } catch {
       showErrorAlert(
         "No se pudo cerrar sesión",
