@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import Button from "../shared/Button"
+import { confirmAction } from "../../utils/alerts"
 
 interface CartSummaryProps {
   cartCount: number
@@ -20,7 +21,17 @@ export default function CartSummary({
 }: CartSummaryProps) {
   const navigate = useNavigate()
 
-  function handleConfirmRequest(): void {
+  async function handleConfirmRequest(): Promise<void> {
+    const confirmed = await confirmAction(
+      "Confirmar servicios",
+      "Pasarás al formulario para crear una solicitud individual por cada servicio del carrito.",
+      "Sí, continuar"
+    )
+
+    if (!confirmed) {
+      return
+    }
+
     navigate("/dashboard/checkout")
   }
 
@@ -43,7 +54,7 @@ export default function CartSummary({
         servicio.
       </p>
 
-      <Button variant="primary" onClick={handleConfirmRequest}>
+      <Button variant="primary" onClick={() => void handleConfirmRequest()}>
         Confirmar solicitud
       </Button>
     </aside>

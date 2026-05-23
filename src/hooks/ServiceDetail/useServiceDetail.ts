@@ -4,6 +4,12 @@ import type { ServiceMock } from "../../interfaces/InterfaceServices"
 import { useCart } from "../cart/useCart"
 import { useHistory } from "../History/useHistory"
 import { getServiceById } from "../../utils/ServiceDetail/service.utils"
+import {
+  confirmAction,
+  showErrorAlert,
+  showToast,
+  showWarningAlert,
+} from "../../utils/alerts"
 
 interface UseServiceDetailResult {
   service: ServiceMock | undefined
@@ -32,26 +38,51 @@ export function useServiceDetail(): UseServiceDetailResult {
 
   function handleAddToCart(): void {
     if (!service) {
+      showErrorAlert(
+        "Servicio no encontrado",
+        "No fue posible agregar este servicio al carrito."
+      )
       return
     }
 
     const result = addToCart(service)
 
     if (result === "added") {
-      alert("Servicio agregado al carrito.")
+      showToast("Servicio agregado al carrito", "success")
       return
     }
 
-    alert("Este servicio ya está en el carrito.")
+    showWarningAlert(
+      "Servicio ya agregado",
+      "Este servicio ya se encuentra en tu carrito."
+    )
   }
 
-  function handleRequestNow(): void {
+  async function handleRequestNowFlow(): Promise<void> {
     if (!service) {
+      showErrorAlert(
+        "Servicio no encontrado",
+        "No fue posible continuar con la solicitud."
+      )
+      return
+    }
+
+    const confirmed = await confirmAction(
+      "Solicitar servicio",
+      "El servicio se agregará al carrito y pasarás al formulario de solicitud.",
+      "Sí, continuar"
+    )
+
+    if (!confirmed) {
       return
     }
 
     addToCart(service)
     navigate("/dashboard/checkout")
+  }
+
+  function handleRequestNow(): void {
+    void handleRequestNowFlow()
   }
 
   return {

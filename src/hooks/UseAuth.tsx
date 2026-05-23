@@ -2,9 +2,11 @@ import {
   EmailAuthProvider,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
+  inMemoryPersistence,
   onAuthStateChanged,
   reauthenticateWithCredential,
   sendPasswordResetEmail,
+  setPersistence,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -71,6 +73,8 @@ export function useAuth() {
     city,
     zone,
   }: RegisterData): Promise<void> => {
+    await setPersistence(auth, inMemoryPersistence)
+
     const result = await createUserWithEmailAndPassword(auth, email, password)
 
     await updateProfile(result.user, {
@@ -94,10 +98,13 @@ export function useAuth() {
   }
 
   const login = async (email: string, password: string): Promise<void> => {
+    await setPersistence(auth, inMemoryPersistence)
     await signInWithEmailAndPassword(auth, email, password)
   }
 
   const loginGoogle = async (): Promise<User> => {
+    await setPersistence(auth, inMemoryPersistence)
+
     const result = await signInWithPopup(auth, googleProvider)
     const firebaseUser = result.user
 
@@ -188,18 +195,18 @@ export function useAuth() {
   }
 
   return {
-      user,
-      userData,
-      loading,
-      register,
-      login,
-      loginGoogle,
-      updateUserData,
-      rechargeAuth,
-      changePassword,
-      changeEmail,
-      resetPassword,
-      logout,
+    user,
+    userData,
+    loading,
+    register,
+    login,
+    loginGoogle,
+    updateUserData,
+    rechargeAuth,
+    changePassword,
+    changeEmail,
+    resetPassword,
+    logout,
   }
 }
 

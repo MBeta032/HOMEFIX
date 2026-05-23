@@ -4,6 +4,11 @@ import type { IRating } from "../../interfaces/Rating/rating.interface"
 import { useRatings } from "../../hooks/rating/useRatings"
 import { RatingStars } from "./RatingStars"
 import Button from "../shared/Button"
+import {
+  confirmAction,
+  showSuccessAlert,
+  showWarningAlert,
+} from "../../utils/alerts"
 
 interface RatingFormProps {
   request: IRequest
@@ -11,15 +16,45 @@ interface RatingFormProps {
 }
 
 export function RatingForm({ request, onSaved }: RatingFormProps) {
-  const { addRating } = useRatings()
+  const { addRating, isRated } = useRatings()
   const [score, setScore] = useState<number>(0)
   const [comment, setComment] = useState<string>("")
   const [error, setError] = useState<string>("")
   const [success, setSuccess] = useState<boolean>(false)
 
-  function handleSubmit(): void {
+  async function handleSubmit(): Promise<void> {
+    if (request.status !== "Finalizada") {
+      showWarningAlert(
+        "Servicio no finalizado",
+        "Solo puedes calificar servicios que ya estén finalizados."
+      )
+      return
+    }
+
+    if (isRated(request.id)) {
+      showWarningAlert(
+        "Servicio ya calificado",
+        "Esta solicitud ya tiene una calificación guardada."
+      )
+      return
+    }
+
     if (score < 1 || score > 5) {
       setError("Selecciona una puntuación entre 1 y 5 estrellas.")
+      showWarningAlert(
+        "Puntuación requerida",
+        "Selecciona una puntuación entre 1 y 5 antes de guardar."
+      )
+      return
+    }
+
+    const confirmed = await confirmAction(
+      "Guardar calificación",
+      "Después de guardar la calificación, esta solicitud quedará marcada como calificada.",
+      "Sí, guardar"
+    )
+
+    if (!confirmed) {
       return
     }
 
@@ -37,6 +72,11 @@ export function RatingForm({ request, onSaved }: RatingFormProps) {
     addRating(newRating)
     setSuccess(true)
     setError("")
+
+    showSuccessAlert(
+      "Calificación guardada",
+      "Gracias por compartir tu experiencia con HomeFix."
+    )
 
     if (onSaved) {
       onSaved()
@@ -79,7 +119,7 @@ export function RatingForm({ request, onSaved }: RatingFormProps) {
 
       {error && <p className="rating-form-error">{error}</p>}
 
-      <Button variant="success" onClick={handleSubmit}>
+      <Button variant="success" onClick={() => void handleSubmit()}>
         Guardar calificación
       </Button>
     </div>

@@ -6,6 +6,13 @@ import {
   type PasswordUpdateForm,
   type ProfileUpdateForm,
 } from "../utils/UtilValidateUpdate"
+import {
+  confirmAction,
+  showErrorAlert,
+  showSuccessAlert,
+  showWarningAlert,
+} from "../utils/alerts"
+import { getFirebaseErrorMessage } from "../utils/firebaseErrors"
 import "../styles/Profile.css"
 
 function Profile() {
@@ -50,7 +57,6 @@ function Profile() {
 
   useEffect(() => {
     if (userData) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setProfileForm({
         name: userData.name || "",
         email: userData.email || "",
@@ -62,7 +68,7 @@ function Profile() {
     }
   }, [userData])
 
-  const cleanMessages = () => {
+  const cleanMessages = (): void => {
     setErrors({})
     setMessage("")
     setErrorMessage("")
@@ -85,7 +91,7 @@ function Profile() {
     })
   }
 
-  const handleUpdateProfile = async () => {
+  const handleUpdateProfile = async (): Promise<void> => {
     cleanMessages()
 
     const validationErrors = validateProfile(profileForm)
@@ -107,7 +113,23 @@ function Profile() {
 
     setErrors(validationErrors)
 
-    if (Object.keys(validationErrors).length > 0) return
+    if (Object.keys(validationErrors).length > 0) {
+      showWarningAlert(
+        "Datos incompletos",
+        "Revisa los campos marcados antes de guardar tu perfil."
+      )
+      return
+    }
+
+    const confirmed = await confirmAction(
+      "Actualizar perfil",
+      "¿Seguro que deseas guardar los cambios de tu perfil?",
+      "Sí, guardar"
+    )
+
+    if (!confirmed) {
+      return
+    }
 
     try {
       if (emailChanged && !isGoogleUser) {
@@ -129,28 +151,52 @@ function Profile() {
         newPassword: "",
         confirmPassword: "",
       })
+
       setMessage("Perfil actualizado correctamente")
-    } catch {
-      setErrorMessage(
-        "No se pudo actualizar el perfil. Verifica los datos e intenta nuevamente."
+      showSuccessAlert(
+        "Perfil actualizado",
+        "Tus datos personales fueron guardados correctamente."
       )
+    } catch (error: unknown) {
+      const messageError = getFirebaseErrorMessage(error)
+
+      setErrorMessage(messageError)
+      showErrorAlert("No se pudo actualizar el perfil", messageError)
     }
   }
 
-  const handleUpdatePassword = async () => {
+  const handleUpdatePassword = async (): Promise<void> => {
     cleanMessages()
 
     if (isGoogleUser) {
-      setErrorMessage(
+      const googleMessage =
         "Las cuentas de Google no cambian contraseña desde HomeFix."
-      )
+
+      setErrorMessage(googleMessage)
+      showWarningAlert("Cuenta de Google", googleMessage)
       return
     }
 
     const validationErrors = validatePassword(passwordForm)
     setErrors(validationErrors)
 
-    if (Object.keys(validationErrors).length > 0) return
+    if (Object.keys(validationErrors).length > 0) {
+      showWarningAlert(
+        "Datos incompletos",
+        "Revisa los campos de contraseña antes de continuar."
+      )
+      return
+    }
+
+    const confirmed = await confirmAction(
+      "Cambiar contraseña",
+      "¿Seguro que deseas cambiar la contraseña de tu cuenta?",
+      "Sí, cambiar"
+    )
+
+    if (!confirmed) {
+      return
+    }
 
     try {
       await rechargeAuth(passwordForm.currentPassword)
@@ -163,19 +209,43 @@ function Profile() {
       })
 
       setMessage("Contraseña actualizada correctamente")
-    } catch {
-      setErrorMessage("La contraseña actual no es correcta o la sesión expiró.")
+      showSuccessAlert(
+        "Contraseña actualizada",
+        "Tu contraseña fue cambiada correctamente."
+      )
+    } catch (error: unknown) {
+      const messageError = getFirebaseErrorMessage(error)
+
+      setErrorMessage(messageError)
+      showErrorAlert("No se pudo cambiar la contraseña", messageError)
     }
   }
 
-  const handleResetPassword = async () => {
+  const handleResetPassword = async (): Promise<void> => {
     cleanMessages()
+
+    const confirmed = await confirmAction(
+      "Enviar recuperación",
+      "Te enviaremos un correo para restablecer tu contraseña.",
+      "Sí, enviar"
+    )
+
+    if (!confirmed) {
+      return
+    }
 
     try {
       await resetPassword()
       setMessage("Se envió un correo para restablecer la contraseña.")
-    } catch {
-      setErrorMessage("No se pudo enviar el correo de restablecimiento.")
+      showSuccessAlert(
+        "Correo enviado",
+        "Revisa tu bandeja de entrada para restablecer tu contraseña."
+      )
+    } catch (error: unknown) {
+      const messageError = getFirebaseErrorMessage(error)
+
+      setErrorMessage(messageError)
+      showErrorAlert("No se pudo enviar el correo", messageError)
     }
   }
 
@@ -308,7 +378,10 @@ function Profile() {
                 {errors.zone && <span>{errors.zone}</span>}
               </div>
 
-              <button className="btn-primary" onClick={handleUpdateProfile}>
+              <button
+                className="btn-primary"
+                onClick={() => void handleUpdateProfile()}
+              >
                 Guardar cambios
               </button>
             </div>
@@ -369,7 +442,10 @@ function Profile() {
                 administran desde tu cuenta de Google.
               </p>
 
-              <button className="btn-secondary" onClick={handleResetPassword}>
+              <button
+                className="btn-secondary"
+                onClick={() => void handleResetPassword()}
+              >
                 Enviar correo de recuperación
               </button>
             </div>
@@ -415,11 +491,17 @@ function Profile() {
                 )}
               </div>
 
-              <button className="btn-primary" onClick={handleUpdatePassword}>
+              <button
+                className="btn-primary"
+                onClick={() => void handleUpdatePassword()}
+              >
                 Cambiar contraseña
               </button>
 
-              <button className="btn-secondary" onClick={handleResetPassword}>
+              <button
+                className="btn-secondary"
+                onClick={() => void handleResetPassword()}
+              >
                 Enviar correo de recuperación
               </button>
             </div>

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import type { ServiceMock } from "../../interfaces/InterfaceServices"
 import Button from "../shared/Button"
+import { confirmAction, showToast } from "../../utils/alerts"
 
 interface CartItemProps {
   service: ServiceMock
@@ -22,8 +23,19 @@ export default function CartItem({ service, onRemove }: CartItemProps) {
     navigate(`/dashboard/servicios/${service.id}`)
   }
 
-  function handleRemove(): void {
+  async function handleRemove(): Promise<void> {
+    const confirmed = await confirmAction(
+      "Eliminar servicio",
+      `¿Seguro que deseas quitar ${service.name} del carrito?`,
+      "Sí, eliminar"
+    )
+
+    if (!confirmed) {
+      return
+    }
+
     onRemove(service.id)
+    showToast("Servicio eliminado del carrito", "success")
   }
 
   return (
@@ -62,7 +74,7 @@ export default function CartItem({ service, onRemove }: CartItemProps) {
           <Button
             variant="secondary"
             className="cart-remove-button"
-            onClick={handleRemove}
+            onClick={() => void handleRemove()}
           >
             Eliminar
           </Button>

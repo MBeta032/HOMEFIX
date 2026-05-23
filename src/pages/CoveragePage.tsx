@@ -9,6 +9,7 @@ import {
   getServicesByZone,
   getZones,
 } from "../utils/coverageGraph.utils"
+import { showInfoAlert } from "../utils/alerts"
 import "../styles/Coverage.css"
 
 function CoveragePage() {
@@ -23,7 +24,21 @@ function CoveragePage() {
   const adjacency = selectedZone ? getAdjacencyByZone(selectedZone.id) : []
 
   const handleZoneChange = (event: ChangeEvent<HTMLSelectElement>): void => {
-    setSelectedZoneId(event.target.value)
+    const zoneId = event.target.value
+    setSelectedZoneId(zoneId)
+
+    if (!zoneId) {
+      return
+    }
+
+    const companiesByZone = getCompaniesByZone(zoneId)
+
+    if (companiesByZone.length === 0) {
+      showInfoAlert(
+        "Sin cobertura",
+        "Esta zona todavía no tiene empresas conectadas en el grafo."
+      )
+    }
   }
 
   return (

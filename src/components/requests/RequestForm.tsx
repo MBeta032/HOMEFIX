@@ -3,6 +3,7 @@ import type { ChangeEvent, FormEvent } from "react"
 import Button from "../shared/Button"
 import type { ServiceMock } from "../../interfaces/InterfaceServices"
 import type { IRequestFormData } from "../../interfaces/Requests/request.interface"
+import { confirmAction, showWarningAlert } from "../../utils/alerts"
 
 interface RequestFormProps {
   services: ServiceMock[]
@@ -99,6 +100,31 @@ export default function RequestForm({
     return Object.keys(newErrors).length === 0
   }
 
+  async function submitValidatedForm(): Promise<void> {
+    const confirmed = await confirmAction(
+      "Crear solicitud",
+      isSingleService
+        ? `Se creará una solicitud pendiente para ${selectedServiceName}.`
+        : `Se crearán solicitudes pendientes para ${services.length} servicios.`,
+      "Sí, crear solicitud"
+    )
+
+    if (!confirmed) {
+      return
+    }
+
+    onSubmit({
+      ...formData,
+      address: formData.address.trim(),
+      neighborhood: formData.neighborhood.trim(),
+      city: formData.city.trim(),
+      zone: formData.zone.trim(),
+      problemDescription: formData.problemDescription.trim(),
+    })
+
+    setFormData(initialFormData)
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault()
 
@@ -106,11 +132,28 @@ export default function RequestForm({
 
     if (!isValidForm) {
       setGeneralError("Completa todos los campos obligatorios antes de continuar.")
+      showWarningAlert(
+        "Datos incompletos",
+        "Completa todos los campos obligatorios antes de crear la solicitud."
+      )
       return
     }
 
-    onSubmit(formData)
-    setFormData(initialFormData)
+    void submitValidatedForm()
+  }
+
+  async function handleCancel(): Promise<void> {
+    const confirmed = await confirmAction(
+      "Cancelar este servicio",
+      `¿Seguro que deseas cancelar la configuración de ${selectedServiceName}?`,
+      "Sí, cancelar"
+    )
+
+    if (!confirmed) {
+      return
+    }
+
+    onCancel()
   }
 
   return (
@@ -266,7 +309,11 @@ export default function RequestForm({
           {submitText}
         </Button>
 
-        <Button type="button" variant="secondary" onClick={onCancel}>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => void handleCancel()}
+        >
           {cancelText}
         </Button>
       </div>

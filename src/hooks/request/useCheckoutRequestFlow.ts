@@ -4,6 +4,7 @@ import { useCart } from "../cart/useCart"
 import { useRequests } from "./useRequests"
 import type { ServiceMock } from "../../interfaces/InterfaceServices"
 import type { IRequestFormData } from "../../interfaces/Requests/request.interface"
+import { showInfoAlert, showSuccessAlert, showToast } from "../../utils/alerts"
 
 interface UseCheckoutRequestFlowReturn {
   cartItems: ServiceMock[]
@@ -67,6 +68,10 @@ export function useCheckoutRequestFlow(): UseCheckoutRequestFlowReturn {
       requestedServiceIds.includes(serviceId) ||
       cancelledServiceIds.includes(serviceId)
     ) {
+      showInfoAlert(
+        "Servicio ya gestionado",
+        "Este servicio ya fue confirmado o cancelado en este proceso."
+      )
       return
     }
 
@@ -76,6 +81,10 @@ export function useCheckoutRequestFlow(): UseCheckoutRequestFlowReturn {
 
   function handleConfirmRequest(formData: IRequestFormData): void {
     if (!selectedService) {
+      showInfoAlert(
+        "Sin servicio seleccionado",
+        "No hay un servicio pendiente para crear solicitud."
+      )
       return
     }
 
@@ -102,6 +111,11 @@ export function useCheckoutRequestFlow(): UseCheckoutRequestFlowReturn {
         "Terminaste el proceso. Las solicitudes confirmadas quedaron guardadas correctamente."
       )
 
+      showSuccessAlert(
+        "Proceso terminado",
+        "Las solicitudes confirmadas quedaron guardadas como pendientes."
+      )
+
       return
     }
 
@@ -110,10 +124,16 @@ export function useCheckoutRequestFlow(): UseCheckoutRequestFlowReturn {
     setSuccessMessage(
       `La solicitud de ${selectedService.name} fue creada. Ahora puedes configurar el siguiente servicio.`
     )
+
+    showToast(`Solicitud de ${selectedService.name} creada`, "success")
   }
 
   function handleCancelCurrentService(): void {
     if (!selectedService) {
+      showInfoAlert(
+        "Sin servicio seleccionado",
+        "No hay un servicio pendiente para cancelar."
+      )
       return
     }
 
@@ -139,11 +159,21 @@ export function useCheckoutRequestFlow(): UseCheckoutRequestFlowReturn {
           "Terminaste el proceso. No se creó ninguna solicitud porque cancelaste los servicios pendientes."
         )
 
+        showInfoAlert(
+          "Proceso terminado",
+          "No se creó ninguna solicitud porque cancelaste los servicios pendientes."
+        )
+
         return
       }
 
       setSuccessMessage(
         "Terminaste el proceso. Algunos servicios fueron confirmados y otros fueron cancelados."
+      )
+
+      showSuccessAlert(
+        "Proceso terminado",
+        "Algunas solicitudes fueron confirmadas y otras fueron canceladas."
       )
 
       return
@@ -154,6 +184,8 @@ export function useCheckoutRequestFlow(): UseCheckoutRequestFlowReturn {
     setSuccessMessage(
       `Cancelaste ${selectedService.name}. Ahora puedes continuar con el siguiente servicio.`
     )
+
+    showToast(`Cancelaste ${selectedService.name}`, "info")
   }
 
   return {

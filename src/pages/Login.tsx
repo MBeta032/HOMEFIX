@@ -1,111 +1,92 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
-import "../styles/Login.css";
-import { validateLogin } from "../utils/UtilValidateLogin";
+import { useContext, useEffect, useState } from "react"
+import { AuthContext } from "../context/AuthContext"
+import { Link, useNavigate } from "react-router-dom"
+import "../styles/Login.css"
+import { validateLogin } from "../utils/UtilValidateLogin"
+import {
+  showErrorAlert,
+  showSuccessAlert,
+  showWarningAlert,
+} from "../utils/alerts"
+import { getFirebaseErrorMessage } from "../utils/firebaseErrors"
 
 function Login() {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
-  const context = useContext(AuthContext);
-  const navigate = useNavigate();
+  const context = useContext(AuthContext)
+  const navigate = useNavigate()
 
   if (!context) {
-    throw new Error("AuthContext no disponible");
+    throw new Error("AuthContext no disponible")
   }
 
-  const { user, login, loginGoogle, loading } = context;
+  const { user, login, loginGoogle, loading } = context
 
   useEffect(() => {
     if (!loading && user) {
-      navigate("/dashboard");
+      navigate("/dashboard")
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate])
 
-  const handleLogin = async () => {
-    const validationErrors = validateLogin(email, password);
-    setErrors(validationErrors);
+  const handleLogin = async (): Promise<void> => {
+    const validationErrors = validateLogin(email, password)
+    setErrors(validationErrors)
 
-    if (Object.keys(validationErrors).length > 0) return;
+    if (Object.keys(validationErrors).length > 0) {
+      showWarningAlert(
+        "Datos incompletos",
+        "Revisa el correo y la contraseña antes de continuar."
+      )
+      return
+    }
 
     try {
-      setIsSubmitting(true);
-      setErrors({});
+      setIsSubmitting(true)
+      setErrors({})
 
-      await login(email, password);
-      navigate("/dashboard");
+      await login(email.trim(), password)
+
+      showSuccessAlert(
+        "Inicio de sesión exitoso",
+        "Bienvenido nuevamente a HomeFix."
+      )
+
+      navigate("/dashboard")
     } catch (error: unknown) {
-      const err = error as { code?: string };
+      const message = getFirebaseErrorMessage(error)
 
-      switch (err.code) {
-        case "auth/invalid-email":
-          setErrors({ email: "Correo inválido." });
-          break;
-
-        case "auth/invalid-credential":
-          setErrors({ general: "Correo o contraseña incorrectos." });
-          break;
-
-        case "auth/user-not-found":
-          setErrors({ general: "No existe una cuenta con este correo." });
-          break;
-
-        case "auth/wrong-password":
-          setErrors({ general: "La contraseña es incorrecta." });
-          break;
-
-        default:
-          setErrors({
-            general: "No se pudo iniciar sesión. Intenta nuevamente.",
-          });
-      }
+      setErrors({ general: message })
+      showErrorAlert("Error al iniciar sesión", message)
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = async (): Promise<void> => {
     try {
-      setIsSubmitting(true);
-      setErrors({});
+      setIsSubmitting(true)
+      setErrors({})
 
-      await loginGoogle();
-      navigate("/dashboard");
+      await loginGoogle()
+
+      showSuccessAlert(
+        "Inicio de sesión exitoso",
+        "Entraste a HomeFix usando tu cuenta de Google."
+      )
+
+      navigate("/dashboard")
     } catch (error: unknown) {
-      const err = error as { code?: string };
+      const message = getFirebaseErrorMessage(error)
 
-      switch (err.code) {
-        case "auth/popup-closed-by-user":
-          setErrors({
-            general: "Cerraste la ventana de Google antes de iniciar sesión.",
-          });
-          break;
-
-        case "auth/cancelled-popup-request":
-          setErrors({
-            general: "Ya hay una ventana de Google abierta.",
-          });
-          break;
-
-        case "auth/account-exists-with-different-credential":
-          setErrors({
-            general:
-              "Ya existe una cuenta con este correo usando otro método de inicio de sesión.",
-          });
-          break;
-
-        default:
-          setErrors({
-            general: "No se pudo iniciar sesión con Google. Intenta nuevamente.",
-          });
-      }
+      setErrors({ general: message })
+      showErrorAlert("Error con Google", message)
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <div className="login-container">
@@ -134,7 +115,7 @@ function Login() {
 
         <button
           className="login-button"
-          onClick={handleLogin}
+          onClick={() => void handleLogin()}
           disabled={isSubmitting || loading}
         >
           {isSubmitting ? "Ingresando..." : "Ingresar"}
@@ -142,7 +123,7 @@ function Login() {
 
         <button
           className="google-button"
-          onClick={handleGoogleLogin}
+          onClick={() => void handleGoogleLogin()}
           disabled={isSubmitting || loading}
         >
           <img src="/src/assets/images/google.png" alt="Google" />
@@ -154,7 +135,7 @@ function Login() {
         </p>
       </div>
     </div>
-  );
+  )
 }
 
-export default Login;
+export default Login
