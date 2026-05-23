@@ -23,7 +23,9 @@ export const CartContext = createContext<CartContextType | undefined>(
   undefined
 )
 
-const getStorageKey = (uid: string) => `homefix-cart-${uid}`
+const getStorageKey = (uid: string) => {
+ return uid ?  `homefix-cart-${uid}`: "homefix-cart-guest"
+}
 
 function isValidService(service: unknown): service is ServiceMock {
   if (typeof service !== "object" || service === null) {
@@ -68,6 +70,11 @@ export function CartProvider({ children, uid }: CartProviderProps) {
   const [cartItems, setCartItems] = useState<ServiceMock[]>(() =>{
     return getCartFromStorage(uid)
   })
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCartItems(getCartFromStorage(uid))
+  }, [uid])
 
   const cartCount = cartItems.length
 

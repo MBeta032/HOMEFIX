@@ -16,7 +16,7 @@ function AppWithProviders() {
       <CartProvider uid={uid}>
         <RequestProvider uid={uid}>
           <RatingProvider uid={uid}>
-            <BrowserRouter uid={uid}>
+            <BrowserRouter>
               <AppRouter />
             </BrowserRouter>
           </RatingProvider>

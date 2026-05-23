@@ -2,8 +2,9 @@ import { createContext, useEffect, useState } from "react"
 import type { ReactNode } from "react"
 import type { IRating } from "../../interfaces/Rating/rating.interface"
 
-const getStorageKey = (uid: string) => `homefix-ratings-${uid}`
-
+const getStorageKey = (uid: string) => {
+ return uid ?  `homefix-cart-${uid}`: "homefix-cart-guest"
+}
 export interface RatingContextType {
   ratings: IRating[]
   addRating: (rating: IRating) => void

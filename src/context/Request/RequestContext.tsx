@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useEffect, useState } from "react"
 import type { ReactNode } from "react"
 import RequestQueue from "../../algorithms/RequestQueue"
 import type { ServiceMock } from "../../interfaces/InterfaceServices"
@@ -9,10 +9,10 @@ import type {
   RequestStatus,
 } from "../../interfaces/Requests/request.interface"
 import { mockRequests } from "../../data/mockRequests"
-import { AuthContext } from "../AuthContext"
 
 interface RequestProviderProps {
   children: ReactNode
+  uid: string
 }
 
 export interface RequestContextType {
@@ -147,12 +147,16 @@ function buildRequest(
   }
 }
 
-export function RequestProvider({ children }: RequestProviderProps) {
-  const auth = useContext(AuthContext)
-  const uid = auth?.user?.uid
+export function RequestProvider({ children, uid }: RequestProviderProps) {
   const [requests, setRequests] = useState<IRequest[]>(() =>
     getRequestsFromStorage(uid)
   )
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setRequests(getRequestsFromStorage(uid))
+  }, [uid])
+
 
   const requestQueue = new RequestQueue(requests)
   const requestCount: number = requestQueue.size()

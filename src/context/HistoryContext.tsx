@@ -20,7 +20,10 @@ export const HistoryContext = createContext<HistoryContextType | undefined>(
   undefined
 )
 
-const getStorageKey = (uid: string) => `homefix-history-${uid}`
+const getStorageKey = (uid: string) => {
+ return uid ?  `homefix-cart-${uid}`: "homefix-cart-guest"
+}
+
 const MAX_HISTORY_SIZE = 5
 
 function serviceExists(serviceId: string): boolean {
@@ -57,6 +60,11 @@ export function HistoryProvider({ children, uid }: HistoryProviderProps) {
   const [historyIds, setHistoryIds] = useState<string[]>(
     getHistoryIdsFromStorage(uid)
   )
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setHistoryIds(getHistoryIdsFromStorage(uid))
+  }, [uid])
 
   useEffect(() => {
     localStorage.setItem(getStorageKey(uid), JSON.stringify(historyIds))
