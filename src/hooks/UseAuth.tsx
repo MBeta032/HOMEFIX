@@ -1,8 +1,8 @@
 import {
   EmailAuthProvider,
   GoogleAuthProvider,
+  browserLocalPersistence,
   createUserWithEmailAndPassword,
-  inMemoryPersistence,
   onAuthStateChanged,
   reauthenticateWithCredential,
   sendPasswordResetEmail,
@@ -73,7 +73,7 @@ export function useAuth() {
     city,
     zone,
   }: RegisterData): Promise<void> => {
-    await setPersistence(auth, inMemoryPersistence)
+    await setPersistence(auth, browserLocalPersistence)
 
     const result = await createUserWithEmailAndPassword(auth, email, password)
 
@@ -98,12 +98,12 @@ export function useAuth() {
   }
 
   const login = async (email: string, password: string): Promise<void> => {
-    await setPersistence(auth, inMemoryPersistence)
+    await setPersistence(auth, browserLocalPersistence)
     await signInWithEmailAndPassword(auth, email, password)
   }
 
   const loginGoogle = async (): Promise<User> => {
-    await setPersistence(auth, inMemoryPersistence)
+    await setPersistence(auth, browserLocalPersistence)
 
     const result = await signInWithPopup(auth, googleProvider)
     const firebaseUser = result.user

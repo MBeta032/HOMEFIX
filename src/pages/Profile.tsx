@@ -14,9 +14,15 @@ import {
 } from "../utils/alerts"
 import { getFirebaseErrorMessage } from "../utils/firebaseErrors"
 import "../styles/Profile.css"
+import { FaEye, FaEyeSlash } from "react-icons/fa"
 
 function Profile() {
   const context = useContext(AuthContext)
+  const [showPassword , setShowPassword] = useState({
+    current: true,
+    new: true,
+    confirm: true
+  })
 
   if (!context) {
     throw new Error("AuthContext no disponible")
@@ -57,6 +63,7 @@ function Profile() {
 
   useEffect(() => {
     if (userData) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setProfileForm({
         name: userData.name || "",
         email: userData.email || "",
@@ -89,6 +96,13 @@ function Profile() {
       ...passwordForm,
       [field]: value,
     })
+  }
+
+  const toggleShowPassword = (field: "current" | "new" | "confirm") => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
   }
 
   const handleUpdateProfile = async (): Promise<void> => {
@@ -152,6 +166,8 @@ function Profile() {
         confirmPassword: "",
       })
 
+      setShowPassword({current: true, new: true, confirm: true})
+
       setMessage("Perfil actualizado correctamente")
       showSuccessAlert(
         "Perfil actualizado",
@@ -207,6 +223,8 @@ function Profile() {
         newPassword: "",
         confirmPassword: "",
       })
+
+      setShowPassword({ current: true, new: true, confirm: true })
 
       setMessage("Contraseña actualizada correctamente")
       showSuccessAlert(
@@ -316,17 +334,25 @@ function Profile() {
               {profileForm.email !== userData?.email && !isGoogleUser && (
                 <div className="profile-field">
                   <label>Contraseña actual</label>
-                  <input
-                    type="password"
-                    value={passwordForm.currentPassword}
-                    onChange={(e) =>
-                      handlePasswordChange("currentPassword", e.target.value)
-                    }
-                    placeholder="Necesaria para cambiar correo"
-                  />
-                  {errors.currentPassword && (
-                    <span>{errors.currentPassword}</span>
-                  )}
+                  <div className="password-container">
+                    <input
+                      type={showPassword.current ? "password" : "text"}
+                      value={passwordForm.currentPassword}
+                      onChange={(e) =>
+                        handlePasswordChange("currentPassword", e.target.value)
+                      }
+                      placeholder="Necesaria para cambiar correo"
+                    />
+                    <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => toggleShowPassword("current")}>
+                      {showPassword.current ? <FaEyeSlash/> : <FaEye/>}
+                    </button>
+                    {errors.currentPassword && (
+                      <span>{errors.currentPassword}</span>
+                    )}                    
+                  </div>
                 </div>
               )}
 
@@ -453,42 +479,67 @@ function Profile() {
             <div className="profile-form">
               <div className="profile-field">
                 <label>Contraseña actual</label>
-                <input
-                  type="password"
-                  value={passwordForm.currentPassword}
-                  onChange={(e) =>
-                    handlePasswordChange("currentPassword", e.target.value)
-                  }
-                />
-                {errors.currentPassword && (
-                  <span>{errors.currentPassword}</span>
-                )}
+                <div className="password-container">
+                  <input
+                    type={showPassword.current ? "password" : "text"}
+                    value={passwordForm.currentPassword}
+                    onChange={(e) =>
+                      handlePasswordChange("currentPassword", e.target.value)
+                    }
+                  />
+                  {errors.currentPassword && (
+                    <span>{errors.currentPassword}</span>
+                  )}
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => toggleShowPassword("current")}
+                  >
+                    {showPassword.current ? <FaEyeSlash/> : <FaEye/>}
+                  </button>
+                </div>
               </div>
 
               <div className="profile-field">
                 <label>Nueva contraseña</label>
-                <input
-                  type="password"
-                  value={passwordForm.newPassword}
-                  onChange={(e) =>
-                    handlePasswordChange("newPassword", e.target.value)
-                  }
-                />
-                {errors.newPassword && <span>{errors.newPassword}</span>}
+                <div className="password-container">
+                    <input
+                      type={showPassword.new ? "password" : "text"}
+                      value={passwordForm.newPassword}
+                      onChange={(e) =>
+                        handlePasswordChange("newPassword", e.target.value)
+                      }
+                    />
+                  {errors.newPassword && <span>{errors.newPassword}</span>}
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => toggleShowPassword("new")}
+                  >
+                    {showPassword.new ? <FaEyeSlash/> : <FaEye/>}    
+                  </button>
+                </div>
               </div>
 
               <div className="profile-field">
                 <label>Confirmar contraseña</label>
-                <input
-                  type="password"
-                  value={passwordForm.confirmPassword}
-                  onChange={(e) =>
-                    handlePasswordChange("confirmPassword", e.target.value)
-                  }
-                />
-                {errors.confirmPassword && (
-                  <span>{errors.confirmPassword}</span>
-                )}
+                <div className="password-container">
+                    <input
+                      type={showPassword.confirm ? "password" : "text"}
+                      value={passwordForm.confirmPassword}
+                      onChange={(e) =>
+                        handlePasswordChange("confirmPassword", e.target.value)
+                      }
+                    />
+                  {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    onClick={() => toggleShowPassword("confirm")}
+                  >
+                    {showPassword.confirm ? <FaEyeSlash/> : <FaEye/>}    
+                  </button>
+                </div>
               </div>
 
               <button

@@ -42,6 +42,7 @@ export default function ServiceDetailHero({
         <ServiceDetailActions
           onAddToCart={onAddToCart}
           onRequestNow={onRequestNow}
+          availability={service.availability}
         />
       </div>
     </article>

@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState, type FormEvent } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { Link, useNavigate } from "react-router-dom"
+import { FaEye, FaEyeSlash } from "react-icons/fa"
 import "../styles/Login.css"
 import { validateLogin } from "../utils/UtilValidateLogin"
 import {
@@ -13,6 +14,7 @@ import { getFirebaseErrorMessage } from "../utils/firebaseErrors"
 function Login() {
   const [email, setEmail] = useState<string>("")
   const [password, setPassword] = useState<string>("")
+  const [showPassword, setShowPassword] = useState<boolean>(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
@@ -130,14 +132,23 @@ function Login() {
             Contraseña
           </label>
           {errors.password && <p className="error-text">{errors.password}</p>}
-          <input
-            id="password"
-            className="login-input"
-            type="password"
-            placeholder="Ingresa tu contraseña"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
+          <div className="password-container">
+            <input
+              id="password"
+              className="login-input"
+              type={showPassword ? "text" : "password"}
+              placeholder="Ingresa tu contraseña"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEye/> : <FaEyeSlash/> }
+            </button>
+          </div>
 
           <button
             className="login-button"

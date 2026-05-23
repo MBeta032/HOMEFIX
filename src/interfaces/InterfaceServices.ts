@@ -8,7 +8,7 @@ export interface ServiceBaseMock {
   zone: string
   rating: number
   duration: string
-  availability: string
+  availability: "Disponible" | "No disponible"
 }
 
 export interface ServiceMock extends ServiceBaseMock {

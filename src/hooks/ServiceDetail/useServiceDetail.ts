@@ -45,6 +45,14 @@ export function useServiceDetail(): UseServiceDetailResult {
       return
     }
 
+    if (service.availability === "No disponible") {
+      showWarningAlert(
+        "Servicio no disponible",
+        "Este servicio no se encuentra disponible actualmente."
+      )
+      return
+    }
+
     const result = addToCart(service)
 
     if (result === "added") {
@@ -66,6 +74,16 @@ export function useServiceDetail(): UseServiceDetailResult {
       )
       return
     }
+
+    if (service.availability === "No disponible") {
+      showWarningAlert(
+        "Servicio no disponible",
+        "Este servicio no puede solicitarse actualmente."
+      )
+
+      return
+    }
+
 
     const confirmed = await confirmAction(
       "Solicitar servicio",
