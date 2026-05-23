@@ -46,7 +46,12 @@ export function useServiceDetail(): UseServiceDetailResult {
   }
 
   function handleRequestNow(): void {
-    alert("Esta función se conectará en HU-015.")
+    if (!service) {
+      return
+    }
+
+    addToCart(service)
+    navigate("/dashboard/checkout")
   }
 
   return {
