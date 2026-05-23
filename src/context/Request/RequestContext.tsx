@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import type { ReactNode } from "react"
 import RequestQueue from "../../algorithms/RequestQueue"
 import type { ServiceMock } from "../../interfaces/InterfaceServices"
@@ -8,6 +8,8 @@ import type {
   PaymentMethod,
   RequestStatus,
 } from "../../interfaces/Requests/request.interface"
+import { mockRequests } from "../../data/mockRequests"
+import { AuthContext } from "../AuthContext"
 
 interface RequestProviderProps {
   children: ReactNode
@@ -32,7 +34,10 @@ export const RequestContext = createContext<RequestContextType | undefined>(
   undefined
 )
 
-const REQUEST_STORAGE_KEY = "homefix-requests"
+function getStorageKey(uid: string | undefined): string {
+  if (!uid) return "homefix-requests-guest"
+  return `homefix-requests-${uid}`
+}
 
 const VALID_REQUEST_STATUS: RequestStatus[] = [
   "Pendiente",
@@ -79,27 +84,29 @@ function isValidRequest(request: unknown): request is IRequest {
   )
 }
 
-function getRequestsFromStorage(): IRequest[] {
+function getRequestsFromStorage(uid: string | undefined): IRequest[] {
   if (typeof window === "undefined") {
-    return []
+    return mockRequests
   }
 
-  const savedRequests = localStorage.getItem(REQUEST_STORAGE_KEY)
+  const savedRequests = localStorage.getItem(getStorageKey(uid))
 
   if (!savedRequests) {
-    return []
+    return mockRequests
   }
 
   try {
     const parsedRequests = JSON.parse(savedRequests) as unknown
 
     if (!Array.isArray(parsedRequests)) {
-      return []
+      return mockRequests
     }
 
-    return parsedRequests.filter(isValidRequest)
+    const valid = parsedRequests.filter(isValidRequest)
+    return valid.length > 0 ? valid : mockRequests
+
   } catch {
-    return []
+    return mockRequests
   }
 }
 
@@ -141,21 +148,22 @@ function buildRequest(
 }
 
 export function RequestProvider({ children }: RequestProviderProps) {
+  const auth = useContext(AuthContext)
+  const uid = auth?.user?.uid
   const [requests, setRequests] = useState<IRequest[]>(() =>
-    getRequestsFromStorage()
+    getRequestsFromStorage(uid)
   )
 
   const requestQueue = new RequestQueue(requests)
   const requestCount: number = requestQueue.size()
 
+
   useEffect(() => {
     if (requests.length === 0) {
-      localStorage.removeItem(REQUEST_STORAGE_KEY)
       return
     }
-
-    localStorage.setItem(REQUEST_STORAGE_KEY, JSON.stringify(requests))
-  }, [requests])
+    localStorage.setItem(getStorageKey(uid), JSON.stringify(requests))
+  }, [requests, uid])
 
   function createRequestFromService(
     service: ServiceMock,
