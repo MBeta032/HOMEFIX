@@ -73,6 +73,11 @@ export function RatingProvider({ children, uid }: RatingProviderProps) {
   )
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setRatings(getRatingsFromStorage(uid))
+  }, [uid])
+
+  useEffect(() => {
     localStorage.setItem(getStorageKey(uid), JSON.stringify(ratings))
   }, [ratings, uid])
 
