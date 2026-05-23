@@ -15,6 +15,7 @@ export interface CartContextType {
 
 interface CartProviderProps {
   children: ReactNode
+  uid: string
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -22,7 +23,7 @@ export const CartContext = createContext<CartContextType | undefined>(
   undefined
 )
 
-const CART_STORAGE_KEY = "homefix-cart"
+const getStorageKey = (uid: string) => `homefix-cart-${uid}`
 
 function isValidService(service: unknown): service is ServiceMock {
   if (typeof service !== "object" || service === null) {
@@ -39,12 +40,12 @@ function isValidService(service: unknown): service is ServiceMock {
   )
 }
 
-function getCartFromStorage(): ServiceMock[] {
+function getCartFromStorage(uid: string): ServiceMock[] {
   if (typeof window === "undefined") {
     return []
   }
 
-  const savedCart = localStorage.getItem(CART_STORAGE_KEY)
+  const savedCart = localStorage.getItem(getStorageKey(uid))
 
   if (!savedCart) {
     return []
@@ -63,8 +64,10 @@ function getCartFromStorage(): ServiceMock[] {
   }
 }
 
-export function CartProvider({ children }: CartProviderProps) {
-  const [cartItems, setCartItems] = useState<ServiceMock[]>(getCartFromStorage)
+export function CartProvider({ children, uid }: CartProviderProps) {
+  const [cartItems, setCartItems] = useState<ServiceMock[]>(() =>{
+    return getCartFromStorage(uid)
+  })
 
   const cartCount = cartItems.length
 
@@ -75,12 +78,12 @@ export function CartProvider({ children }: CartProviderProps) {
 
   useEffect(() => {
     if (cartItems.length === 0) {
-      localStorage.removeItem(CART_STORAGE_KEY)
+      localStorage.removeItem(getStorageKey(uid))
       return
     }
 
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems))
-  }, [cartItems])
+    localStorage.setItem(getStorageKey(uid), JSON.stringify(cartItems))
+  }, [cartItems, uid])
 
   function addToCart(service: ServiceMock): AddToCartResult {
     const serviceAlreadyExists = cartItems.some(

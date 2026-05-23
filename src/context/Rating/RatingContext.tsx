@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react"
 import type { ReactNode } from "react"
 import type { IRating } from "../../interfaces/Rating/rating.interface"
 
-const STORAGE_KEY = "homefix-ratings"
+const getStorageKey = (uid: string) => `homefix-ratings-${uid}`
 
 export interface RatingContextType {
   ratings: IRating[]
@@ -11,12 +11,14 @@ export interface RatingContextType {
   isRated: (requestId: string) => boolean
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const RatingContext = createContext<RatingContextType | undefined>(
   undefined
 )
 
 interface RatingProviderProps {
   children: ReactNode
+  uid: string
 }
 
 function isValidRating(rating: unknown): rating is IRating {
@@ -40,12 +42,12 @@ function isValidRating(rating: unknown): rating is IRating {
   )
 }
 
-function getRatingsFromStorage(): IRating[] {
+function getRatingsFromStorage(uid: string): IRating[] {
   if (typeof window === "undefined") {
     return []
   }
 
-  const storedRatings = localStorage.getItem(STORAGE_KEY)
+  const storedRatings = localStorage.getItem(getStorageKey(uid))
 
   if (!storedRatings) {
     return []
@@ -64,14 +66,14 @@ function getRatingsFromStorage(): IRating[] {
   }
 }
 
-export function RatingProvider({ children }: RatingProviderProps) {
+export function RatingProvider({ children, uid }: RatingProviderProps) {
   const [ratings, setRatings] = useState<IRating[]>(() =>
-    getRatingsFromStorage()
+    getRatingsFromStorage(uid)
   )
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(ratings))
-  }, [ratings])
+    localStorage.setItem(getStorageKey(uid), JSON.stringify(ratings))
+  }, [ratings, uid])
 
   function addRating(rating: IRating): void {
     if (!isValidRating(rating)) {

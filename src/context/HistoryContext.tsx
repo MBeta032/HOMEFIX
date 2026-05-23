@@ -12,25 +12,27 @@ export interface HistoryContextType {
 
 interface HistoryProviderProps {
   children: ReactNode
+  uid: string
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const HistoryContext = createContext<HistoryContextType | undefined>(
   undefined
 )
 
-const STORAGE_KEY = "homefix-history"
+const getStorageKey = (uid: string) => `homefix-history-${uid}`
 const MAX_HISTORY_SIZE = 5
 
 function serviceExists(serviceId: string): boolean {
   return servicesMock.some((service) => service.id === serviceId)
 }
 
-function getHistoryIdsFromStorage(): string[] {
+function getHistoryIdsFromStorage(uid: string): string[] {
   if (typeof window === "undefined") {
     return []
   }
 
-  const savedHistory = localStorage.getItem(STORAGE_KEY)
+  const savedHistory = localStorage.getItem(getStorageKey(uid))
 
   if (!savedHistory) {
     return []
@@ -51,14 +53,14 @@ function getHistoryIdsFromStorage(): string[] {
   }
 }
 
-export function HistoryProvider({ children }: HistoryProviderProps) {
+export function HistoryProvider({ children, uid }: HistoryProviderProps) {
   const [historyIds, setHistoryIds] = useState<string[]>(
-    getHistoryIdsFromStorage
+    getHistoryIdsFromStorage(uid)
   )
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(historyIds))
-  }, [historyIds])
+    localStorage.setItem(getStorageKey(uid), JSON.stringify(historyIds))
+  }, [historyIds, uid])
 
   const history = useMemo<ServiceMock[]>(() => {
     return [...historyIds]
@@ -92,8 +94,8 @@ export function HistoryProvider({ children }: HistoryProviderProps) {
 
   const clearHistory = useCallback((): void => {
     setHistoryIds([])
-    localStorage.removeItem(STORAGE_KEY)
-  }, [])
+    localStorage.removeItem(getStorageKey(uid))
+  }, [uid])
 
   return (
     <HistoryContext.Provider

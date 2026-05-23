@@ -12,11 +12,11 @@ function AppWithProviders() {
   const uid = auth?.user?.uid ?? "guest"
 
   return (
-    <HistoryProvider>
-      <CartProvider>
-        <RequestProvider key={uid}>
-          <RatingProvider>
-            <BrowserRouter>
+    <HistoryProvider uid={uid}>
+      <CartProvider uid={uid}>
+        <RequestProvider uid={uid}>
+          <RatingProvider uid={uid}>
+            <BrowserRouter uid={uid}>
               <AppRouter />
             </BrowserRouter>
           </RatingProvider>
