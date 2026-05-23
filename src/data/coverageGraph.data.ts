@@ -9,33 +9,60 @@ export const coverageNodes: ICoverageNode[] = [
     label: "Norte de Cali",
     type: "zone",
     description: "Zona residencial y comercial con servicios para el hogar.",
+    position: {
+      lat: 3.475,
+      lng: -76.52,
+    },
   },
   {
     id: "zone-south",
     label: "Sur de Cali",
     type: "zone",
     description: "Zona con alta demanda de servicios técnicos y limpieza.",
+    position: {
+      lat: 3.374,
+      lng: -76.54,
+    },
   },
   {
     id: "zone-center",
     label: "Centro de Cali",
     type: "zone",
     description: "Zona central con cobertura de servicios básicos.",
+    position: {
+      lat: 3.4516,
+      lng: -76.532,
+    },
   },
   {
     id: "company-aquafix",
     label: "AquaFix Servicios",
     type: "company",
+    description: "Empresa mock especializada en plomería y mantenimiento.",
+    position: {
+      lat: 3.41,
+      lng: -76.535,
+    },
   },
   {
     id: "company-electrohome",
     label: "ElectroHome Cali",
     type: "company",
+    description: "Empresa mock especializada en electricidad y electrodomésticos.",
+    position: {
+      lat: 3.468,
+      lng: -76.518,
+    },
   },
   {
     id: "company-cleanhouse",
     label: "CleanHouse Express",
     type: "company",
+    description: "Empresa mock enfocada en servicios de limpieza.",
+    position: {
+      lat: 3.386,
+      lng: -76.548,
+    },
   },
   {
     id: "service-plumbing",
