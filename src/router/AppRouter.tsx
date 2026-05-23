@@ -13,6 +13,7 @@ import ServiceDetail from "../pages/ServiceDetail"
 import History from "../pages/History"
 import RequestPage from "../pages/CheckoutRequestPage"
 import RequestsPage from "../pages/MyRequestsPage"
+import CoveragePage from "../pages/CoveragePage"
 
 function AppRouter() {
   return (
@@ -32,6 +33,7 @@ function AppRouter() {
           <Route path="/dashboard/carrito" element={<CartPage />} />
           <Route path="/dashboard/checkout" element={<RequestPage />} />
           <Route path="/dashboard/solicitudes" element={<RequestsPage />} />
+          <Route path="/dashboard/cobertura" element={<CoveragePage />} />
           <Route path="/dashboard/perfil" element={<Profile />} />
 
           <Route
@@ -52,6 +54,11 @@ function AppRouter() {
           <Route
             path="/requests"
             element={<Navigate to="/dashboard/solicitudes" replace />}
+          />
+
+          <Route
+            path="/coverage"
+            element={<Navigate to="/dashboard/cobertura" replace />}
           />
         </Route>
       </Route>

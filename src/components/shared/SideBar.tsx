@@ -1,12 +1,19 @@
 import { NavLink } from "react-router-dom"
 
-const link = [
+interface SidebarLink {
+  name: string
+  path: string
+  end?: boolean
+}
+
+const links: SidebarLink[] = [
   { name: "Inicio", path: "/dashboard", end: true },
-  { name: "Catalogo", path: "/dashboard/catalogo" },
+  { name: "Catálogo", path: "/dashboard/catalogo" },
   { name: "Servicios", path: "/dashboard/servicios" },
   { name: "Historial", path: "/dashboard/historial" },
   { name: "Carrito", path: "/dashboard/carrito" },
   { name: "Solicitudes", path: "/dashboard/solicitudes" },
+  { name: "Cobertura", path: "/dashboard/cobertura" },
   { name: "Perfil", path: "/dashboard/perfil" },
 ]
 
@@ -16,7 +23,7 @@ function Sidebar() {
       <h2 className="sidebar-logo">HomeFix</h2>
 
       <nav className="sidebar-nav">
-        {link.map((link) => (
+        {links.map((link) => (
           <NavLink
             key={link.path}
             to={link.path}
