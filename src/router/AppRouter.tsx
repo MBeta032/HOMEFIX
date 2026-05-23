@@ -8,7 +8,6 @@ import DashboardLayout from "../components/shared/DashboardLayout"
 import Services from "../pages/Services"
 import CartPage from "../pages/CartPage"
 import Profile from "../pages/Profile"
-import Traking from "../pages/Traking"
 import Catalog from "../pages/Catalog"
 import ServiceDetail from "../pages/ServiceDetail"
 import History from "../pages/History"
@@ -30,7 +29,6 @@ function AppRouter() {
           <Route path="/dashboard/servicios/:id" element={<ServiceDetail />} />
           <Route path="/dashboard/catalogo" element={<Catalog />} />
           <Route path="/dashboard/historial" element={<History />} />
-          <Route path="/dashboard/seguimiento" element={<Traking />} />
           <Route path="/dashboard/carrito" element={<CartPage />} />
           <Route path="/dashboard/checkout" element={<RequestPage />} />
           <Route path="/dashboard/solicitudes" element={<RequestsPage />} />

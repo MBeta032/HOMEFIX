@@ -27,6 +27,7 @@ export interface RequestContextType {
   clearRequests: () => void
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const RequestContext = createContext<RequestContextType | undefined>(
   undefined
 )

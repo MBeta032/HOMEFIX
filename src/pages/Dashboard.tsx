@@ -1,32 +1,11 @@
 import PageHeader from "../components/shared/PageHeader";
 import "../styles/Dashboard.css"
+import { useCart } from "../hooks/cart/useCart";
+import { useRequests } from "../hooks/request/useRequests";
 
-const info = [
-  {
-    tittle: "Solicitudes Activas",
-    value: 2,
-    icon: "📦"
-  },
-  {
-    tittle: "Servicios Completados",
-    value: 5,
-    icon: "✅"
-  },
 
-  {
-    tittle: "Servicios disponibles",
-    value: 8,
-    icon: "🔧",
-  },
 
-  {
-    tittle: "Carrito",
-    value: 0,
-    icon: "🛒",
-  },
-]
-
-const requests = [
+const servicesState = [
   {
     service: "Plomeria",
     state: "Completado"
@@ -51,6 +30,39 @@ const popular = [
 ]
 
 function Dashboard() {
+  
+  const { cartCount } = useCart()
+  const { requests } = useRequests()
+
+  const requestCount = requests.filter(req => req.status === "Pendiente").length;
+
+
+  const info = [
+    {
+      tittle: "Solicitudes Activas",
+      value: requestCount,
+      icon: "📦"
+    },
+    {
+      tittle: "Servicios Completados",
+      value: 5,
+      icon: "✅"
+    },
+
+    {
+      tittle: "Servicios disponibles",
+      value: 8,
+      icon: "🔧",
+    },
+
+    {
+      tittle: "Carrito",
+      value: cartCount,
+      icon: "🛒",
+    },
+  ]
+
+
   return (
     <div className="dashboard-home">
       <PageHeader
@@ -77,7 +89,7 @@ function Dashboard() {
         <div className="dashboard-box">
           <h2>Ultimas solicitudes</h2>
           <div className="requests-list">
-            {requests.map(item =>(
+            {servicesState.map(item =>(
               <div 
                 key={item.service}
                 className="requests-item"

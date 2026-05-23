@@ -145,7 +145,7 @@ function Login() {
           onClick={handleGoogleLogin}
           disabled={isSubmitting || loading}
         >
-          <img src="/google.png" alt="Google" />
+          <img src="/src/assets/images/google.png" alt="Google" />
           Continuar con Google
         </button>
 

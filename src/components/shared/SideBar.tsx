@@ -5,7 +5,6 @@ const link = [
   { name: "Catalogo", path: "/dashboard/catalogo" },
   { name: "Servicios", path: "/dashboard/servicios" },
   { name: "Historial", path: "/dashboard/historial" },
-  { name: "Seguimiento", path: "/dashboard/seguimiento" },
   { name: "Carrito", path: "/dashboard/carrito" },
   { name: "Solicitudes", path: "/dashboard/solicitudes" },
   { name: "Perfil", path: "/dashboard/perfil" },
