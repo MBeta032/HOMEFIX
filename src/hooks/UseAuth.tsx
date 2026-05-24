@@ -1,8 +1,8 @@
 import {
   EmailAuthProvider,
   GoogleAuthProvider,
-  browserLocalPersistence,
   createUserWithEmailAndPassword,
+  inMemoryPersistence,
   onAuthStateChanged,
   reauthenticateWithCredential,
   sendPasswordResetEmail,
@@ -25,40 +25,43 @@ export function useAuth() {
   const [userData, setUserData] = useState<UserData | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
 
-  const googleProvider = new GoogleAuthProvider()
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        setUser(firebaseUser)
+      try {
+        if (firebaseUser) {
+          setUser(firebaseUser)
 
-        const userRef = doc(db, "usuarios", firebaseUser.uid)
-        const userSnap = await getDoc(userRef)
+          const userRef = doc(db, "usuarios", firebaseUser.uid)
+          const userSnap = await getDoc(userRef)
 
-        if (userSnap.exists()) {
-          setUserData(userSnap.data() as UserData)
-        } else {
-          const newUserData: UserData = {
-            uid: firebaseUser.uid,
-            name: firebaseUser.displayName || "Cliente",
-            email: firebaseUser.email || "",
-            phone: "",
-            address: "",
-            city: "",
-            zone: "",
-            rol: "cliente",
-            createdIn: new Date().toISOString(),
+          if (userSnap.exists()) {
+            setUserData(userSnap.data() as UserData)
+          } else {
+            const newUserData: UserData = {
+              uid: firebaseUser.uid,
+              name: firebaseUser.displayName || "Cliente",
+              email: firebaseUser.email || "",
+              phone: "",
+              address: "",
+              city: "",
+              zone: "",
+              rol: "cliente",
+              createdIn: new Date().toISOString(),
+            }
+
+            await setDoc(userRef, newUserData)
+            setUserData(newUserData)
           }
-
-          await setDoc(userRef, newUserData)
-          setUserData(newUserData)
+        } else {
+          setUser(null)
+          setUserData(null)
         }
-      } else {
-        setUser(null)
+      } catch (error) {
+        console.error("Error cargando datos del usuario:", error)
         setUserData(null)
+      } finally {
+        setLoading(false)
       }
-
-      setLoading(false)
     })
 
     return () => unsubscribe()
@@ -73,7 +76,7 @@ export function useAuth() {
     city,
     zone,
   }: RegisterData): Promise<void> => {
-    await setPersistence(auth, browserLocalPersistence)
+    await setPersistence(auth, inMemoryPersistence)
 
     const result = await createUserWithEmailAndPassword(auth, email, password)
 
@@ -98,12 +101,18 @@ export function useAuth() {
   }
 
   const login = async (email: string, password: string): Promise<void> => {
-    await setPersistence(auth, browserLocalPersistence)
+    await setPersistence(auth, inMemoryPersistence)
     await signInWithEmailAndPassword(auth, email, password)
   }
 
   const loginGoogle = async (): Promise<User> => {
-    await setPersistence(auth, browserLocalPersistence)
+    await setPersistence(auth, inMemoryPersistence)
+
+    const googleProvider = new GoogleAuthProvider()
+
+    googleProvider.setCustomParameters({
+      prompt: "select_account",
+    })
 
     const result = await signInWithPopup(auth, googleProvider)
     const firebaseUser = result.user
@@ -149,8 +158,14 @@ export function useAuth() {
     }
 
     setUserData((prev) => {
-      if (!prev) return prev
-      return { ...prev, ...data }
+      if (!prev) {
+        return prev
+      }
+
+      return {
+        ...prev,
+        ...data,
+      }
     })
   }
 
