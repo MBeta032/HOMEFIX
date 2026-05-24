@@ -1,169 +1,241 @@
-# HU-017 — Calificar servicio finalizado
+# 🏠 HomeFix
 
-## Archivos entregados
+> **Soluciones confiables para cada rincón de tu hogar.**
 
-| Archivo | Acción |
+Plataforma web académica para solicitar servicios del hogar como plomería, electricidad, carpintería, pintura, limpieza, jardinería, reparación de electrodomésticos y mantenimiento general.
+
+---
+
+## 🔗 Enlaces importantes
+
+| Recurso | Enlace |
 |---|---|
-| `src/interfaces/Rating/rating.interface.ts` | ✅ CREAR |
-| `src/interfaces/Requests/request.interface.ts` | ✅ YA EXISTE (referencia) |
-| `src/context/Rating/RatingContext.tsx` | ✅ CREAR |
-| `src/hooks/rating/useRatings.ts` | ✅ CREAR |
-| `src/components/ratings/RatingStars.tsx` | ✅ CREAR |
-| `src/components/ratings/RatingForm.tsx` | ✅ CREAR |
-| `src/components/ratings/RatingPreview.tsx` | ✅ CREAR |
-| `src/components/requests/RequestCard.tsx` | ✅ MODIFICAR (agrega sección rating al final) |
-| `src/styles/Requests/index.css` | ✅ AGREGAR al final (contenido de rating-additions.css) |
-| `src/router/AppRouter.tsx` | ✅ MODIFICAR (ver AppRouter_INSTRUCCION.tsx) |
+| 🌐 **Aplicación desplegada** | [homefix-khaki.vercel.app](https://homefix-khaki.vercel.app/) |
+| 🎨 **Propuesta gráfica (Figma)** | [Ver prototipo en Figma](https://www.figma.com/proto/GiU355AFla1BzZ5B8IM2fM/HomeFix---Propuesta-Gr%C3%A1fica?node-id=0-1&t=nKR2sA7iS56RBRm5-1) |
+| 📁 **Repositorio GitHub** | https://github.com/MBeta032/HOMEFIX |
 
 ---
 
-## Cómo copiar los archivos al proyecto real
+## 👥 Integrantes
+
+| Nombre | Rama principal |
+|---|---|
+| Linda Valeria Quintero Hernandez | `hu-*-Val` |
+| Juan Miguel Perdomo Muñoz | `hu-*` |
+| Manuel Betancurt Pérez | `hu-*-Manuel` |
+
+---
+
+## 🛠️ Tecnologías utilizadas
+
+| Tecnología | Versión | Uso |
+|---|---|---|
+| React | 19 | Framework de UI |
+| TypeScript | 6 | Tipado estático |
+| Vite | 8 | Bundler y dev server |
+| Firebase | 12 | Auth + Firestore |
+| React Router | 7 | Navegación SPA |
+| React Leaflet | 5 | Mapa interactivo (Cobertura) |
+| Leaflet | 1.9 | Motor del mapa |
+| SweetAlert2 | 11 | Alertas y notificaciones |
+| React Icons | 5 | Iconografía |
+| Vercel | — | Despliegue del frontend |
+
+---
+
+## 📐 Alcance del sistema
+
+HomeFix está enfocado **únicamente en el usuario/cliente**. El sistema permite:
+
+- Registro e inicio de sesión real con Firebase Auth (email/contraseña y Google)
+- Explorar servicios del hogar con filtros avanzados por categoría, empresa, zona, precio y valoración
+- Navegar el catálogo de servicios organizado mediante un árbol N-ario de categorías
+- Ver el historial de servicios consultados (Stack LIFO)
+- Agregar servicios al carrito y confirmar solicitudes (Queue)
+- Consultar el estado de las solicitudes realizadas
+- Calificar servicios finalizados
+- Ver zonas de cobertura de Cali conectadas con empresas mock y servicios mediante un grafo
+
+> Las empresas son **datos mock** — no existe un panel funcional de empresa ni registro de empresas.
+
+---
+
+## 🧩 Estructura del proyecto
+
+```
+src/
+├── algorithms/          # Estructuras de datos implementadas
+│   ├── Stack.ts
+│   ├── RequestQueue.ts
+│   ├── NaryTree.ts
+│   ├── BinarySearchTree.ts
+│   └── Graph.ts
+├── components/
+│   ├── coverage/        # CoverageMap, CoverageGraphView
+│   ├── cart/            # CartItem, CartSummary, CartCounter
+│   ├── ratings/         # RatingForm, RatingStars, RatingPreview
+│   ├── requests/        # RequestCard, RequestForm, RequestsList...
+│   ├── services/        # ServiceCard, CategoryMenu, TopRatedServices
+│   ├── ServiceDetail/   # Hero, Info, Actions, ListCard
+│   └── shared/          # Button, EmptyState, PageHeader, FilterBar...
+├── context/             # AuthContext, CartContext, HistoryContext,
+│   │                      RequestContext, RatingContext
+├── data/                # ServicesMock, CategoriesMock, coverageGraph.data...
+├── firebase/            # config.ts
+├── hooks/               # useCart, useHistory, useRequests, useRatings...
+├── interfaces/          # Tipado TypeScript de todos los modelos
+├── pages/               # 13 vistas principales
+├── router/              # AppRouter, PrivateRoutes
+├── styles/              # CSS por página/componente
+└── utils/               # UtilServices, validaciones, coverageGraph.utils
+```
+
+---
+
+## 🔢 Estructuras de datos implementadas
+
+### 1. 📚 Stack (Pila) — `src/algorithms/Stack.ts`
+**Uso:** Historial de servicios vistos  
+**Métodos:** `push`, `pop`, `peek`, `isEmpty`, `size`, `toArray`  
+**Conexión:** `HistoryContext.tsx` → al abrir un servicio se hace `push` al stack. `History.tsx` muestra el resultado ordenado LIFO (último visto = primero mostrado).
+
+---
+
+### 2. 📬 Queue (Cola) — `src/algorithms/RequestQueue.ts`
+**Uso:** Solicitudes pendientes del usuario  
+**Métodos:** `enqueue`, `dequeue`, `peek`, `isEmpty`, `size`, `getItems`, `clear`  
+**Conexión:** `RequestContext.tsx` → al confirmar el checkout se hace `enqueue` por cada servicio. `MyRequestsPage.tsx` muestra la lista de solicitudes.
+
+---
+
+### 3. 🌳 N-ary Tree (Árbol N-ario) — `src/algorithms/NaryTree.ts`
+**Uso:** Catálogo de categorías y subcategorías de servicios  
+**Métodos:** `addChild`, `findNode`, `getChildren`, `traverse`, `toMenuData`  
+**Conexión:** `CategoriesMock.ts` construye el árbol con 5 categorías principales y sus subcategorías. `Catalog.tsx` + `CategoryMenu.tsx` lo usan para la navegación lateral del catálogo.
+
+---
+
+### 4. 🔍 BST (Árbol Binario de Búsqueda) — `src/algorithms/BinarySearchTree.ts`
+**Uso:** Servicios mejor valorados ordenados por rating  
+**Métodos:** `insert`, `inOrder`, `reverseInOrder`, `search`, `isEmpty`, `size`  
+**Conexión:** `UtilServices.ts` → `getTopRatedServices()` inserta servicios en el BST y retorna `reverseInOrder()` para obtener el Top 5. `TopRatedServices.tsx` los muestra en la vista de servicios.
+
+---
+
+### 5. 🕸️ Graph (Grafo no dirigido) — `src/algorithms/Graph.ts`
+**Uso:** Zonas de Cali conectadas con empresas mock y servicios disponibles  
+**Métodos:** `addNode`, `addEdge`, `getNeighbors`, `printAdjacency`, `printGraph`, `searchNode`, `size`  
+**Conexión:** `coverageGraph.utils.ts` construye el grafo con 10 nodos (3 zonas + 3 empresas + 4 servicios) y 9 aristas. `CoveragePage.tsx` + `CoverageMap.tsx` + `CoverageGraphView.tsx` permiten visualizarlo en un mapa Leaflet interactivo de Cali.
+
+---
+
+## 🗺️ Rutas de la aplicación
+
+```
+Públicas:
+  /                       → Home pública
+  /login                  → Inicio de sesión
+  /registro               → Registro de cliente
+
+Privadas (requieren autenticación):
+  /dashboard              → Panel principal
+  /dashboard/servicios    → Listado y búsqueda de servicios
+  /dashboard/servicios/:id → Detalle de un servicio
+  /dashboard/catalogo     → Catálogo con árbol N-ario
+  /dashboard/historial    → Historial con Stack
+  /dashboard/carrito      → Carrito de servicios
+  /dashboard/checkout     → Confirmar solicitud (Queue)
+  /dashboard/solicitudes  → Mis solicitudes
+  /dashboard/cobertura    → Cobertura por zonas (Grafo + Mapa)
+  /dashboard/perfil       → Perfil del usuario
+```
+
+---
+
+## 🚀 Instalación local
 
 ```bash
-# Desde la raíz de HOMEFIX, rama hu-017-Rate-service-Val
+# 1. Clonar el repositorio
+git clone [URL_DEL_REPO]
+cd homefix
 
-# 1. Crear carpetas nuevas
-mkdir -p src/interfaces/Rating
-mkdir -p src/context/Rating
-mkdir -p src/hooks/rating
-mkdir -p src/components/ratings
+# 2. Instalar dependencias
+npm install
 
-# 2. Copiar archivos nuevos
-cp [ruta_descarga]/src/interfaces/Rating/rating.interface.ts src/interfaces/Rating/
-cp [ruta_descarga]/src/context/Rating/RatingContext.tsx src/context/Rating/
-cp [ruta_descarga]/src/hooks/rating/useRatings.ts src/hooks/rating/
-cp [ruta_descarga]/src/components/ratings/RatingStars.tsx src/components/ratings/
-cp [ruta_descarga]/src/components/ratings/RatingForm.tsx src/components/ratings/
-cp [ruta_descarga]/src/components/ratings/RatingPreview.tsx src/components/ratings/
+# 3. Configurar variables de entorno
+# Crear un archivo .env en la raíz con las credenciales de Firebase:
+# VITE_FIREBASE_API_KEY=...
+# VITE_FIREBASE_AUTH_DOMAIN=...
+# VITE_FIREBASE_PROJECT_ID=...
+# VITE_FIREBASE_STORAGE_BUCKET=...
+# VITE_FIREBASE_MESSAGING_SENDER_ID=...
+# VITE_FIREBASE_APP_ID=...
 
-# 3. RequestCard.tsx: copia el archivo entregado O agrega solo la sección
-# "request-card__rating" al final de tu RequestCard existente.
+# 4. Iniciar en modo desarrollo
+npm run dev
 
-# 4. Pegar el contenido de rating-additions.css AL FINAL de:
-# src/styles/Requests/index.css
-
-# 5. En AppRouter.tsx: agregar import y envolver con RatingProvider
+# 5. Compilar para producción
+npm run build
 ```
 
 ---
 
-## Instrucción para AppRouter.tsx
+## 🌿 Ramas del repositorio
 
-Solo necesitas hacer 2 cambios:
+El proyecto se desarrolló con una rama por Historia de Usuario (HU).  
+Todas las ramas están mezcladas sobre `main`.
 
-**1. Agregar el import:**
-```tsx
-import { RatingProvider } from "../context/Rating/RatingContext";
 ```
-
-**2. Envolver las rutas:**
-```tsx
-// Antes (ejemplo):
-<CartProvider>
-  <RequestProvider>
-    <Routes>...</Routes>
-  </RequestProvider>
-</CartProvider>
-
-// Después:
-<CartProvider>
-  <RequestProvider>
-    <RatingProvider>
-      <Routes>...</Routes>
-    </RatingProvider>
-  </RequestProvider>
-</CartProvider>
-```
-
----
-
-## Cómo probar con solicitud Finalizada
-
-Si no tienes una solicitud con estado "Finalizada", pégala en la consola del navegador:
-
-```js
-const requests = JSON.parse(localStorage.getItem("homefix-requests") || "[]");
-
-requests.push({
-  id: "test-finalizada-001",
-  serviceId: "srv-001",
-  serviceName: "Plomería residencial",
-  company: "AquaFix Servicios",
-  price: 80000,
-  serviceZone: "Zona Sur",
-  address: "Calle 10 # 5-30",
-  neighborhood: "La Candelaria",
-  city: "Bogotá",
-  desiredDate: "2026-05-20",
-  desiredTime: "09:00",
-  paymentMethod: "Efectivo",
-  problemDescription: "Fuga en el baño",
-  status: "Finalizada",
-  createdAt: new Date().toISOString()
-});
-
-localStorage.setItem("homefix-requests", JSON.stringify(requests));
-```
-
-Luego recarga la página y entra a `/requests`.
-
----
-
-## Limpiar calificaciones de prueba
-
-```js
-localStorage.removeItem("homefix-ratings");
+main
+├── hu-001-home-publica - Linda
+├── hu-002-zone-search - Linda
+├── hu-003-register - Juan
+├── hu-004-login - Juan
+├── hu-005-dashboard - Juan
+├── hu-006-search-services - Juan
+├── hu-007-filter-services - Juan
+├── hu-008-catalog-ntree - Juan
+├── hu-009-top-rated-bst - Juan
+├── hu-010-logout - Juan
+├── hu-011-service-detail - Manuel 
+├── hu-012-history-stack - Manuel 
+├── hu-013-add-to-cart - Manuel 
+├── hu-014-cart-view - Manuel 
+├── hu-015-checkout-queue - Manuel 
+├── hu-016-my-requests - Manuel 
+└── hu-017-rate-service - Linda
 ```
 
 ---
 
-## Commits recomendados
+## ✅ Criterios de la rúbrica cumplidos
 
-```bash
-git add src/interfaces/Rating/rating.interface.ts
-git commit -m "✨ add rating interface"
-
-git add src/context/Rating/RatingContext.tsx
-git commit -m "✨ add rating context"
-
-git add src/hooks/rating/useRatings.ts
-git commit -m "✨ add ratings hook"
-
-git add src/components/ratings/RatingStars.tsx
-git commit -m "✨ add rating stars component"
-
-git add src/components/ratings/RatingForm.tsx
-git commit -m "✨ add rating form"
-
-git add src/components/ratings/RatingPreview.tsx
-git commit -m "✨ add rating preview"
-
-git add src/components/requests/RequestCard.tsx
-git commit -m "✨ connect ratings with request cards"
-
-git add src/router/AppRouter.tsx
-git commit -m "🔀 add rating provider"
-
-git add src/styles/Requests/index.css
-git commit -m "💄 style service ratings"
-
-git add .
-git commit -m "✨ complete HU-017 service rating flow"
-```
+| Criterio | Estado |
+|---|---|
+| Propuesta gráfica en Figma | ✅ |
+| Plataforma web funcional | ✅ |
+| Navegación pública (Home, Login, Registro) | ✅ |
+| Navegación privada (Dashboard y secciones) | ✅ |
+| Mapa interactivo (Leaflet + Cobertura) | ✅ |
+| Carrito de compras | ✅ |
+| 5 estructuras de datos implementadas | ✅ |
+| 2 Listas/Pilas/Colas (Stack + Queue) | ✅ |
+| 2 Árboles/Tries/Heaps (NaryTree + BST) | ✅ |
+| 1 Grafo (Graph) | ✅ |
+| Componentes padres e hijos | ✅ |
+| Carpeta Helpers/Utils | ✅ |
+| Carpeta Context | ✅ |
+| Carpeta Pages | ✅ |
+| Carpeta Components + Shared | ✅ |
+| Carpeta Hooks | ✅ |
+| Carpeta Router con AppRoutes | ✅ |
+| Publicación frontend en Vercel | ✅ |
+| Login y registro reales (Firebase Auth) | ✅ |
+| Almacenamiento en base de datos (Firestore) | ✅ |
+| Transacción de datos | ✅ |
+| Documento final en Git | ✅ |
+| README con integrantes y enlaces | ✅ |
 
 ---
 
-## Checklist de calidad
-
-- [x] Solo califica solicitudes con status === "Finalizada"
-- [x] No aparece formulario en: Pendiente, Asignada, En proceso, Cancelada
-- [x] Puntuación obligatoria (1–5)
-- [x] Comentario opcional
-- [x] Guarda en localStorage con clave `homefix-ratings`
-- [x] Persiste al recargar la página
-- [x] No permite calificar dos veces la misma solicitud
-- [x] Muestra RatingPreview si ya fue calificada
-- [x] No usa `any`
-- [x] No instala librerías nuevas
-- [x] No rompe rutas anteriores
-- [x] No usa Firebase, Redux, Zustand, Tailwind ni Bootstrap
+*Proyecto académico — Estructuras de Datos II · Universidad Autónoma de Occidente*
