@@ -3,7 +3,7 @@ import type { ReactNode } from "react"
 import type { IRating } from "../../interfaces/Rating/rating.interface"
 
 const getStorageKey = (uid: string) => {
- return uid ?  `homefix-cart-${uid}`: "homefix-cart-guest"
+ return uid ?  `homefix-ratings-${uid}`: "homefix-ratings-guest"
 }
 export interface RatingContextType {
   ratings: IRating[]

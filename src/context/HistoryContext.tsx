@@ -21,7 +21,7 @@ export const HistoryContext = createContext<HistoryContextType | undefined>(
 )
 
 const getStorageKey = (uid: string) => {
- return uid ?  `homefix-cart-${uid}`: "homefix-cart-guest"
+ return uid ?  `homefix-history-${uid}`: "homefix-history-guest"
 }
 
 const MAX_HISTORY_SIZE = 5
