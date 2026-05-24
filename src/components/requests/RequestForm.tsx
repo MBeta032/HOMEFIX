@@ -1,0 +1,322 @@
+import { useState } from "react"
+import type { ChangeEvent, FormEvent } from "react"
+import Button from "../shared/Button"
+import type { ServiceMock } from "../../interfaces/InterfaceServices"
+import type { IRequestFormData } from "../../interfaces/Requests/request.interface"
+import { confirmAction, showWarningAlert } from "../../utils/alerts"
+
+interface RequestFormProps {
+  services: ServiceMock[]
+  onSubmit: (formData: IRequestFormData) => void
+  onCancel: () => void
+  submitText?: string
+  cancelText?: string
+}
+
+type RequestFormErrors = Partial<Record<keyof IRequestFormData, string>>
+
+const initialFormData: IRequestFormData = {
+  address: "",
+  neighborhood: "",
+  city: "",
+  zone: "",
+  desiredDate: "",
+  desiredTime: "",
+  paymentMethod: "",
+  problemDescription: "",
+}
+
+export default function RequestForm({
+  services,
+  onSubmit,
+  onCancel,
+  submitText = "Confirmar solicitud",
+  cancelText = "Volver al carrito",
+}: RequestFormProps) {
+  const [formData, setFormData] = useState<IRequestFormData>(initialFormData)
+  const [errors, setErrors] = useState<RequestFormErrors>({})
+  const [generalError, setGeneralError] = useState<string>("")
+
+  const isSingleService = services.length === 1
+  const selectedServiceName = services[0]?.name || "servicio seleccionado"
+
+  function handleChange(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ): void {
+    const fieldName = event.target.name as keyof IRequestFormData
+    const fieldValue = event.target.value
+
+    setFormData({
+      ...formData,
+      [fieldName]: fieldValue,
+    })
+
+    setErrors({
+      ...errors,
+      [fieldName]: "",
+    })
+
+    setGeneralError("")
+  }
+
+  function validateForm(): boolean {
+    const newErrors: RequestFormErrors = {}
+
+    if (!formData.address.trim()) {
+      newErrors.address = "La dirección es obligatoria."
+    }
+
+    if (!formData.neighborhood.trim()) {
+      newErrors.neighborhood = "El barrio es obligatorio."
+    }
+
+    if (!formData.city.trim()) {
+      newErrors.city = "La ciudad es obligatoria."
+    }
+
+    if (!formData.zone.trim()) {
+      newErrors.zone = "La zona es obligatoria."
+    }
+
+    if (!formData.desiredDate.trim()) {
+      newErrors.desiredDate = "La fecha deseada es obligatoria."
+    }
+
+    if (!formData.desiredTime.trim()) {
+      newErrors.desiredTime = "La hora deseada es obligatoria."
+    }
+
+    if (!formData.paymentMethod) {
+      newErrors.paymentMethod = "Selecciona un método de pago."
+    }
+
+    if (!formData.problemDescription.trim()) {
+      newErrors.problemDescription =
+        "La descripción del problema es obligatoria."
+    }
+
+    setErrors(newErrors)
+
+    return Object.keys(newErrors).length === 0
+  }
+
+  async function submitValidatedForm(): Promise<void> {
+    const confirmed = await confirmAction(
+      "Crear solicitud",
+      isSingleService
+        ? `Se creará una solicitud pendiente para ${selectedServiceName}.`
+        : `Se crearán solicitudes pendientes para ${services.length} servicios.`,
+      "Sí, crear solicitud"
+    )
+
+    if (!confirmed) {
+      return
+    }
+
+    onSubmit({
+      ...formData,
+      address: formData.address.trim(),
+      neighborhood: formData.neighborhood.trim(),
+      city: formData.city.trim(),
+      zone: formData.zone.trim(),
+      problemDescription: formData.problemDescription.trim(),
+    })
+
+    setFormData(initialFormData)
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+    event.preventDefault()
+
+    const isValidForm = validateForm()
+
+    if (!isValidForm) {
+      setGeneralError("Completa todos los campos obligatorios antes de continuar.")
+      showWarningAlert(
+        "Datos incompletos",
+        "Completa todos los campos obligatorios antes de crear la solicitud."
+      )
+      return
+    }
+
+    void submitValidatedForm()
+  }
+
+  async function handleCancel(): Promise<void> {
+    const confirmed = await confirmAction(
+      "Cancelar este servicio",
+      `¿Seguro que deseas cancelar la configuración de ${selectedServiceName}?`,
+      "Sí, cancelar"
+    )
+
+    if (!confirmed) {
+      return
+    }
+
+    onCancel()
+  }
+
+  return (
+    <form className="request-form" onSubmit={handleSubmit}>
+      <div className="request-form-header">
+        <p className="request-selected-label">
+          {isSingleService ? "Servicio a confirmar" : "Servicios a confirmar"}
+        </p>
+
+        <h2>
+          {isSingleService
+            ? selectedServiceName
+            : `${services.length} servicio(s) del carrito`}
+        </h2>
+
+        <p>
+          {isSingleService
+            ? "Al enviar este formulario se creará una solicitud pendiente solo para este servicio."
+            : "Al enviar este formulario se creará una solicitud pendiente por cada servicio agregado al carrito."}
+        </p>
+      </div>
+
+      {generalError && (
+        <p className="request-form-general-error">{generalError}</p>
+      )}
+
+      <div className="request-form-grid">
+        <div className="request-form-group">
+          <label htmlFor="address">Dirección</label>
+
+          <input
+            id="address"
+            name="address"
+            type="text"
+            value={formData.address}
+            onChange={handleChange}
+            placeholder="Ej: Calle 10 # 20-30"
+          />
+
+          {errors.address && <span>{errors.address}</span>}
+        </div>
+
+        <div className="request-form-group">
+          <label htmlFor="neighborhood">Barrio</label>
+
+          <input
+            id="neighborhood"
+            name="neighborhood"
+            type="text"
+            value={formData.neighborhood}
+            onChange={handleChange}
+            placeholder="Ej: San Fernando"
+          />
+
+          {errors.neighborhood && <span>{errors.neighborhood}</span>}
+        </div>
+
+        <div className="request-form-group">
+          <label htmlFor="city">Ciudad</label>
+
+          <input
+            id="city"
+            name="city"
+            type="text"
+            value={formData.city}
+            onChange={handleChange}
+            placeholder="Ej: Cali"
+          />
+
+          {errors.city && <span>{errors.city}</span>}
+        </div>
+
+        <div className="request-form-group">
+          <label htmlFor="zone">Zona</label>
+
+          <input
+            id="zone"
+            name="zone"
+            type="text"
+            value={formData.zone}
+            onChange={handleChange}
+            placeholder="Ej: Sur de Cali"
+          />
+
+          {errors.zone && <span>{errors.zone}</span>}
+        </div>
+
+        <div className="request-form-group">
+          <label htmlFor="desiredDate">Fecha deseada</label>
+
+          <input
+            id="desiredDate"
+            name="desiredDate"
+            type="date"
+            value={formData.desiredDate}
+            onChange={handleChange}
+          />
+
+          {errors.desiredDate && <span>{errors.desiredDate}</span>}
+        </div>
+
+        <div className="request-form-group">
+          <label htmlFor="desiredTime">Hora deseada</label>
+
+          <input
+            id="desiredTime"
+            name="desiredTime"
+            type="time"
+            value={formData.desiredTime}
+            onChange={handleChange}
+          />
+
+          {errors.desiredTime && <span>{errors.desiredTime}</span>}
+        </div>
+
+        <div className="request-form-group">
+          <label htmlFor="paymentMethod">Método de pago</label>
+
+          <select
+            id="paymentMethod"
+            name="paymentMethod"
+            value={formData.paymentMethod}
+            onChange={handleChange}
+          >
+            <option value="">Selecciona un método</option>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Datáfono">Datáfono</option>
+          </select>
+
+          {errors.paymentMethod && <span>{errors.paymentMethod}</span>}
+        </div>
+      </div>
+
+      <div className="request-form-group">
+        <label htmlFor="problemDescription">Descripción del problema</label>
+
+        <textarea
+          id="problemDescription"
+          name="problemDescription"
+          value={formData.problemDescription}
+          onChange={handleChange}
+          placeholder="Describe qué necesitas que revise la empresa."
+          rows={5}
+        />
+
+        {errors.problemDescription && (
+          <span>{errors.problemDescription}</span>
+        )}
+      </div>
+
+      <div className="request-form-actions">
+        <Button type="submit" variant="success">
+          {submitText}
+        </Button>
+
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => void handleCancel()}
+        >
+          {cancelText}
+        </Button>
+      </div>
+    </form>
+  )
+}

@@ -1,0 +1,179 @@
+/* Estrellas */
+.rating-stars {
+  display: flex;
+  gap: 4px;
+  margin: 6px 0;
+}
+
+.rating-star {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: transform 0.1s ease;
+}
+
+.rating-star:hover {
+  transform: scale(1.2);
+}
+
+.rating-star--filled {
+  color: #f59e0b;
+}
+
+.rating-star--empty {
+  color: #d1d5db;
+}
+
+.rating-star:disabled {
+  cursor: default;
+}
+
+.rating-star:disabled:hover {
+  transform: none;
+}
+
+/* Formulario de calificación */
+.rating-form {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 12px;
+}
+
+.rating-form__title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.rating-form__subtitle {
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin: 0 0 12px 0;
+}
+
+.rating-form__field {
+  margin-bottom: 12px;
+}
+
+.rating-form__label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+.rating-form__textarea {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 0.875rem;
+  color: #111827;
+  resize: vertical;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.rating-form__textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.rating-form__error {
+  color: #dc2626;
+  font-size: 0.82rem;
+  margin: 0 0 8px 0;
+}
+
+.rating-form__btn {
+  background-color: #1d4ed8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.rating-form__btn:hover {
+  background-color: #1e40af;
+}
+
+/* Mensaje de éxito */
+.rating-success {
+  color: #16a34a;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+/* Vista previa de calificación guardada */
+.rating-preview {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 12px;
+}
+
+.rating-preview__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #166534;
+  margin: 0 0 6px 0;
+}
+
+.rating-preview__comment {
+  font-size: 0.875rem;
+  color: #374151;
+  margin: 8px 0 4px 0;
+  font-style: italic;
+}
+
+.rating-preview__date {
+  font-size: 0.78rem;
+  color: #6b7280;
+  margin: 4px 0 0 0;
+}
+
+/* Mensaje de pendiente */
+.rating-pending {
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* Botón calificar */
+.rating-btn {
+  background-color: #059669;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
+}
+
+.rating-btn:hover {
+  background-color: #047857;
+}
+
+/* Sección rating dentro de la card */
+.request-card__rating {
+  border-top: 1px solid #f3f4f6;
+  padding-top: 12px;
+  margin-top: 12px;
+}

@@ -1,0 +1,43 @@
+import { NavLink } from "react-router-dom"
+
+interface SidebarLink {
+  name: string
+  path: string
+  end?: boolean
+}
+
+const links: SidebarLink[] = [
+  { name: "Inicio", path: "/dashboard", end: true },
+  { name: "Catálogo", path: "/dashboard/catalogo" },
+  { name: "Servicios", path: "/dashboard/servicios" },
+  { name: "Historial", path: "/dashboard/historial" },
+  { name: "Carrito", path: "/dashboard/carrito" },
+  { name: "Solicitudes", path: "/dashboard/solicitudes" },
+  { name: "Cobertura", path: "/dashboard/cobertura" },
+  { name: "Perfil", path: "/dashboard/perfil" },
+]
+
+function Sidebar() {
+  return (
+    <aside className="sidebar">
+      <h2 className="sidebar-logo">HomeFix</h2>
+
+      <nav className="sidebar-nav">
+        {links.map((link) => (
+          <NavLink
+            key={link.path}
+            to={link.path}
+            end={link.end}
+            className={({ isActive }) =>
+              isActive ? "sidebar-link active" : "sidebar-link"
+            }
+          >
+            {link.name}
+          </NavLink>
+        ))}
+      </nav>
+    </aside>
+  )
+}
+
+export default Sidebar

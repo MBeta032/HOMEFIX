@@ -1,98 +1,180 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, type FormEvent } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { Link, useNavigate } from "react-router-dom"
+import { FaEye, FaEyeSlash } from "react-icons/fa"
 import "../styles/Login.css"
-import { validateLogin } from "../utils/ValidateLogin"
+import { validateLogin } from "../utils/UtilValidateLogin"
+import {
+  showErrorAlert,
+  showSuccessAlert,
+  showWarningAlert,
+} from "../utils/alerts"
+import { getFirebaseErrorMessage } from "../utils/firebaseErrors"
 
-function Login(){
-    const [email, setEmail] = useState<string>("")
-    const [password, setPassword] = useState<string>("")
-    const [errors, setErrors] = useState<Record<string, string>>({})    
-    const context = useContext(AuthContext)
+function Login() {
+  const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("")
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [errors, setErrors] = useState<Record<string, string>>({})
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
+  const context = useContext(AuthContext)
+  const navigate = useNavigate()
 
-    if (!context) {
-        throw new Error("AuthContext no disponible")
+  if (!context) {
+    throw new Error("AuthContext no disponible")
+  }
+
+  const { user, login, loginGoogle, loading } = context
+
+  useEffect(() => {
+    if (!loading && user) {
+      navigate("/dashboard")
+    }
+  }, [user, loading, navigate])
+
+  const handleBackHome = (): void => {
+    navigate("/")
+  }
+
+  const handleLogin = async (): Promise<void> => {
+    const validationErrors = validateLogin(email, password)
+    setErrors(validationErrors)
+
+    if (Object.keys(validationErrors).length > 0) {
+      showWarningAlert(
+        "Datos incompletos",
+        "Revisa el correo y la contraseña antes de continuar."
+      )
+      return
     }
 
-    const { user, login, loading, loginGoogle } = context
+    try {
+      setIsSubmitting(true)
+      setErrors({})
 
-    const navigate = useNavigate()
+      await login(email.trim(), password)
 
+      showSuccessAlert(
+        "Inicio de sesión exitoso",
+        "Bienvenido nuevamente a HomeFix."
+      )
 
-    useEffect(() => {
-        if (!loading && user) {
-            navigate("/dashboard")
-        }
-    }, [user, loading, navigate])
+      navigate("/dashboard")
+    } catch (error: unknown) {
+      const message = getFirebaseErrorMessage(error)
 
-    
-    const handleLogin = async () => {
-        const validationErrors = validateLogin(email, password)
-
-        setErrors(validationErrors)
-
-        if (Object.keys(validationErrors).length > 0) return
-
-        try {
-            await login(email, password)
-            navigate("/home")
-
-        } catch (error: unknown) {
-            const err = error as { code?: string }
-
-            switch (err.code) {
-                case "auth/invalid-email":
-                    setErrors({ email: "Email inválido" })
-                    break
-
-                case "auth/invalid-credential":
-                    setErrors({ general: "Credenciales incorrectas" })
-                    break
-
-                default:
-                    setErrors({ general: "Error inesperado" })
-            }
-        }
+      setErrors({ general: message })
+      showErrorAlert("Error al iniciar sesión", message)
+    } finally {
+      setIsSubmitting(false)
     }
+  }
 
-    return (
-        <div className="login-container">
+  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault()
+    void handleLogin()
+  }
 
-            <div className="login-card">
+  const handleGoogleLogin = async (): Promise<void> => {
+    try {
+      setIsSubmitting(true)
+      setErrors({})
 
-                <h2 className="login-title">Iniciar sesión</h2>
+      await loginGoogle()
 
-                {errors.email && (<p className="error-text">{errors.email}</p>)}
-                <input className="login-input"type="email"placeholder="Correo Electronico" value={email} onChange={(e) => setEmail(e.target.value)}
-                />
+      showSuccessAlert(
+        "Inicio de sesión exitoso",
+        "Entraste a HomeFix usando tu cuenta de Google."
+      )
 
-                {errors.password && (<p className="error-text">{errors.password}</p>)}
-                <input className="login-input" type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)}/>
+      navigate("/dashboard")
+    } catch (error: unknown) {
+      const message = getFirebaseErrorMessage(error)
 
-                <button onClick={loginGoogle} className="google-button">
-                <img src="/public/Google.png" alt="Google" />
-                Iniciar sesión con Google
-                </button>
+      setErrors({ general: message })
+      showErrorAlert("Error con Google", message)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
-                <button
-                    className="login-button" onClick={handleLogin} disabled={loading}>
-                    {loading ? "Cargando..." : "Ingresar"}
-                </button>
+  return (
+    <div className="login-container">
+      <div className="login-card">
+        <button
+          type="button"
+          className="login-back-button"
+          onClick={handleBackHome}
+        >
+          ← Volver al inicio
+        </button>
 
-                {errors.general && (<p className="error-text">{errors.general}</p>)}
+        <form className="login-form" onSubmit={handleSubmit}>
+          <h2 className="login-title">Iniciar sesión</h2>
 
-                <p className="login-link">
-                    ¿No tienes cuenta?{" "}
-                    <Link to="/registro">Regístrate</Link>
-                </p>
+          {errors.general && <p className="error-text">{errors.general}</p>}
 
-            </div>
+          <label className="login-label" htmlFor="email">
+            Correo electrónico
+          </label>
+          {errors.email && <p className="error-text">{errors.email}</p>}
+          <input
+            id="email"
+            className="login-input"
+            type="email"
+            placeholder="correo@ejemplo.com"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
 
-        </div>
-    )
+          <label className="login-label" htmlFor="password">
+            Contraseña
+          </label>
+          {errors.password && <p className="error-text">{errors.password}</p>}
+          <div className="password-container">
+            <input
+              id="password"
+              className="login-input"
+              type={showPassword ? "text" : "password"}
+              placeholder="Ingresa tu contraseña"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+            />
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEye/> : <FaEyeSlash/> }
+            </button>
+          </div>
+
+          <button
+            className="login-button"
+            type="submit"
+            disabled={isSubmitting || loading}
+          >
+            {isSubmitting ? "Ingresando..." : "Ingresar"}
+          </button>
+        </form>
+
+        <button
+          className="google-button"
+          type="button"
+          onClick={() => void handleGoogleLogin()}
+          disabled={isSubmitting || loading}
+        >
+          <img src="/src/assets/images/google.png" alt="Google" />
+          Continuar con Google
+        </button>
+
+        <p className="login-link">
+          ¿No tienes cuenta? <Link to="/registro">Regístrate</Link>
+        </p>
+      </div>
+    </div>
+  )
 }
-
-
 
 export default Login
