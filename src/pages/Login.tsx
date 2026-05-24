@@ -10,6 +10,7 @@ import {
   showWarningAlert,
 } from "../utils/alerts"
 import { getFirebaseErrorMessage } from "../utils/firebaseErrors"
+import googleIcon from "../assets/images/google.png"
 
 function Login() {
   const [email, setEmail] = useState<string>("")
@@ -132,6 +133,7 @@ function Login() {
             Contraseña
           </label>
           {errors.password && <p className="error-text">{errors.password}</p>}
+
           <div className="password-container">
             <input
               id="password"
@@ -141,12 +143,16 @@ function Login() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
+
             <button
               type="button"
               className="password-toggle"
               onClick={() => setShowPassword(!showPassword)}
+              aria-label={
+                showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+              }
             >
-              {showPassword ? <FaEye/> : <FaEyeSlash/> }
+              {showPassword ? <FaEye /> : <FaEyeSlash />}
             </button>
           </div>
 
@@ -165,7 +171,7 @@ function Login() {
           onClick={() => void handleGoogleLogin()}
           disabled={isSubmitting || loading}
         >
-          <img src="/src/assets/images/google.png" alt="Google" />
+          <img src={googleIcon} alt="Google" />
           Continuar con Google
         </button>
 
